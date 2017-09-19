@@ -5,7 +5,8 @@ import React, {Component} from 'react';
 import ResourceItem from './resourceItem'
 import Request from '../common/request';
 import ServiceURl from '../common/service';
-import ResourceDetail from '../resource/resourceDetail'
+import ResourceDetail from '../resource/resourceDetail';
+import Util from '../common/util';
 import {
     AppRegistry,
     StyleSheet,
@@ -18,27 +19,32 @@ import {
     ScrollView
 } from 'react-native';
 
-class myResourceList extends React.Component {
+class OtherResourceList extends React.Component {
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows(['row 1', 'row 2']),
+            show: false
         };
-        this._renderRow=this._renderRow.bind(this)
+        this._renderRow = this._renderRow.bind(this)
     }
 
     render() {
         return (
-            <ListView
-                dataSource={this.state.dataSource}
-                initialListSize={10}    //设置显示条数
-                renderRow={this._renderRow}
-                renderSeparator={this._renderSeparator}
-                contentContainerStyle={styles.listStyle}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-            />
+            <View>
+                {
+                    this.state.show ? <ListView
+                        dataSource={this.state.dataSource}
+                        initialListSize={10}    //设置显示条数
+                        renderRow={this._renderRow}
+                        renderSeparator={this._renderSeparator}
+                        contentContainerStyle={styles.listStyle}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                    /> : Util.loading
+                }
+            </View>
         );
     }
 
@@ -70,13 +76,13 @@ class myResourceList extends React.Component {
         return <View style={style} key="{sectionID+rowID}"/>
     }
 
+    //获取数据
     _getData() {
-        const url = ServiceURl.personManager + 'queryMyResource';
+        const url = ServiceURl.personManager + 'queryDimensionResource';
         const that = this;
         Request.postRequest(url, '', function (response) {
-            // console.log(JSON.stringify(response));
-            let {code:code, productCategoryId:productCategoryId, myResourceList:myResourceList}=response;
-
+            console.log("好友资源" + JSON.stringify(response));
+            let {code:code, productCategoryId:productCategoryId, dimensionResourceList:dimensionResourceList}=response;
             if (code === '200') {
                 //设置数据源和加载状态
                 var ds = new ListView.DataSource({
@@ -84,7 +90,8 @@ class myResourceList extends React.Component {
                 });
                 that.setState({
                     productCategoryId: productCategoryId,
-                    dataSource: ds.cloneWithRows(myResourceList)
+                    dataSource: ds.cloneWithRows(dimensionResourceList),
+                    show: true
                 })
             }
         }, function (err) {
@@ -92,12 +99,10 @@ class myResourceList extends React.Component {
         });
     }
 
-
     componentWillMount() {
         this._getData();
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -107,4 +112,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default myResourceList
+export default OtherResourceList

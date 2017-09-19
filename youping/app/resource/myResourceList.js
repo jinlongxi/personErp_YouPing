@@ -6,6 +6,8 @@ import ResourceItem from './resourceItem'
 import Request from '../common/request';
 import ServiceURl from '../common/service';
 import ResourceDetail from '../resource/resourceDetail'
+import Util from '../common/util'
+import DeviceStorage from '../common/deviceStorage'
 import {
     AppRegistry,
     StyleSheet,
@@ -18,27 +20,32 @@ import {
     ScrollView
 } from 'react-native';
 
-class OtherResourceList extends React.Component {
+class myResourceList extends React.Component {
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows(['row 1', 'row 2']),
+            show: false
         };
-        this._renderRow=this._renderRow.bind(this)
+        this._renderRow = this._renderRow.bind(this)
     }
 
     render() {
         return (
-            <ListView
-                dataSource={this.state.dataSource}
-                initialListSize={3}    //设置显示条数
-                renderRow={this._renderRow}
-                renderSeparator={this._renderSeparator}
-                contentContainerStyle={styles.listStyle}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-            />
+            <View>
+                {
+                    this.state.show ? <ListView
+                        dataSource={this.state.dataSource}
+                        initialListSize={10}    //设置显示条数
+                        renderRow={this._renderRow}
+                        renderSeparator={this._renderSeparator}
+                        contentContainerStyle={styles.listStyle}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                    /> : Util.loading
+                }
+            </View>
         );
     }
 
@@ -70,27 +77,38 @@ class OtherResourceList extends React.Component {
         return <View style={style} key="{sectionID+rowID}"/>
     }
 
+    //查询我的资源列表
     _getData() {
-        const url = ServiceURl.personManager + 'queryDimensionResource';
+        const url = ServiceURl.personManager + 'queryMyResource';
         const that = this;
         Request.postRequest(url, '', function (response) {
+            console.log("我的资源列表" + JSON.stringify(response));
             let {code:code, productCategoryId:productCategoryId, myResourceList:myResourceList}=response;
-
             if (code === '200') {
-                //设置数据源和加载状态
-                var ds = new ListView.DataSource({
-                    rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-                });
-                that.setState({
-                    productCategoryId: productCategoryId,
-                    dataSource: ds.cloneWithRows(myResourceList)
-                })
+                if (myResourceList != '') {
+                    //设置数据源和加载状态
+                    var ds = new ListView.DataSource({
+                        rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+                    });
+                    //
+                    DeviceStorage.save('productCategoryId', productCategoryId);
+                    that.setState({
+                        productCategoryId: productCategoryId,
+                        dataSource: ds.cloneWithRows(myResourceList),
+                        show: true
+                    });
+                } else {
+                    DeviceStorage.save('productCategoryId', productCategoryId);
+                    that.setState({
+                        productCategoryId: productCategoryId,
+                        show: true
+                    });
+                }
             }
         }, function (err) {
             console.log(JSON.stringify(err))
         });
     }
-
 
     componentWillMount() {
         this._getData();
@@ -106,4 +124,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OtherResourceList
+export default myResourceList

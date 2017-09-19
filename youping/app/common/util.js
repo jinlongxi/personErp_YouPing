@@ -29,7 +29,6 @@ var Util = {
 
     //加载效果
     loading:<ActivityIndicator style={{marginTop:200}}/>
-
 };
 
 module.exports=Util;

@@ -3,8 +3,9 @@
  */
 import React, {Component} from 'react';
 import ServiceURl from '../common/service';
-import Request from  '../common/request'
-import Header from '../common/header'
+import Request from  '../common/request';
+import Header from '../common/header';
+import OrderList from '../order/orderList';
 import {
     AppRegistry,
     StyleSheet,
@@ -45,10 +46,24 @@ class ResourceDetail extends React.Component {
     //购买资源
     _buyResource() {
         let url = ServiceURl.personManager + 'placeResourceOrder';
-        let data = '&productId=' + this.state.resourceData.productId + '&productStoreId=' + this.state.resourceData.productStoreId+'&prodCatalogId=' + this.state.resourceData.prodCatalogId;
+        const that=this;
+        let data = '&productId=' + this.state.resourceData.productId + '&productStoreId=' + this.state.resourceData.productStoreId+'&prodCatalogId='
+            + this.state.resourceData.prodCatalogId+'&payToPartyId='+this.state.resourceData.payToPartyId;
         console.log('购买资源URL:' + url + data);
         Request.postRequest(url, data, function (success) {
-            console.log("购买资源:" + JSON.stringify(success))
+            let {code:code}=success;
+            if(code==='200'){
+                console.log("购买资源:" + JSON.stringify(success));
+                const {navigator} = that.props;
+                if (navigator) {
+                    navigator.push({
+                        name: 'OrderList',
+                        component: OrderList,
+                        params: {
+                        },
+                    })
+                }
+            }
         }, function (err) {
             console.log(JSON.stringify(err))
         })

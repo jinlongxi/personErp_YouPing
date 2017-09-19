@@ -37,8 +37,8 @@ class myResourceItem extends React.Component {
                         <Text numberOfLines={1}>资源名称:{resource.productName}</Text>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text style={styles.publisher_author}
-                              numberOfLines={1}>发布时间:{resource.productName}</Text>
+                        <Text style={styles.price}
+                              numberOfLines={1}>价格:{resource.price}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -52,8 +52,6 @@ const styles = StyleSheet.create({
         height: 120,
         padding: 10,
         width: 300,
-        borderWidth: 1,
-        borderColor: 'red'
     },
     imageContainer: {
         justifyContent: 'center',
@@ -61,9 +59,9 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 80,
-        height: 100,
+        height: 80,
         borderWidth: 1,
-        borderColor: 'red'
+        borderColor: 'gray'
     },
     contentContainer: {
         flex: 1,
@@ -86,7 +84,6 @@ const styles = StyleSheet.create({
         color: "#ff00ff",
         marginLeft: 10
     }
-
 });
 
 export default myResourceItem

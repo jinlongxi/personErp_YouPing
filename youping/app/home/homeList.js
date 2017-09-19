@@ -2,11 +2,9 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
-import Request from '../common/request';
-import ServiceURl from '../common/service';
 import NavigationBar from './navigationBar';
-import MyResourceList from './myResourceList';
-import OtherResourceList from './otherResourceList'
+import MyResourceList from '../resource/myResourceList';
+import OtherResourceList from '../resource/otherResourceList'
 import {
     AppRegistry,
     StyleSheet,
@@ -15,14 +13,15 @@ import {
     TouchableOpacity,
     TextInput,
     Image,
+    DeviceEventEmitter
 } from 'react-native';
-
 
 class homeList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             productCategoryId: null,
+            resource: null
         }
 
     }
@@ -38,42 +37,19 @@ class homeList extends React.Component {
             <View style={styles.container}>
                 <View style={styles.myResource}>
                     <Text>我的资源</Text>
-                    <MyResourceList handleVal={this.handleVal} resource={this.state.resource} {...this.props}/>
+                    <MyResourceList handleVal={this.handleVal} {...this.props}/>
                 </View>
                 <View style={styles.navigationBar}>
                     <NavigationBar productCategoryId={this.state.productCategoryId} {...this.props}/>
                 </View>
                 <View style={styles.otherResource}>
                     <Text>好友资源</Text>
-                    <OtherResourceList handleVal={this.handleVal} resource={this.state.resource} {...this.props}/>
+                    <OtherResourceList {...this.props}/>
                 </View>
             </View>
         );
     }
-
-    //获取我的资源列表
-    _getData() {
-        const url = ServiceURl.personManager + 'queryMyResource';
-        const that = this;
-        Request.postRequest(url, '', function (response) {
-            console.log(JSON.stringify(response));
-            let {code:code, productCategoryId:productCategoryId, myResourceList:myResourceList}=response;
-            if (code === '200') {
-                that.setState({
-                    productCategoryId: productCategoryId,
-                    resource: myResourceList
-                })
-            }
-        }, function (err) {
-            console.log(JSON.stringify(err))
-        });
-    }
-
-    componentWillMount() {
-        this._getData();
-    }
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -86,6 +62,7 @@ const styles = StyleSheet.create({
         borderColor: '#1d1d1d',
         height: 250,
         margin: 10,
+        paddingTop:10,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -97,6 +74,7 @@ const styles = StyleSheet.create({
         borderColor: '#1d1d1d',
         height: 250,
         margin: 10,
+        paddingTop:10,
         justifyContent: 'center',
         alignItems: 'center'
     },

@@ -20,9 +20,10 @@ export default class youping extends Component {
         return (
             <Navigator.Navigator
                 initialRoute={rootRoute}
-                configureScene={() => {
-                    return Navigator.Navigator.SceneConfigs.SwipeFromLeft;
-                }}
+                configureScene={() => ({
+                    ...Navigator.Navigator.SceneConfigs.SwipeFromLeft,//转场动画
+                    gestures: { pop: false }
+                })}
                 renderScene={(route, navigator) => {
                     let Component = route.component;
                     return <Component {...route.params} navigator={navigator} />

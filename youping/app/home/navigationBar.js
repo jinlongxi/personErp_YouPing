@@ -2,7 +2,8 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
-import ReleaseResource from '../release/releaseResource'
+import ReleaseResource from '../resource/releaseResource';
+import OrderList from '../order/orderList';
 import {
     AppRegistry,
     StyleSheet,
@@ -19,32 +20,43 @@ import {
 class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            productCategoryId:this.props.productCategoryId
+        this.state = {
+            productCategoryId: null
         };
-        this._releseResource = this._releseResource.bind(this)
+        this._releseResource = this._releseResource.bind(this);
+        this._queryMyResourceOrder = this._queryMyResourceOrder.bind(this);
     }
 
     //发布资源
     _releseResource() {
-        console.log(this.props.productCategoryId+"llllllllllll")
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'ReleaseResource',
                 component: ReleaseResource,
+                params: {},
+            })
+        }
+    }
+
+    //查询我的订单
+    _queryMyResourceOrder() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'OrderList',
+                component: OrderList,
                 params: {
-                    productCategoryId:this.props.productCategoryId
-                }
+                    productCategoryId: this.props.productCategoryId
+                },
             })
         }
     }
 
     render() {
-        var productCategoryId=this.props.productCategoryId;
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={styles.imageIcon}>
+                <TouchableOpacity style={styles.imageIcon} onPress={this._queryMyResourceOrder}>
                     <Image
                         source={require('../img/home/manager.png')}
                         style={styles.icon}/>
@@ -65,7 +77,6 @@ class NavigationBar extends React.Component {
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

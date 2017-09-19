@@ -24,11 +24,11 @@ export default class TelLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumber: JSON.stringify(new Date().getTime()).substring(0,11),
+            phoneNumber: JSON.stringify(new Date().getTime()).substring(0, 11),
             loginBtn: '获取验证码',
             sented: false,
             timerCount: 30,
-            captcha:null
+            captcha: null
         };
         this._countDownAction = this._countDownAction.bind(this);
         this._getVerifyCode = this._getVerifyCode.bind(this);
@@ -44,12 +44,12 @@ export default class TelLogin extends Component {
         const that = this;
         Request.postRequestLogin(url, formData, function (response) {
             console.log(JSON.stringify(response));
-            let {code:code,captcha:captcha}=response;
+            let {code:code, captcha:captcha}=response;
             if (code === '200') {
                 that.setState({
                     loginBtn: '登录',
                     sented: true,
-                    captcha:captcha
+                    captcha: captcha
                 });
                 that._countDownAction()
             }
@@ -100,14 +100,14 @@ export default class TelLogin extends Component {
                 console.log(JSON.stringify(response));
                 let {code:code, tarjeta:tarjeta}=response;
                 if (code === '200') {
-                   if(DeviceStorage.get('tarjeta')==undefined){
-                       console.log('保存TOKEN');
-                       DeviceStorage.save('tarjeta', tarjeta);
-                   }else{
-                       console.log('更新TOKEN');
-                       DeviceStorage.update('tarjeta', tarjeta);
-                   }
-                       that._home();
+                    if (DeviceStorage.get('tarjeta') == undefined) {
+                        console.log('保存TOKEN');
+                        DeviceStorage.save('tarjeta', tarjeta);
+                    } else {
+                        console.log('更新TOKEN');
+                        DeviceStorage.update('tarjeta', tarjeta);
+                    }
+                    that._home();
                 } else {
                     alert('验证码不正确')
                 }
