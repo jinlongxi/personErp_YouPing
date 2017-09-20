@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import ReleaseResource from '../resource/releaseResource';
 import OrderList from '../order/orderList';
+import ContactList from '../contacts/contactList'
 import {
     AppRegistry,
     StyleSheet,
@@ -25,6 +26,7 @@ class NavigationBar extends React.Component {
         };
         this._releseResource = this._releseResource.bind(this);
         this._queryMyResourceOrder = this._queryMyResourceOrder.bind(this);
+        this._enterContactList = this._enterContactList.bind(this);
     }
 
     //发布资源
@@ -34,6 +36,18 @@ class NavigationBar extends React.Component {
             navigator.push({
                 name: 'ReleaseResource',
                 component: ReleaseResource,
+                params: {},
+            })
+        }
+    }
+
+    //我的联系人
+    _enterContactList() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'ContactList',
+                component: ContactList,
                 params: {},
             })
         }
@@ -68,7 +82,7 @@ class NavigationBar extends React.Component {
 
                     />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.imageIcon}>
+                <TouchableOpacity style={styles.imageIcon} onPress={this._enterContactList}>
                     <Image
                         source={require('../img/home/contacts.png')}
                         style={styles.icon}/>

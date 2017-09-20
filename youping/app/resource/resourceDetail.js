@@ -22,6 +22,7 @@ class ResourceDetail extends React.Component {
         super(props);
         this.state = {
             resourceData: null,
+            resourceType: this.props.resourceType
         };
         this._buyResource = this._buyResource.bind(this)
     }
@@ -46,21 +47,21 @@ class ResourceDetail extends React.Component {
     //购买资源
     _buyResource() {
         let url = ServiceURl.personManager + 'placeResourceOrder';
-        const that=this;
-        let data = '&productId=' + this.state.resourceData.productId + '&productStoreId=' + this.state.resourceData.productStoreId+'&prodCatalogId='
-            + this.state.resourceData.prodCatalogId+'&payToPartyId='+this.state.resourceData.payToPartyId;
+        const that = this;
+        let data = '&productId=' + this.state.resourceData.productId + '&productStoreId=' + this.state.resourceData.productStoreId
+            + '&prodCatalogId='
+            + this.state.resourceData.prodCatalogId + '&payToPartyId=' + this.state.resourceData.payToPartyId;
         console.log('购买资源URL:' + url + data);
         Request.postRequest(url, data, function (success) {
             let {code:code}=success;
-            if(code==='200'){
+            if (code === '200') {
                 console.log("购买资源:" + JSON.stringify(success));
                 const {navigator} = that.props;
                 if (navigator) {
                     navigator.push({
                         name: 'OrderList',
                         component: OrderList,
-                        params: {
-                        },
+                        params: {},
                     })
                 }
             }
@@ -90,23 +91,27 @@ class ResourceDetail extends React.Component {
                                 <Text style={styles.title}>资源简介:{this.state.resourceData.productName}</Text>
                                 <Text style={styles.text}>资源编号:{this.state.resourceData.productId}</Text>
                                 <Text style={styles.title}>发布者</Text>
-                                <Text style={styles.text}>小沈</Text>
+                                <Text style={styles.text}>{this.state.resourceData.firstName}</Text>
                             </View>
 
                     }
                 </ScrollView>
                 <View >
-                    <TouchableOpacity style={styles.placeOrder} onPress={this._buyResource}>
-                        <Text style={styles.placeOrder_btn}
-                        >联系购买</Text>
-                    </TouchableOpacity>
+                    {
+                        this.state.resourceType !== 'my' ?
+                            <TouchableOpacity style={styles.placeOrder} onPress={this._buyResource}>
+                                <Text style={styles.placeOrder_btn}
+                                >联系购买</Text>
+                            </TouchableOpacity> : null
+                    }
                 </View>
             </View>
         )
     }
 
     componentWillMount() {
-        this._getData()
+        this._getData();
+        console.log(this.props.resourceType + "带来的参数")
     }
 }
 
@@ -116,7 +121,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop:20
+        marginTop: 20
     },
     title: {
         marginTop: 10,

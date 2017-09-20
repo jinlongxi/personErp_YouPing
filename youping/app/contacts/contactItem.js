@@ -13,36 +13,32 @@ import {
     ScrollView
 } from 'react-native';
 
-class myResourceItem extends React.Component {
+class ContactItem extends React.Component {
     constructor(props) {
         super(props);
     }
 
     render() {
         var resource = this.props.resource;
-        console.log(resource.firstName+'资源发布人')
-
         return (
             <TouchableOpacity style={styles.item} {...this.props} >
 
                 <View style={styles.imageContainer}>
                     {
-                        resource.detailImageUrl != null ?
-                            <Image source={{uri: resource.detailImageUrl}} style={styles.image}/>
+                        resource.headPortrait != null ?
+                            <Image source={{uri: resource.headPortrait}} style={styles.image}/>
                             : null
                     }
                 </View>
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
-                        <Text numberOfLines={1}>资源名称:{resource.productName}</Text>
+                        <Text numberOfLines={1}>姓名:{resource.firstName}</Text>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text style={styles.price}
-                              numberOfLines={1}>价格:{resource.price}</Text>
-                        {
-                            resource.firstName!=null? <Text style={styles.price}
-                                  numberOfLines={1}>发布人:{resource.firstName}</Text>:null
-                        }
+                        <Text numberOfLines={1}>关系类型:{resource.partyRelationshipTypeId}</Text>
+                    </View>
+                    <View style={styles.textContainer}>
+                        <Text numberOfLines={1}>PartyId:{resource.partyIdFrom}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -90,4 +86,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default myResourceItem
+export default ContactItem

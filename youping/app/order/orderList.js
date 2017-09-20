@@ -16,7 +16,8 @@ import {
     TextInput,
     Image,
     ListView,
-    ScrollView
+    ScrollView,
+    RefreshControl
 } from 'react-native';
 
 class OrderList extends React.Component {
@@ -26,9 +27,11 @@ class OrderList extends React.Component {
         this.state = {
             dataSource: ds.cloneWithRows(['row 1', 'row 2']),
             queryMyResourceOrderList: null,
-            show: false
+            show: false,
+            isRefreshing: false,
         };
-        this._renderRow = this._renderRow.bind(this)
+        this._renderRow = this._renderRow.bind(this);
+        this._onRefresh = this._onRefresh.bind(this);
     }
 
     render() {
@@ -38,7 +41,21 @@ class OrderList extends React.Component {
                     initObj={{backName: '返回', barTitle: '我的订单'}}
                     navigator={this.props.navigator}
                 />
-                <ScrollView>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this._onRefresh.bind(this)}
+                            tintColor="#ff0000"
+                            title="加载中..."
+                            titleColor="#00ff00"
+                            colors={['#ff0000', '#00ff00', '#0000ff']}
+                            progressBackgroundColor="#ffffff"
+                        />
+                    }
+                    onScroll={this._onScroll.bind(this)}
+                    scrollEventThrottle={50}>
+
                     {
                         this.state.show ? <ListView
                             dataSource={this.state.dataSource}
@@ -51,6 +68,32 @@ class OrderList extends React.Component {
                 </ScrollView>
             </View>
         );
+    }
+
+    //监听滚动条
+    _onScroll(event) {
+        if (this.state.loadMore) {
+            return;
+        }
+        let y = event.nativeEvent.contentOffset.y;
+        let height = event.nativeEvent.layoutMeasurement.height;
+        let contentHeight = event.nativeEvent.contentSize.height;
+        console.log('offsetY-->' + y);
+        console.log('height-->' + height);
+        console.log('contentHeight-->' + contentHeight);
+        if (y + height >= contentHeight - 20) {
+            this.setState({
+                loadMore: true
+            });
+        }
+    }
+
+    //下拉刷新
+    _onRefresh() {
+        this.setState({
+            isRefreshing: true
+        });
+        this._getData();
     }
 
 
@@ -82,7 +125,8 @@ class OrderList extends React.Component {
                 });
                 that.setState({
                     dataSource: ds.cloneWithRows(queryMyResourceOrderList),
-                    show:true,
+                    show: true,
+                    isRefreshing: false
                 })
             }
         }, function (err) {

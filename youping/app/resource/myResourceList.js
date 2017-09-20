@@ -33,7 +33,7 @@ class myResourceList extends React.Component {
 
     render() {
         return (
-            <View>
+            <ScrollView>
                 {
                     this.state.show ? <ListView
                         dataSource={this.state.dataSource}
@@ -45,7 +45,7 @@ class myResourceList extends React.Component {
                         showsHorizontalScrollIndicator={false}
                     /> : Util.loading
                 }
-            </View>
+            </ScrollView>
         );
     }
 
@@ -57,7 +57,8 @@ class myResourceList extends React.Component {
                 name: 'ResourceDetail',
                 component: ResourceDetail,
                 params: {
-                    productId: productId
+                    productId: productId,
+                    resourceType:'my'
                 }
             })
         }

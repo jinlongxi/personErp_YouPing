@@ -9,6 +9,7 @@ import DeviceInfo from 'react-native-device-info';
 import Header from '../common/header'
 import Home from '../home/homeList'
 import DeviceStorage from '../common/deviceStorage'
+import CompleteInfo from './completeInformation'
 import {
     AppRegistry,
     StyleSheet,
@@ -98,7 +99,7 @@ export default class TelLogin extends Component {
             const that = this;
             Request.postRequestLogin(url, formData, function (response) {
                 console.log(JSON.stringify(response));
-                let {code:code, tarjeta:tarjeta}=response;
+                let {code:code, tarjeta:tarjeta, newUser:newUser}=response;
                 if (code === '200') {
                     if (DeviceStorage.get('tarjeta') == undefined) {
                         console.log('保存TOKEN');
@@ -107,7 +108,11 @@ export default class TelLogin extends Component {
                         console.log('更新TOKEN');
                         DeviceStorage.update('tarjeta', tarjeta);
                     }
-                    that._home();
+                    if (newUser === 'N') {
+                        that._completeInfo();
+                    } else {
+                        that._home()
+                    }
                 } else {
                     alert('验证码不正确')
                 }
@@ -126,6 +131,18 @@ export default class TelLogin extends Component {
             navigator.push({
                 name: 'Home',
                 component: Home,
+                params: {}
+            })
+        }
+    }
+
+    //完善资料
+    _completeInfo() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'CompleteInfo',
+                component: CompleteInfo,
                 params: {}
             })
         }
