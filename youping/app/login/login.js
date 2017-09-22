@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import TelLogin from './telLogin'
 import DeviceStorage from '../common/deviceStorage'
 import Home from '../home/homeList'
+import Navigator from '../common/navigation'
 
 import {
     AppRegistry,
@@ -21,9 +22,6 @@ import {
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            tarjeta: null,
-        }
     }
 
     //手机登录
@@ -40,34 +38,21 @@ class Login extends React.Component {
 
     render() {
         return (
-            <View>
-                {
-                    this.state.tarjeta == null ?
-                        <View style={styles.container} >
-                            <TouchableOpacity style={styles.btnWechat}>
-                                <Image
-                                    source={require('../img/login/wechat.jpg')}
-                                    style={styles.icon}/>
-                                <Text style={styles.btn}  {...this.props}>微信登录</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnTel} onPress={this._telLogin.bind(this)}>
-                                <Image
-                                    source={require('../img/login/tel.png')}
-                                    style={styles.icon}/>
-                                <Text style={styles.btn}  {...this.props}>手机登录</Text>
-                            </TouchableOpacity>
-                        </View> : <Home {...this.props}/>
-                }
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.btnWechat}>
+                    <Image
+                        source={require('../img/login/wechat.jpg')}
+                        style={styles.icon}/>
+                    <Text style={styles.btn}  {...this.props}>微信登录</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnTel} onPress={this._telLogin.bind(this)}>
+                    <Image
+                        source={require('../img/login/tel.png')}
+                        style={styles.icon}/>
+                    <Text style={styles.btn}  {...this.props}>手机登录</Text>
+                </TouchableOpacity>
             </View>
         );
-    }
-
-    componentWillMount() {
-        DeviceStorage.get('tarjeta').then((tags) => {
-            this.setState({
-                tarjeta: tags
-            })
-        });
     }
 }
 
@@ -84,10 +69,10 @@ const styles = StyleSheet.create({
         height: 44,
         marginLeft: 5,
         borderRadius: 4,
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center',
-        marginRight:3
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 3
     },
     btnTel: {
         marginTop: 200,
@@ -96,9 +81,9 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         borderRadius: 4,
-        flexDirection:'row',
-        justifyContent:'center',
-        alignItems:'center'
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     btn: {
         fontSize: 16,
@@ -107,9 +92,9 @@ const styles = StyleSheet.create({
         lineHeight: 44
     },
     icon: {
-        height:30,
-        width:30,
-        marginRight:5
+        height: 30,
+        width: 30,
+        marginRight: 5
     },
 
 

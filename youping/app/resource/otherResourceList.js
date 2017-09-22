@@ -24,7 +24,7 @@ class OtherResourceList extends React.Component {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows(['row 1', 'row 2']),
+            dataSource: ds.cloneWithRows(['row 1']),
             show: false
         };
         this._renderRow = this._renderRow.bind(this)
@@ -81,7 +81,7 @@ class OtherResourceList extends React.Component {
         const url = ServiceURl.personManager + 'queryDimensionResource';
         const that = this;
         Request.postRequest(url, '', function (response) {
-            console.log("好友资源" + JSON.stringify(response));
+            //console.log("好友资源" + JSON.stringify(response));
             let {code:code, productCategoryId:productCategoryId, dimensionResourceList:dimensionResourceList}=response;
             if (code === '200') {
                 //设置数据源和加载状态

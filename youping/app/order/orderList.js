@@ -7,6 +7,7 @@ import Request from '../common/request';
 import ServiceURl from '../common/service';
 import Util from '../common/util';
 import Header from '../common/header';
+import EmptyPage from '../common/emptyPage';
 import {
     AppRegistry,
     StyleSheet,
@@ -25,10 +26,10 @@ class OrderList extends React.Component {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows(['row 1', 'row 2']),
-            queryMyResourceOrderList: null,
+            dataSource: ds.cloneWithRows(['row 1']),
             show: false,
             isRefreshing: false,
+            empty:false
         };
         this._renderRow = this._renderRow.bind(this);
         this._onRefresh = this._onRefresh.bind(this);
@@ -99,7 +100,7 @@ class OrderList extends React.Component {
 
     //渲染
     _renderRow(resource) {
-        return <OrderItem resource={resource}/>
+        return !this.state.empty?<OrderItem resource={resource}/>:<EmptyPage/>
     }
 
     //渲染分割线
@@ -119,15 +120,23 @@ class OrderList extends React.Component {
             console.log('我的订单' + JSON.stringify(response));
             let {code:code, queryMyResourceOrderList:queryMyResourceOrderList}=response;
             if (code === '200') {
-                console.log('000000000');
-                var ds = new ListView.DataSource({
-                    rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-                });
-                that.setState({
-                    dataSource: ds.cloneWithRows(queryMyResourceOrderList),
-                    show: true,
-                    isRefreshing: false
-                })
+                if(queryMyResourceOrderList!=''){
+                    var ds = new ListView.DataSource({
+                        rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+                    });
+                    that.setState({
+                        dataSource: ds.cloneWithRows(queryMyResourceOrderList),
+                        show: true,
+                        isRefreshing: false,
+                        empty:false
+                    })
+                }else{
+                    that.setState({
+                        show: true,
+                        empty:true,
+                        isRefreshing: false,
+                    });
+                }
             }
         }, function (err) {
             console.log(JSON.stringify(err))

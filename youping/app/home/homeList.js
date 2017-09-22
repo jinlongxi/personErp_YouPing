@@ -4,7 +4,8 @@
 import React, {Component} from 'react';
 import NavigationBar from './navigationBar';
 import MyResourceList from '../resource/myResourceList';
-import OtherResourceList from '../resource/otherResourceList'
+import OtherResourceList from '../resource/otherResourceList';
+import Geolocation from 'Geolocation';
 import {
     AppRegistry,
     StyleSheet,
@@ -23,7 +24,6 @@ class homeList extends React.Component {
             productCategoryId: null,
             resource: null
         }
-
     }
 
     //定义子组件传来的参数
@@ -36,48 +36,73 @@ class homeList extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.myResource}>
-                    <Text>我的资源</Text>
+                    <Text style={styles.title}>我的资源</Text>
                     <MyResourceList handleVal={this.handleVal} {...this.props}/>
                 </View>
                 <View style={styles.navigationBar}>
                     <NavigationBar productCategoryId={this.state.productCategoryId} {...this.props}/>
                 </View>
                 <View style={styles.otherResource}>
-                    <Text>好友资源</Text>
+                    <Text style={styles.title}>好友资源</Text>
                     <OtherResourceList {...this.props}/>
                 </View>
             </View>
         );
+    }
+
+    //获取地理位置
+    _getLocation() {
+        Geolocation.getCurrentPosition(
+            location => {
+                var result = "速度：" + location.coords.speed +
+                    "\n经度：" + location.coords.longitude +
+                    "\n纬度：" + location.coords.latitude +
+                    "\n准确度：" + location.coords.accuracy +
+                    "\n行进方向：" + location.coords.heading +
+                    "\n海拔：" + location.coords.altitude +
+                    "\n海拔准确度：" + location.coords.altitudeAccuracy +
+                    "\n时间戳：" + location.timestamp;
+                console.log(result);
+            },
+            error => {
+                alert("获取位置失败：" + error)
+            }
+        );
+    }
+
+    componentWillMount() {
+        this._getLocation()
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
-        marginTop: 20
+        marginTop: 20,
     },
     myResource: {
         borderWidth: 1,
         borderColor: '#1d1d1d',
         height: 250,
-        margin: 10,
-        paddingTop:10,
+        padding: 10,
+        margin: 5,
         justifyContent: 'center',
-        alignItems: 'center'
     },
     navigationBar: {
-        height: 80,
+        height: 60,
         margin: 10
-    }, otherResource: {
+    },
+    otherResource: {
         borderWidth: 1,
         borderColor: '#1d1d1d',
         height: 250,
-        margin: 10,
-        paddingTop:10,
+        padding: 10,
+        margin: 5,
         justifyContent: 'center',
-        alignItems: 'center'
     },
+    title: {
+        textAlign: 'center'
+    }
 });
 
 export default homeList

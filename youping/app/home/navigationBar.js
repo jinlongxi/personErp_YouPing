@@ -72,7 +72,7 @@ class NavigationBar extends React.Component {
             <View style={styles.container}>
                 <TouchableOpacity style={styles.imageIcon} onPress={this._queryMyResourceOrder}>
                     <Image
-                        source={require('../img/home/manager.png')}
+                        source={require('../img/home/order.png')}
                         style={styles.icon}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this._releseResource}>

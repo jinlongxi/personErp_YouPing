@@ -5,8 +5,7 @@
  */
 
 import React, {Component} from 'react';
-import Login from './app/login/login';
-import Navigator from './app/common/navigation'
+import Tabs from './app/root/tabs'
 
 import {
     AppRegistry,
@@ -14,19 +13,23 @@ import {
     Text,
     View,
     AsyncStorage,
-    ScrollView
+    ScrollView,
+    Image
 } from 'react-native';
 
 
 class youping extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedTab: 'Event'
+        }
     }
 
     render() {
         return (
-           <Navigator component={Login}/>
-        )
+            <Tabs/>
+        );
     }
 }
 

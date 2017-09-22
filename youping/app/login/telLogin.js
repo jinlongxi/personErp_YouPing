@@ -6,10 +6,10 @@ import React, {Component} from 'react';
 import Request from '../common/request';
 import ServiceURl from '../common/service';
 import DeviceInfo from 'react-native-device-info';
-import Header from '../common/header'
-import Home from '../home/homeList'
-import DeviceStorage from '../common/deviceStorage'
-import CompleteInfo from './completeInformation'
+import Header from '../common/header';
+import DeviceStorage from '../common/deviceStorage';
+import CompleteInfo from './completeInformation';
+import Tabs from '../root/tabs'
 import {
     AppRegistry,
     StyleSheet,
@@ -25,11 +25,12 @@ export default class TelLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumber: JSON.stringify(new Date().getTime()).substring(0, 11),
+            phoneNumber: null,      //JSON.stringify(new Date().getTime()).substring(0, 11)
             loginBtn: '获取验证码',
             sented: false,
             timerCount: 30,
-            captcha: null
+            captcha: null,
+            tarjeta:null,
         };
         this._countDownAction = this._countDownAction.bind(this);
         this._getVerifyCode = this._getVerifyCode.bind(this);
@@ -101,7 +102,10 @@ export default class TelLogin extends Component {
                 console.log(JSON.stringify(response));
                 let {code:code, tarjeta:tarjeta, newUser:newUser}=response;
                 if (code === '200') {
-                    if (DeviceStorage.get('tarjeta') == undefined) {
+                    that.setState({
+                        tarjeta:tarjeta
+                    });
+                    if (DeviceStorage.get('tarjeta') == '') {
                         console.log('保存TOKEN');
                         DeviceStorage.save('tarjeta', tarjeta);
                     } else {
@@ -109,9 +113,12 @@ export default class TelLogin extends Component {
                         DeviceStorage.update('tarjeta', tarjeta);
                     }
                     if (newUser === 'N') {
-                        that._completeInfo();
+                        setTimeout(function () {
+                            that._home()
+                        },3000);
+                        console.log('我在等待在等待--------------------------')
                     } else {
-                        that._home()
+                        that._completeInfo();
                     }
                 } else {
                     alert('验证码不正确')
@@ -129,9 +136,11 @@ export default class TelLogin extends Component {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'Home',
-                component: Home,
-                params: {}
+                name: 'Tabs',
+                component: Tabs,
+                params: {
+                    tarjeta:this.state.tarjeta
+                }
             })
         }
     }

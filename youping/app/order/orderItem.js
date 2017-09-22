@@ -28,7 +28,11 @@ class OrderItem extends React.Component {
                 <View style={styles.imageContainer}>
                     {
                         resource.detailImageUrl != null ?
-                            <Image source={{uri: resource.detailImageUrl}} style={styles.image}/>
+                            <Image
+                                source={{uri: resource.detailImageUrl}}
+                                style={styles.image}
+                                defaultSource={require('../img/loading.gif')}
+                            />
                             : null
                     }
                 </View>
@@ -72,7 +76,6 @@ const styles = StyleSheet.create({
     textContainer: {
         flex: 1,
         justifyContent: 'center'
-
     },
     publisher_author: {
         color: "#A3A3A3",

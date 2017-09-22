@@ -6,7 +6,7 @@ import ImagePicker from 'react-native-image-picker';
 import ServiceURl from '../common/service';
 import Request from '../common/request';
 import DeviceStorage from '../common/deviceStorage';
-import HomeList from '../home/homeList';
+import Tabs from '../root/tabs';
 import Util from '../common/util';
 import {
     AppRegistry,
@@ -72,7 +72,7 @@ class CompleteInformation extends React.Component {
         })
     }
 
-    //发布资源
+    //点击完善信息
     _completeInfo() {
         this.setState({
             show: false
@@ -94,8 +94,8 @@ class CompleteInformation extends React.Component {
                         const {navigator} = that.props;
                         if (navigator) {
                             navigator.push({
-                                name: 'HomeList',
-                                component: HomeList,
+                                name: 'Tabs',
+                                component: Tabs,
                                 params: {},
                             })
                         }
@@ -119,7 +119,7 @@ class CompleteInformation extends React.Component {
                                 {
                                     this.state.avatarSource == null ?
                                         <Image
-                                            source={require('../img/contact/upLoad.png')}/> :
+                                            source={require('../img/login/photo.png')}/> :
                                         <Image source={this.state.avatarSource} style={styles.image}/>
                                 }
                                 <Text style={styles.uploadBtn}>点击上传头像</Text>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     },
     header:{
         height:44,
-        backgroundColor:'yellow',
+        backgroundColor:'#1DBAF1',
         paddingTop:20
     },
     header_title:{

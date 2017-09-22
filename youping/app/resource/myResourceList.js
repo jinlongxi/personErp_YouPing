@@ -5,9 +5,10 @@ import React, {Component} from 'react';
 import ResourceItem from './resourceItem'
 import Request from '../common/request';
 import ServiceURl from '../common/service';
-import ResourceDetail from '../resource/resourceDetail'
-import Util from '../common/util'
-import DeviceStorage from '../common/deviceStorage'
+import ResourceDetail from '../resource/resourceDetail';
+import Util from '../common/util';
+import DeviceStorage from '../common/deviceStorage';
+import EmptyPage from '../common/emptyPage';
 import {
     AppRegistry,
     StyleSheet,
@@ -25,8 +26,9 @@ class myResourceList extends React.Component {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows(['row 1', 'row 2']),
-            show: false
+            dataSource: ds.cloneWithRows(['row 1']),
+            show: false,
+            empty:false
         };
         this._renderRow = this._renderRow.bind(this)
     }
@@ -66,7 +68,7 @@ class myResourceList extends React.Component {
 
     //渲染
     _renderRow(resource) {
-        return <ResourceItem resource={resource} onPress={this._showDetail.bind(this, resource.productId)}/>
+        return !this.state.empty?<ResourceItem resource={resource} onPress={this._showDetail.bind(this, resource.productId)}/>:<EmptyPage/>
     }
 
     //渲染分割线
@@ -83,7 +85,7 @@ class myResourceList extends React.Component {
         const url = ServiceURl.personManager + 'queryMyResource';
         const that = this;
         Request.postRequest(url, '', function (response) {
-            console.log("我的资源列表" + JSON.stringify(response));
+            //console.log("我的资源列表" + JSON.stringify(response));
             let {code:code, productCategoryId:productCategoryId, myResourceList:myResourceList}=response;
             if (code === '200') {
                 if (myResourceList != '') {
@@ -96,13 +98,15 @@ class myResourceList extends React.Component {
                     that.setState({
                         productCategoryId: productCategoryId,
                         dataSource: ds.cloneWithRows(myResourceList),
-                        show: true
+                        show: true,
+                        empty:false
                     });
                 } else {
                     DeviceStorage.save('productCategoryId', productCategoryId);
                     that.setState({
                         productCategoryId: productCategoryId,
-                        show: true
+                        show: true,
+                        empty:true
                     });
                 }
             }

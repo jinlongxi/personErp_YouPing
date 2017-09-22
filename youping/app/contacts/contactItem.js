@@ -26,7 +26,11 @@ class ContactItem extends React.Component {
                 <View style={styles.imageContainer}>
                     {
                         resource.headPortrait != null ?
-                            <Image source={{uri: resource.headPortrait}} style={styles.image}/>
+                            <Image
+                                source={{uri: resource.headPortrait}}
+                                style={styles.image}
+                                defaultSource={require('../img/loading.gif')}
+                            />
                             : null
                     }
                 </View>
@@ -38,7 +42,7 @@ class ContactItem extends React.Component {
                         <Text numberOfLines={1}>关系类型:{resource.partyRelationshipTypeId}</Text>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text numberOfLines={1}>PartyId:{resource.partyIdFrom}</Text>
+                        <Text numberOfLines={1}>PartyId:{resource.partyIdTo}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -61,7 +65,8 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderWidth: 1,
-        borderColor: 'gray'
+        borderColor: 'gray',
+        borderRadius:40,
     },
     contentContainer: {
         flex: 1,
@@ -86,4 +91,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ContactItem
+export default ContactItem;

@@ -20,28 +20,30 @@ class myResourceItem extends React.Component {
 
     render() {
         var resource = this.props.resource;
-        console.log(resource.firstName+'资源发布人')
-
         return (
             <TouchableOpacity style={styles.item} {...this.props} >
 
                 <View style={styles.imageContainer}>
                     {
                         resource.detailImageUrl != null ?
-                            <Image source={{uri: resource.detailImageUrl}} style={styles.image}/>
+                            <Image
+                                source={{uri: resource.detailImageUrl}}
+                                style={styles.image}
+                                defaultSource={require('../img/loading.gif')}
+                            />
                             : null
                     }
                 </View>
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
-                        <Text numberOfLines={1}>资源名称:{resource.productName}</Text>
+                        <Text numberOfLines={1} style={styles.resourceTitle}>资源名称:{resource.productName}</Text>
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.price}
                               numberOfLines={1}>价格:{resource.price}</Text>
                         {
-                            resource.firstName!=null? <Text style={styles.price}
-                                  numberOfLines={1}>发布人:{resource.firstName}</Text>:null
+                            resource.firstName != null ? <Text style={styles.price}
+                                                               numberOfLines={1}>发布人:{resource.firstName}</Text> : null
                         }
                     </View>
                 </View>
@@ -73,8 +75,12 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flex: 1,
-        justifyContent: 'center'
-
+        justifyContent: 'center',
+    },
+    resourceTitle: {
+        fontSize: 18,
+        color: '#1d1d1d',
+        paddingBottom: 10
     },
     publisher_author: {
         color: "#A3A3A3",
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     },
     price: {
         color: '#2bb2a3',
-        fontSize: 16
+        fontSize: 16,
     },
     pages: {
         color: "#ff00ff",

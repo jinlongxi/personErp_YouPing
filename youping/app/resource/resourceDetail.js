@@ -6,6 +6,7 @@ import ServiceURl from '../common/service';
 import Request from  '../common/request';
 import Header from '../common/header';
 import OrderList from '../order/orderList';
+import Home from '../home/homeList';
 import {
     AppRegistry,
     StyleSheet,
@@ -14,7 +15,8 @@ import {
     TouchableOpacity,
     TextInput,
     Image,
-    ScrollView
+    ScrollView,
+    SectionList
 } from 'react-native';
 
 class ResourceDetail extends React.Component {
@@ -24,7 +26,8 @@ class ResourceDetail extends React.Component {
             resourceData: null,
             resourceType: this.props.resourceType
         };
-        this._buyResource = this._buyResource.bind(this)
+        this._buyResource = this._buyResource.bind(this);
+        this._salesDiscontinuation = this._salesDiscontinuation.bind(this);
     }
 
     //请求数据
@@ -56,11 +59,12 @@ class ResourceDetail extends React.Component {
             let {code:code}=success;
             if (code === '200') {
                 console.log("购买资源:" + JSON.stringify(success));
+                alert('请拨打:' + success.contactTel + '联系卖家');
                 const {navigator} = that.props;
                 if (navigator) {
                     navigator.push({
-                        name: 'OrderList',
-                        component: OrderList,
+                        name: 'Home',
+                        component: Home,
                         params: {},
                     })
                 }
@@ -68,6 +72,29 @@ class ResourceDetail extends React.Component {
         }, function (err) {
             console.log(JSON.stringify(err))
         })
+    }
+
+    //下架商品
+    _salesDiscontinuation() {
+        let url = ServiceURl.personManager + 'salesDiscontinuation';
+        const that = this;
+        let data = '&productId=' + this.state.resourceData.productId;
+        Request.postRequest(url, data, function (success) {
+            let {code:code}=success;
+            if (code === '200') {
+                const {navigator} = that.props;
+                if (navigator) {
+                    navigator.push({
+                        name: 'Tabs',
+                        component: Tabs,
+                        params: {},
+                    })
+                }
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        })
+
     }
 
     render() {
@@ -85,15 +112,19 @@ class ResourceDetail extends React.Component {
                                 {
                                     this.state.resourceData.detailImageUrl != null ?
                                         <Image source={{uri: this.state.resourceData.detailImageUrl}}
-                                               style={styles.image}/>
+                                               style={styles.image}
+                                               accessibilityLabel="图片加载中。。。"
+                                               blurRadius={1}
+                                               defaultSource={require('../img/loading.gif')}
+                                        />
                                         : null
                                 }
                                 <Text style={styles.title}>资源简介:{this.state.resourceData.productName}</Text>
                                 <Text style={styles.text}>资源编号:{this.state.resourceData.productId}</Text>
                                 <Text style={styles.title}>发布者</Text>
                                 <Text style={styles.text}>{this.state.resourceData.firstName}</Text>
-                            </View>
 
+                            </View>
                     }
                 </ScrollView>
                 <View >
@@ -102,7 +133,11 @@ class ResourceDetail extends React.Component {
                             <TouchableOpacity style={styles.placeOrder} onPress={this._buyResource}>
                                 <Text style={styles.placeOrder_btn}
                                 >联系购买</Text>
-                            </TouchableOpacity> : null
+                            </TouchableOpacity> :
+                            <TouchableOpacity style={styles.cencelOrder} onPress={this._salesDiscontinuation}>
+                                <Text style={styles.placeOrder_btn}
+                                >不卖了</Text>
+                            </TouchableOpacity>
                     }
                 </View>
             </View>
@@ -143,18 +178,30 @@ const styles = StyleSheet.create({
         width: 300,
         height: 200,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'gray'
     },
     placeOrder: {//下单
-        backgroundColor: 'blue',
+        backgroundColor: '#3497FF',
         height: 55,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        margin: 10,
+        borderRadius: 5
     },
     placeOrder_btn: {//下单按钮
         alignSelf: 'center',
         fontSize: 20,
         color: '#FFFFFF',
+    },
+    cencelOrder: {
+        backgroundColor: '#90EE90',
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        borderRadius: 5
     }
 });
 
