@@ -30,7 +30,7 @@ export default class TelLogin extends Component {
             sented: false,
             timerCount: 30,
             captcha: null,
-            tarjeta:null,
+            tarjeta: null,
         };
         this._countDownAction = this._countDownAction.bind(this);
         this._getVerifyCode = this._getVerifyCode.bind(this);
@@ -98,12 +98,20 @@ export default class TelLogin extends Component {
             formData.append("captcha", this.state.captcha);
             formData.append("uuid", uuid);
             const that = this;
+            //获取tarjeta
             Request.postRequestLogin(url, formData, function (response) {
                 console.log(JSON.stringify(response));
                 let {code:code, tarjeta:tarjeta, newUser:newUser}=response;
                 if (code === '200') {
+                    //过去我的纬度名单
+                    let url = ServiceURl.platformManager + 'queryLocalRoster';
+                    Request.postRequestF(url, tarjeta, function (response) {
+                        console.log(JSON.stringify(response) + '------------------tarjeta－－－－－－－－－－－－－－－－')
+                    }, function (err) {
+                        console.log(JSON.stringify(err))
+                    });
                     that.setState({
-                        tarjeta:tarjeta
+                        tarjeta: tarjeta
                     });
                     if (DeviceStorage.get('tarjeta') == '') {
                         console.log('保存TOKEN');
@@ -115,7 +123,7 @@ export default class TelLogin extends Component {
                     if (newUser === 'N') {
                         setTimeout(function () {
                             that._home()
-                        },3000);
+                        }, 3000);
                         console.log('我在等待在等待--------------------------')
                     } else {
                         that._completeInfo();
@@ -139,7 +147,7 @@ export default class TelLogin extends Component {
                 name: 'Tabs',
                 component: Tabs,
                 params: {
-                    tarjeta:this.state.tarjeta
+                    tarjeta: this.state.tarjeta
                 }
             })
         }

@@ -8,7 +8,8 @@ import ContactItem from './contactItem';
 import ServiceURl from '../common/service';
 import Request from '../common/request';
 import EmptyPage from '../common/emptyPage';
-import Contacts from 'react-native-contacts'
+import Contacts from 'react-native-contacts';
+import SingleChat from '../common/singleChat'
 import {
     AppRegistry,
     StyleSheet,
@@ -62,7 +63,7 @@ class ContactList extends React.Component {
 
     //渲染
     _renderRow(resource) {
-        return !this.state.empty ? <ContactItem resource={resource}/> : <EmptyPage/>
+        return !this.state.empty ? <ContactItem resource={resource} onPress={this._singleChat.bind(this)}/> : <EmptyPage/>
 
     }
 
@@ -73,6 +74,19 @@ class ContactList extends React.Component {
             backgroundColor: "#CCCCCC"
         };
         return <View style={style} key="{sectionID+rowID}"/>
+    }
+
+    //点击进入单聊页面
+    _singleChat(){
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'SingleChat',
+                component: SingleChat,
+                params: {
+                }
+            })
+        }
     }
 
     //查询我的资源列表

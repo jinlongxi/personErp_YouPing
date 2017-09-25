@@ -7,6 +7,7 @@ import Request from  '../common/request';
 import Header from '../common/header';
 import OrderList from '../order/orderList';
 import Home from '../home/homeList';
+import SectionViewList from '../common/sectionList';
 import {
     AppRegistry,
     StyleSheet,
@@ -16,7 +17,6 @@ import {
     TextInput,
     Image,
     ScrollView,
-    SectionList
 } from 'react-native';
 
 class ResourceDetail extends React.Component {
@@ -98,7 +98,6 @@ class ResourceDetail extends React.Component {
     }
 
     render() {
-        var resource = this.props.resource;
         return (
             <View style={{flex: 1}}>
                 <Header
@@ -125,6 +124,10 @@ class ResourceDetail extends React.Component {
                                 <Text style={styles.text}>{this.state.resourceData.firstName}</Text>
 
                             </View>
+                    }
+                    {
+                        this.state.resourceData!=null?
+                            <SectionViewList sectionData={this.state.resourceData.partyBuyOrder}/> : null
                     }
                 </ScrollView>
                 <View >

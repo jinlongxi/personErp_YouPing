@@ -2,6 +2,7 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
+import Swipeout from 'react-native-swipeout';
 import {
     AppRegistry,
     StyleSheet,
@@ -18,36 +19,57 @@ class myResourceItem extends React.Component {
         super(props);
     }
 
+    //删除资源
+    _deleteReource(productId){
+        alert('删除资源'+productId)
+    }
+
     render() {
         var resource = this.props.resource;
-        return (
-            <TouchableOpacity style={styles.item} {...this.props} >
+        console.log(JSON.stringify(resource));
+        // Buttons
+        var swipeoutBtns = [
+            {
+                text: '删除',
+                backgroundColor:'red',
+                onPress:this._deleteReource.bind(this,resource.productId)
+            },
+            {
+                text: '屏蔽',
+                backgroundColor:'blue',
+            }
 
-                <View style={styles.imageContainer}>
-                    {
-                        resource.detailImageUrl != null ?
-                            <Image
-                                source={{uri: resource.detailImageUrl}}
-                                style={styles.image}
-                                defaultSource={require('../img/loading.gif')}
-                            />
-                            : null
-                    }
-                </View>
-                <View style={styles.contentContainer}>
-                    <View style={styles.textContainer}>
-                        <Text numberOfLines={1} style={styles.resourceTitle}>资源名称:{resource.productName}</Text>
-                    </View>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.price}
-                              numberOfLines={1}>价格:{resource.price}</Text>
+        ];
+        return (
+            <Swipeout right={swipeoutBtns} style={{backgroundColor:'white'}}>
+                <TouchableOpacity style={styles.item} {...this.props} >
+
+                    <View style={styles.imageContainer}>
                         {
-                            resource.firstName != null ? <Text style={styles.price}
-                                                               numberOfLines={1}>发布人:{resource.firstName}</Text> : null
+                            resource.detailImageUrl != null ?
+                                <Image
+                                    source={{uri: resource.detailImageUrl}}
+                                    style={styles.image}
+                                    defaultSource={require('../img/loading.gif')}
+                                />
+                                : null
                         }
                     </View>
-                </View>
-            </TouchableOpacity>
+                    <View style={styles.contentContainer}>
+                        <View style={styles.textContainer}>
+                            <Text numberOfLines={1} style={styles.resourceTitle}>资源名称:{resource.productName}</Text>
+                        </View>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.price}
+                                  numberOfLines={1}>价格:{resource.price}</Text>
+                            {
+                                resource.firstName != null ? <Text style={styles.price}
+                                                                   numberOfLines={1}>发布人:{resource.firstName}</Text> : null
+                            }
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </Swipeout>
         )
     }
 }

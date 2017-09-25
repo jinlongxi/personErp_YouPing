@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     },
     page1: {
         flex: 1,
-        backgroundColor: 'blue'
+       //backgroundColor: 'blue'
     }
 });
 

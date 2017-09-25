@@ -27,6 +27,19 @@ const Request = {
                 .catch((error)=>failCallback(error))
         });
     },
+    //快速实现
+    postRequestF: function (url, tarjeta, successCallback, failCallback) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: "tarjeta=" + tarjeta
+        })
+            .then((response)=>response.json())
+            .then((responseData)=>successCallback(responseData))
+            .catch((error)=>failCallback(error))
+    },
     //不需要token的请求
     postRequestLogin: function (url, data, successCallback, failCallback) {
         fetch(url, {
@@ -41,7 +54,7 @@ const Request = {
             .catch((error)=>failCallback(error))
     },
     //上传图片
-    uploadImage: function (url, data,successCallback,failCallback) {
+    uploadImage: function (url, data, successCallback, failCallback) {
         let formData = new FormData();      //因为需要上传多张图片,所以需要遍历数组,把图片的路径数组放入formData中
         for (var i = 0; i < data.length; i++) {
             let file = {uri: data[i], type: 'multipart/form-data', name: 'image.png'};   //这里的key(uri和type和name)不能改变,
@@ -53,7 +66,7 @@ const Request = {
                 'Content-Type': 'multipart/form-data',
             },
             body: formData,
-        })  .then((response)=>response.json())
+        }).then((response)=>response.json())
             .then((responseData)=>successCallback(responseData))
             .catch((error)=>failCallback(error))
     }

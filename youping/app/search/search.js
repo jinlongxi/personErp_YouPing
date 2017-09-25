@@ -2,6 +2,9 @@
  * Created by jinlongxi on 17/8/22.
  */
 import React, {Component} from 'react';
+import ServiceURL from '../common/service';
+import Request from '../common/request';
+import FuzzyList from './fuzzyList'
 import {
     AppRegistry,
     StyleSheet,
@@ -9,39 +12,109 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    ListView
 } from 'react-native';
 
 class Search extends React.Component {
     constructor(props) {
         super(props);
+        var ds = new ListView.DataSource({
+            rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+        });
+        this.state = {
+            text: null,
+            show: false,
+            dataSource: ds.cloneWithRows([{productName: '没有相关数据'}]),
+        };
+        this._queryResource = this._queryResource.bind(this);
+        this._onChange = this._onChange.bind(this);
+        this._cancel = this._cancel.bind(this);
+    }
+
+    //搜索资源
+    _queryResource(text) {
+        if(text){
+            let url = ServiceURL.personManager + 'ajaxQueryResource';
+            let data = '&productName=' + text;
+            let that = this;
+            Request.postRequest(url, data, function (response) {
+                let {code:code, queryResourceList:queryResourceList}=response;
+
+                //给模糊查询列表准备数据
+                var ds = new ListView.DataSource({
+                    rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+                });
+                if (code === '200' && queryResourceList != '') {
+                    that.setState({
+                        show: true,
+                        dataSource: ds.cloneWithRows(queryResourceList),
+                    })
+                }else{
+                    that.setState({
+                        dataSource: ds.cloneWithRows([{productName: '没有相关数据'}]),
+                    })
+                }
+                console.log(response)
+            }, function (err) {
+                console.log(err)
+            })
+        }
+    }
+
+    //定义搜索框onChange
+    _onChange(text) {
+        console.log(text+'dfshgkjsdfkgjhdskjfghdsfkgjh');
+        this.setState({
+            text: text,
+            show: true
+        });
+        this._queryResource(text)
+    }
+
+    //取消搜索
+    _cancel() {
+        this.setState({
+            text: null,
+            show: false
+        });
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.containerBar}>
-                    <Text style={styles.title}>搜索资源</Text>
-                </View>
+            <ScrollView style={styles.container}>
                 <View style={styles.containerBar}>
                     <View style={styles.inputContainer}>
-                        <TextInput style={styles.input} {...this.props}/>
+                        <TextInput
+                            style={styles.input} {...this.props}
+                            onChangeText={(text)=>this._onChange(text)}
+                            clearButtonMode="always"
+                            placeholder='请输入你要搜索的资源名称'
+                            value={this.state.text}
+                        />
                     </View>
-                    <TouchableOpacity style={styles.btn}>
-                        <Text style={styles.search}  {...this.props}>搜索</Text>
-                    </TouchableOpacity>
+                    {
+                        this.state.show ?
+                            <TouchableOpacity style={styles.btn} onPress={this._cancel}>
+                                <Text style={styles.search}  {...this.props} >取消</Text>
+                            </TouchableOpacity> : null
+                    }
                 </View>
-            </View>
+                <View>
+                    {
+                        this.state.show ? <FuzzyList dataSource={this.state.dataSource} {...this.props}/> : null
+                    }
+                </View>
+            </ScrollView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
+    container: {
+        flex: 1,
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent:'center'
+        marginTop: 20
     },
     containerBar: {
         flexDirection: 'row',
@@ -52,7 +125,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flex: 1,
-        marginLeft: 5,
+        margin: 5,
     },
     input: {
         height: 44,
@@ -78,10 +151,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         lineHeight: 44
     },
-    title:{
-        fontSize:18,
-        color:'#1d1d1d'
-    }
+    title: {
+        fontSize: 18,
+        color: '#1d1d1d'
+    },
 });
 
 export default Search
