@@ -38,10 +38,9 @@ class OrderList extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Header
-                    initObj={{backName: '返回', barTitle: '我的订单'}}
-                    navigator={this.props.navigator}
-                />
+                <View style={styles.header}>
+                    <Text style={styles.header_text}>全部订单</Text>
+                </View>
                 <ScrollView
                     refreshControl={
                         <RefreshControl
@@ -153,6 +152,17 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
     },
+    header:{
+        height:50,
+        backgroundColor:"#1DBAF1",
+        justifyContent:'center',
+        alignItems:"center",
+        paddingTop: 15,
+    },
+    header_text:{
+        fontSize:18,
+        color:'#fff'
+    }
 });
 
 export default OrderList

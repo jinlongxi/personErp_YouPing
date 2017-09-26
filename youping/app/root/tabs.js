@@ -14,7 +14,10 @@ import Navigation from '../common/navigation';
 import DeviceStorage from '../common/deviceStorage';
 import Home from '../home/homeList';
 import Account from '../account/accountList';
-import Search from '../search/search'
+import Search from '../search/search';
+import Order from '../order/orderList';
+import Entry from './entry';
+
 import {
     AppRegistry,
     StyleSheet,
@@ -81,9 +84,7 @@ class Tabs extends Component {
                                 renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]}
                                                                  source={require("../img/tabs/manager.png")}/>}
                                 onPress={() => this.setState({selectedTab: 'Device'})}>
-                                <View style={styles.page1}>
-                                    <Text style={{fontSize: 18, padding: 15}}>管理页面</Text>
-                                </View>
+                                <Navigation component={Order}/>
                             </TabNavigator.Item>
                             <TabNavigator.Item
                                 selected={this.state.selectedTab === 'User'}
@@ -104,10 +105,9 @@ class Tabs extends Component {
     }
 
     componentDidMount() {
-        // console.log('传递过来的TOKEN:'+this.props.tarjeta);
-        // this.setState({
-        //     tarjeta:this.props.tarjeta
-        // });
+        //更新我的维度好友名单
+        Entry.updateRoster;
+        //获取tarjeta用于
         DeviceStorage.get('tarjeta').then((tags) => {
             this.setState({
                 tarjeta: tags

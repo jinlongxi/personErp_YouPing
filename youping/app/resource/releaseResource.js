@@ -87,7 +87,7 @@ class homeList extends React.Component {
                 data.push(this.state.avatarSource);
                 console.log(data);
                 Request.uploadImage(url, data, function (response) {
-                    console.log(JSON.stringify(response));
+                    //console.log(JSON.stringify(response));
                     let {code:code}=response;
                     if (code === '200') {
                         that.setState({

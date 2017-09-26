@@ -26,7 +26,6 @@ class myResourceItem extends React.Component {
 
     render() {
         var resource = this.props.resource;
-        console.log(JSON.stringify(resource));
         // Buttons
         var swipeoutBtns = [
             {

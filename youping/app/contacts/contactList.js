@@ -9,7 +9,8 @@ import ServiceURl from '../common/service';
 import Request from '../common/request';
 import EmptyPage from '../common/emptyPage';
 import Contacts from 'react-native-contacts';
-import SingleChat from '../common/singleChat'
+import SingleChat from '../common/singleChat';
+import DeviceStorage from '../common/deviceStorage';
 import {
     AppRegistry,
     StyleSheet,
@@ -63,7 +64,8 @@ class ContactList extends React.Component {
 
     //渲染
     _renderRow(resource) {
-        return !this.state.empty ? <ContactItem resource={resource} onPress={this._singleChat.bind(this)}/> : <EmptyPage/>
+        return !this.state.empty ? <ContactItem resource={resource} onPress={this._singleChat.bind(this)}/> :
+            <EmptyPage/>
 
     }
 
@@ -77,14 +79,13 @@ class ContactList extends React.Component {
     }
 
     //点击进入单聊页面
-    _singleChat(){
+    _singleChat() {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'SingleChat',
                 component: SingleChat,
-                params: {
-                }
+                params: {}
             })
         }
     }
@@ -124,19 +125,22 @@ class ContactList extends React.Component {
             if (err === 'denied') {
                 alert('打开通讯录失败')
             } else {
+
                 var myContact = contacts.map(
                     function (user) {
-                        return user.familyName + ":" + user.phoneNumbers.map(num=>num.number);
+                        return user.familyName + ":" + user.phoneNumbers.map(num=>num.number.replace(/\s/g, "").replace(/-/g, ""));
                     });
+                console.log(JSON.stringify(myContact));
                 const url = ServiceURl.personManager + 'matchingContact';
                 const that = this;
                 let data = '&contacts=' + JSON.stringify(myContact);
                 Request.postRequest(url, data, function (response) {
                     console.log("匹配到的好友列表" + JSON.stringify(response));
-                    let {code:code,count:count}=response;
+                    let {code:code, count:count}=response;
                     if (code === '200') {
-                        alert('成功匹配到'+count+'个联系人');
-                        that._getData()
+                        alert('成功匹配到' + count + '个联系人');
+                        that._updateRoster();
+                        that._getData();
                     }
                 }, function (err) {
                     console.log(JSON.stringify(err))
@@ -145,7 +149,22 @@ class ContactList extends React.Component {
         })
     }
 
-    componentWillMount() {
+    //更新维度好友名单
+    _updateRoster() {
+
+        let url = ServiceURl.platformManager + 'queryLocalRoster';
+        Request.postRequest(url, '', function (response) {
+            console.log(JSON.stringify(response) + '------------------tarjeta－－－－－－－－－－－－－－－－');
+            let {code:code, roster:roster}=response;
+            if (code === '200') {
+                DeviceStorage.update('roster', roster);
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        });
+    }
+
+    componentDidMount() {
         this._getData();
     }
 }

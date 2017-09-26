@@ -70,8 +70,8 @@ class homeList extends React.Component {
         );
     }
 
-    componentWillMount() {
-        this._getLocation()
+    componentDidMount() {
+        //this._getLocation()
     }
 }
 

@@ -87,6 +87,20 @@ export default class TelLogin extends Component {
         });
     }
 
+    //获取维度好友名单
+    _getRoster(tarjeta){
+        let url = ServiceURl.platformManager + 'queryLocalRoster';
+        Request.postRequestF(url, tarjeta, function (response) {
+            console.log(JSON.stringify(response) + '------------------tarjeta－－－－－－－－－－－－－－－－')
+            let {code:code, roster:roster}=response;
+            if (code === '200') {
+                DeviceStorage.save('roster', roster);
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        });
+    }
+
     //登录
     _login() {
         if (this.state.sented) {
@@ -103,23 +117,14 @@ export default class TelLogin extends Component {
                 console.log(JSON.stringify(response));
                 let {code:code, tarjeta:tarjeta, newUser:newUser}=response;
                 if (code === '200') {
-                    //过去我的纬度名单
-                    let url = ServiceURl.platformManager + 'queryLocalRoster';
-                    Request.postRequestF(url, tarjeta, function (response) {
-                        console.log(JSON.stringify(response) + '------------------tarjeta－－－－－－－－－－－－－－－－')
-                    }, function (err) {
-                        console.log(JSON.stringify(err))
-                    });
+                    //获取我的维度好友名单
+                    that._getRoster(tarjeta);
+                    //保存tarjeta到本地
                     that.setState({
                         tarjeta: tarjeta
                     });
-                    if (DeviceStorage.get('tarjeta') == '') {
-                        console.log('保存TOKEN');
-                        DeviceStorage.save('tarjeta', tarjeta);
-                    } else {
-                        console.log('更新TOKEN');
-                        DeviceStorage.update('tarjeta', tarjeta);
-                    }
+                    DeviceStorage.save('tarjeta', tarjeta);
+                    //判断用户是否是刚注册的用户
                     if (newUser === 'N') {
                         setTimeout(function () {
                             that._home()

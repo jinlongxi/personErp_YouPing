@@ -7,6 +7,7 @@ import ServiceURL from '../common/service';
 import Request from '../common/request';
 import ResourceItem from '../resource/resourceItem';
 import ResourceDetail from '../resource/resourceDetail';
+import DeviceStorage from '../common/deviceStorage';
 import {
     AppRegistry,
     StyleSheet,
@@ -31,27 +32,29 @@ class FuzzyList extends React.Component {
 
     //选中模糊查询内容
     _selectPress(productName) {
-        console.log('点滴但暗示大脑反射地方' + productName);
-        //点击查询相关资源
-        let url = ServiceURL.personManager + 'queryMoreResource';
-        let that = this;
-        let data = '&productName=' + productName;
-        Request.postRequest(url, data, function (response) {
-            console.log(JSON.stringify(response));
-            let {code:code, resourceList:resourceList}=response;
-            if (code === '200') {
-                //设置数据源和加载状态
-                var ds = new ListView.DataSource({
-                    rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-                });
-                that.setState({
-                    show: true,
-                    dataSourceNew: ds.cloneWithRows(resourceList),
-                })
-            }
-        }, function (err) {
-            console.log(JSON.stringify(err))
-        })
+        DeviceStorage.get('roster').then((roster)=> {
+            console.log('获取本地存放的名单' + roster);
+            //点击查询相关资源
+            let url = ServiceURL.personManager + 'queryMoreResource';
+            let that = this;
+            let data = '&productName=' + productName + '&roster=' + roster;
+            Request.postRequest(url, data, function (response) {
+                console.log(JSON.stringify(response));
+                let {code:code, resourceList:resourceList}=response;
+                if (code === '200') {
+                    //设置数据源和加载状态
+                    var ds = new ListView.DataSource({
+                        rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+                    });
+                    that.setState({
+                        show: true,
+                        dataSourceNew: ds.cloneWithRows(resourceList),
+                    })
+                }
+            }, function (err) {
+                console.log(JSON.stringify(err))
+            })
+        });
     }
 
     //点击进入详情页面
@@ -98,15 +101,15 @@ class FuzzyList extends React.Component {
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
                     /> :
-                    <ListView
-                    dataSource={dataSource}
-                    initialListSize={10}    //设置显示条数
-                    renderRow={this._renderRow}
-                    renderSeparator={this._renderSeparator}
-                    contentContainerStyle={styles.listStyle}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    />
+                        <ListView
+                            dataSource={dataSource}
+                            initialListSize={10}    //设置显示条数
+                            renderRow={this._renderRow}
+                            renderSeparator={this._renderSeparator}
+                            contentContainerStyle={styles.listStyle}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                        />
                 }
             </View>
 

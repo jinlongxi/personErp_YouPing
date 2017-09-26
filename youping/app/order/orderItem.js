@@ -20,8 +20,6 @@ class OrderItem extends React.Component {
 
     render() {
         var resource = this.props.resource;
-        console.log(JSON.stringify(resource));
-
         return (
             <TouchableOpacity style={styles.item} {...this.props} >
 
@@ -45,6 +43,14 @@ class OrderItem extends React.Component {
                               numberOfLines={1}>订单状态:{resource.statusId}</Text>
                         <Text style={styles.publisher_author}
                               numberOfLines={1}>单价:{resource.unitPrice}</Text>
+                        {
+                            resource.payToPartyId!==resource.userPartyId?
+                                <Text style={styles.buy}
+                                  numberOfLines={1}>我买的</Text>:
+                                <Text style={styles.sell}
+                                      numberOfLines={1}>我卖的</Text>
+
+                        }
                     </View>
                 </View>
             </TouchableOpacity>
@@ -74,8 +80,7 @@ const styles = StyleSheet.create({
         margin: 15
     },
     textContainer: {
-        flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     publisher_author: {
         color: "#A3A3A3",
@@ -88,8 +93,15 @@ const styles = StyleSheet.create({
     pages: {
         color: "#ff00ff",
         marginLeft: 10
+    },
+    buy:{
+        color: "red",
+        fontSize: 13
+    },
+    sell:{
+        color: "blue",
+        fontSize: 13
     }
-
 });
 
 export default OrderItem

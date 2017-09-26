@@ -20,21 +20,11 @@ class SingleChat extends React.Component {
             messages: [
                 {
                     _id: 1,
-                    text: '请问有什么事情？',
+                    text: '请问有什么事情?我的手机号码是15618323607!',
                     createdAt: new Date(),
                     user: {
                         _id: 2,
                         name: 'React Native1',
-                        avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                    },
-                },
-                {
-                    _id: 2,
-                    text: '咋的',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
                         avatar: 'https://facebook.github.io/react/img/logo_og.png',
                     },
                 },

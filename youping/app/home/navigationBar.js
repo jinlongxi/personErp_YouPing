@@ -55,16 +55,16 @@ class NavigationBar extends React.Component {
 
     //查询我的订单
     _queryMyResourceOrder() {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'OrderList',
-                component: OrderList,
-                params: {
-                    productCategoryId: this.props.productCategoryId
-                },
-            })
-        }
+        // const {navigator} = this.props;
+        // if (navigator) {
+        //     navigator.push({
+        //         name: 'OrderList',
+        //         component: OrderList,
+        //         params: {
+        //             productCategoryId: this.props.productCategoryId
+        //         },
+        //     })
+        // }
     }
 
     render() {
@@ -72,7 +72,7 @@ class NavigationBar extends React.Component {
             <View style={styles.container}>
                 <TouchableOpacity style={styles.imageIcon} onPress={this._queryMyResourceOrder}>
                     <Image
-                        source={require('../img/home/order.png')}
+                        source={require('../img/home/notification.png')}
                         style={styles.icon}/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this._releseResource}>

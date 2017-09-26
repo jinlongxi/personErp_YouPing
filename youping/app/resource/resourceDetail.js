@@ -8,6 +8,7 @@ import Header from '../common/header';
 import OrderList from '../order/orderList';
 import Home from '../home/homeList';
 import SectionViewList from '../common/sectionList';
+import SingleChat from '../common/singleChat';
 import {
     AppRegistry,
     StyleSheet,
@@ -59,12 +60,11 @@ class ResourceDetail extends React.Component {
             let {code:code}=success;
             if (code === '200') {
                 console.log("购买资源:" + JSON.stringify(success));
-                alert('请拨打:' + success.contactTel + '联系卖家');
                 const {navigator} = that.props;
                 if (navigator) {
                     navigator.push({
-                        name: 'Home',
-                        component: Home,
+                        name: 'SingleChat',
+                        component: SingleChat,
                         params: {},
                     })
                 }
