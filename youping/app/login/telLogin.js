@@ -91,7 +91,6 @@ export default class TelLogin extends Component {
     _getRoster(tarjeta){
         let url = ServiceURl.platformManager + 'queryLocalRoster';
         Request.postRequestF(url, tarjeta, function (response) {
-            console.log(JSON.stringify(response) + '------------------tarjeta－－－－－－－－－－－－－－－－')
             let {code:code, roster:roster}=response;
             if (code === '200') {
                 DeviceStorage.save('roster', roster);

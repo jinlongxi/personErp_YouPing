@@ -6,7 +6,7 @@ import Request from '../common/request';
 import ServiceURl from '../common/service';
 import Util from '../common/util';
 import DeviceStorage from '../common/deviceStorage';
-import Tabs from '../root/tabs'
+import Tabs from '../root/tabs';
 import {
     AppRegistry,
     StyleSheet,

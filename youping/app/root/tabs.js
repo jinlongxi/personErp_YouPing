@@ -17,7 +17,9 @@ import Account from '../account/accountList';
 import Search from '../search/search';
 import Order from '../order/orderList';
 import Entry from './entry';
-
+import ServiceURl from '../common/service';
+import Request from '../common/request';
+import DeviceInfo from 'react-native-device-info';
 import {
     AppRegistry,
     StyleSheet,
@@ -28,6 +30,7 @@ import {
     Image
 } from 'react-native';
 
+import JPushModule from 'jpush-react-native';
 
 class Tabs extends Component {
     constructor(props) {
@@ -104,17 +107,65 @@ class Tabs extends Component {
         );
     }
 
+    //发送极光registration到后台
+    _postRegistrationId(registrationId) {
+        const url = ServiceURl.platformManager + 'regJpushRegId';
+        const deviceType = DeviceInfo.getUserAgent();
+        const data = '&regId=' + registrationId + '&deviceType=' + deviceType;
+        Request.postRequest(url, data, function (response) {
+            console.log("发送极光registration返回信息" + JSON.stringify(response));
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        });
+    }
+
+    //异地登录挤掉
+    _loginOut() {
+        DeviceStorage.delete('tarjeta');
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'Login',
+                component: Login,
+                params: {}
+            })
+        }
+        alert('异地登录')
+    }
+
     componentDidMount() {
         //更新我的维度好友名单
-        Entry.updateRoster;
+        Entry.updateRoster();
+
         //获取tarjeta用于
         DeviceStorage.get('tarjeta').then((tags) => {
             this.setState({
                 tarjeta: tags
             })
         });
+
+        //获取registrationId
+        JPushModule.getRegistrationID((registrationId) => {
+            this._postRegistrationId(registrationId)
+        });
+
+        //接收消息
+        JPushModule.addReceiveNotificationListener((map) => {
+            console.log("alertContent: lalalalalalalalalalalalalalalalalalalalalalalalalalalallalaal" + JSON.stringify(map));
+            //console.log("extras: " + map.extras);
+            // var extra = JSON.parse(map.extras);
+            // console.log(extra.key + ": " + extra.value);
+        });
+        JPushModule.addReceiveCustomMsgListener((map) => {
+            console.log("extras1: ololololloolololololololololololol" + JSON.stringify(map));
+            console.log("extras2: ololololloolololololololololololol" + JSON.stringify(map.content));
+            if (map.content === "loginNotification") {
+                this._loginOut()
+            }
+        });
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1
@@ -137,7 +188,7 @@ const styles = StyleSheet.create({
     },
     page1: {
         flex: 1,
-       //backgroundColor: 'blue'
+        //backgroundColor: 'blue'
     }
 });
 

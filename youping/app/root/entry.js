@@ -4,7 +4,6 @@
 import ServiceURl from '../common/service';
 import Request  from '../common/request';
 import DeviceStorage from '../common/deviceStorage';
-
 const Entry = {
     //更新维度好友名单
     updateRoster: function () {
@@ -19,6 +18,14 @@ const Entry = {
             console.log(JSON.stringify(err))
         });
     },
+    //初始化极光
+    // initJpush:function () {
+    //     const receiveCustomMsgEvent = "receivePushMsg";
+    //     const receiveNotificationEvent = "receiveNotification";
+    //     const openNotificationEvent = "openNotification";
+    //     const getRegistrationIdEvent = "getRegistrationId";
+    //
+    // }
 };
 
 export default Entry
