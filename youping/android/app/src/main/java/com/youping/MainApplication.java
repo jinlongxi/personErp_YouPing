@@ -3,9 +3,6 @@ package com.youping;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import cn.reactnative.modules.jpush.JPushPackage;
-import com.react.rnspinkit.RNSpinkitPackage;
-import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -31,9 +28,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new JPushPackage(),
-            new RNSpinkitPackage(),
-            new ReactNativeContacts(),
             new VectorIconsPackage(),
             new ImagePickerPackage(),
             new RNDeviceInfo(),

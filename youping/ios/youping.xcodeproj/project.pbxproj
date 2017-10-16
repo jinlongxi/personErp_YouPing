@@ -70,6 +70,7 @@
 		727070AF1F69093700DE5D01 /* RSKImageCropper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 727070AD1F69093700DE5D01 /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		727070B21F69094600DE5D01 /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 727070B11F69094500DE5D01 /* QBImagePicker.framework */; };
 		727070B31F69094600DE5D01 /* QBImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 727070B11F69094500DE5D01 /* QBImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		72E835161F905B1800F92051 /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 725A3FEA1F667C5700E6D9E0 /* libRCTWeChat.a */; };
 		7FD6FFC1690C4ED89D25EF10 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 221F5A59362C4093A211C9F8 /* Ionicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		958025BBF97C4EC286773ED2 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = DC24C2EBDB5445AEB7B517B1 /* libresolv.tbd */; };
@@ -508,6 +509,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72E835161F905B1800F92051 /* libRCTWeChat.a in Frameworks */,
 				720BF0F21F7B4E9B004F4A3E /* Security.framework in Frameworks */,
 				725A3FF11F667CC700E6D9E0 /* CoreTelephony.framework in Frameworks */,
 				725A40031F667CFA00E6D9E0 /* libz.tbd in Frameworks */,
@@ -1686,7 +1688,7 @@
 				COPYING_PRESERVES_HFS_DATA = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C5RAYSG3RP;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-wechat/ios",
@@ -1727,7 +1729,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPYING_PRESERVES_HFS_DATA = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = C5RAYSG3RP;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-wechat/ios",

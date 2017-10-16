@@ -9,7 +9,6 @@ const Entry = {
     updateRoster: function () {
         let url = ServiceURl.platformManager + 'queryLocalRoster';
         Request.postRequest(url, '', function (response) {
-            console.log(JSON.stringify(response) + '------------------tarjeta－－－－－－－－－－－－－－－－');
             let {code:code, roster:roster}=response;
             if (code === '200') {
                 DeviceStorage.update('roster', roster);
@@ -18,14 +17,6 @@ const Entry = {
             console.log(JSON.stringify(err))
         });
     },
-    //初始化极光
-    // initJpush:function () {
-    //     const receiveCustomMsgEvent = "receivePushMsg";
-    //     const receiveNotificationEvent = "receiveNotification";
-    //     const openNotificationEvent = "openNotification";
-    //     const getRegistrationIdEvent = "getRegistrationId";
-    //
-    // }
 };
 
 export default Entry

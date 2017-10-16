@@ -5,42 +5,30 @@
  */
 
 import React, {Component} from 'react';
-import Login from './app/login/login';
-import Navigator from './app/common/navigation'
-import DeviceStorage from './app/common/deviceStorage'
-import Home from './app/home/homoList'
-
+import ROOT from './app/root/tabs'
 import {
     AppRegistry,
     StyleSheet,
     Text,
     View,
-    NavigatorIOS
+    AsyncStorage,
+    ScrollView,
+    Image
 } from 'react-native';
 
-class youping extends React.Component {
+
+class youping extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tarjeta: ''
-    };
-    DeviceStorage.get('tarjeta').then((tags) => {
-      this.setState({
-        tarjeta: tags
-      })
-    });
+      selectedTab: 'Event'
+    }
   }
 
   render() {
     return (
-        <Navigator
-            component={this.state.tarjeta == '' ?Login:Home}
-        />
-    )
-  }
-
-  componentDidMount() {
-    console.log('当前Token:'+this.state.tarjeta)
+        <ROOT/>
+    );
   }
 }
 

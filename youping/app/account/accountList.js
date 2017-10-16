@@ -7,6 +7,7 @@ import ServiceURl from '../common/service';
 import Util from '../common/util';
 import DeviceStorage from '../common/deviceStorage';
 import Tabs from '../root/tabs';
+import Login from '../login/login'
 import {
     AppRegistry,
     StyleSheet,
@@ -25,7 +26,7 @@ class AccountList extends React.Component {
             show: false,
             userInfo: null
         };
-        this._loginOut=this._loginOut.bind(this)
+        this._loginOut = this._loginOut.bind(this)
     }
 
     render() {
@@ -79,13 +80,13 @@ class AccountList extends React.Component {
     }
 
     //退出登录
-    _loginOut(){
+    _loginOut() {
         DeviceStorage.delete('tarjeta');
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'Tabs',
-                component: Tabs,
+                name: 'Login',
+                component: Login,
                 params: {}
             })
         }
@@ -133,18 +134,18 @@ const styles = StyleSheet.create({
         lineHeight: 40
     },
     loginOut: {
-        justifyContent:'center',
+        justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#EE6A50',
-        margin:20
+        backgroundColor: '#EE6A50',
+        margin: 20
     },
-    loginOutText:{
+    loginOutText: {
         textAlign: 'center',
         height: 40,
         width: 300,
         fontSize: 18,
         lineHeight: 40,
-        color:'#f0f0f0'
+        color: '#f0f0f0'
     }
 });
 

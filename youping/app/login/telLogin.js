@@ -25,7 +25,7 @@ export default class TelLogin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            phoneNumber: null,      //JSON.stringify(new Date().getTime()).substring(0, 11)
+            phoneNumber: null,
             loginBtn: '获取验证码',
             sented: false,
             timerCount: 30,
@@ -190,16 +190,16 @@ export default class TelLogin extends Component {
                                autoCorrect={false}
                                underlinecolorandroid='transparent'
                                onChangeText={(text)=>this._phoneNumberChange(text)}
-                               keyboardType="numeric"
+                               keyboardType="number-pad"
                                returnKeyType="done"
-                               clearButtonMode="never"
+                               clearButtonMode="always"
 
                     />
                     <View style={styles.dividerview}><Text style={styles.divider}></Text></View>
                     <TextInput style={styles.textinput}
                                placeholder='验证码'
                                value={this.state.captcha}
-                               keyboardType="numeric"
+                               keyboardType="number-pad"
                                returnKeyType="done"
                                clearButtonMode="always"
                                keyboardAppearance="dark"

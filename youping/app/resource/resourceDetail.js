@@ -48,7 +48,7 @@ class ResourceDetail extends React.Component {
         })
     }
 
-    //购买资源
+    //联系购买
     _buyResource() {
         let url = ServiceURl.personManager + 'placeResourceOrder';
         const that = this;
@@ -65,7 +65,10 @@ class ResourceDetail extends React.Component {
                     navigator.push({
                         name: 'SingleChat',
                         component: SingleChat,
-                        params: {},
+                        params: {
+                            payToPartyId:that.state.resourceData.payToPartyId,
+                            orderId:that.state.resourceData.orderId
+                        },
                     })
                 }
             }
@@ -147,7 +150,7 @@ class ResourceDetail extends React.Component {
         )
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getData();
         console.log(this.props.resourceType + "带来的参数")
     }

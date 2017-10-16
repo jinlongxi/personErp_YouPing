@@ -27,7 +27,13 @@ export default class youping extends Component {
                 renderScene={(route, navigator) => {
                     let Component = route.component;
                     return <Component {...route.params} navigator={navigator} />
-                }} />
+                }}
+                onDidFocus={(route) => {
+                    if (route.reset) {
+                        this.refs.navigator.immediatelyResetRouteStack([{ name: route.name }])
+                    }
+                }}
+            />
         )
     }
 }

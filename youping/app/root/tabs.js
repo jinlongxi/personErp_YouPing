@@ -20,6 +20,8 @@ import Entry from './entry';
 import ServiceURl from '../common/service';
 import Request from '../common/request';
 import DeviceInfo from 'react-native-device-info';
+import JPushModule from 'jpush-react-native';
+import SingleChat from '../common/singleChat';
 import {
     AppRegistry,
     StyleSheet,
@@ -30,7 +32,7 @@ import {
     Image
 } from 'react-native';
 
-import JPushModule from 'jpush-react-native';
+
 
 class Tabs extends Component {
     constructor(props) {
@@ -133,36 +135,56 @@ class Tabs extends Component {
         alert('异地登录')
     }
 
-    componentDidMount() {
-        //更新我的维度好友名单
-        Entry.updateRoster();
-
-        //获取tarjeta用于
-        DeviceStorage.get('tarjeta').then((tags) => {
-            this.setState({
-                tarjeta: tags
+    //跳转到聊天页面
+    _singleChat(partyId,partyIdFrom,orderId){
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'SingleChat',
+                component: SingleChat,
+                params: {
+                    payToPartyId:partyIdFrom,
+                    partyIdFrom:partyIdFrom,
+                    orderId:orderId
+                }
             })
-        });
+        }
+    }
 
-        //获取registrationId
-        JPushModule.getRegistrationID((registrationId) => {
-            this._postRegistrationId(registrationId)
-        });
-
-        //接收消息
-        JPushModule.addReceiveNotificationListener((map) => {
-            console.log("alertContent: lalalalalalalalalalalalalalalalalalalalalalalalalalalallalaal" + JSON.stringify(map));
-            //console.log("extras: " + map.extras);
-            // var extra = JSON.parse(map.extras);
-            // console.log(extra.key + ": " + extra.value);
-        });
-        JPushModule.addReceiveCustomMsgListener((map) => {
-            console.log("extras1: ololololloolololololololololololol" + JSON.stringify(map));
-            console.log("extras2: ololololloolololololololololololol" + JSON.stringify(map.content));
-            if (map.content === "loginNotification") {
-                this._loginOut()
-            }
-        });
+    componentWillMount() {
+        // //更新我的维度好友名单
+        // Entry.updateRoster();
+        //
+        // //获取tarjeta用于
+        // DeviceStorage.get('tarjeta').then((tags) => {
+        //     this.setState({
+        //         tarjeta: tags
+        //     })
+        // });
+        //
+        // //获取registrationId
+        // JPushModule.getRegistrationID((registrationId) => {
+        //     this._postRegistrationId(registrationId)
+        // });
+        // //接收消息
+        // JPushModule.addReceiveNotificationListener((map) => {
+        //     console.log("alertContent: 接收到的消息" + JSON.stringify(map.aps.alert));
+        //     //console.log("extras: " + map.extras);
+        //     // var extra = JSON.parse(map.extras);
+        //     // console.log(extra.key + ": " + extra.value);
+        // });
+        // //接受通知
+        // JPushModule.addReceiveCustomMsgListener((map) => {
+        //     console.log('alertContent: lalalalalalalalalalalalalalalalalalalalalalalalalalalallalaal'+JSON.stringify(map));
+        //     if (map.content === "loginNotification") {
+        //         this._loginOut()
+        //     }
+        //     console.log('sdaljhfgashdfjkgasdkfjhgsadfkhjagsdfkjhasgdfkasdjhfgasdkfjsga'+map.content.search('message'));
+        //     if (map.content.search('message')=='0') {
+        //         console.log('09090909090909090909090909090909090909090909090909090909');
+        //         this._singleChat(map.content.slice(8,13),map.content.slice(14,19),map.content.slice(20,25))
+        //     }
+        // });
     }
 }
 

@@ -5,8 +5,7 @@
  */
 
 import React, {Component} from 'react';
-import Tabs from './app/root/tabs'
-
+import ROOT from './app/root/tabs'
 import {
     AppRegistry,
     StyleSheet,
@@ -28,7 +27,7 @@ class youping extends Component {
 
     render() {
         return (
-            <Tabs/>
+            <ROOT/>
         );
     }
 }
