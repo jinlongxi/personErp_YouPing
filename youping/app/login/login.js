@@ -7,6 +7,11 @@ import DeviceStorage from '../common/deviceStorage'
 import Home from '../home/homeList'
 import Navigator from '../common/navigation';
 import * as WeChat from 'react-native-wechat';
+import ParallaxView from 'react-native-parallax-view';
+import DeviceInfo from 'react-native-device-info';
+import ServiceURl from '../common/service';
+import Request from '../common/request'
+
 
 import {
     AppRegistry,
@@ -25,6 +30,9 @@ import {
 class Login extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            tarjeta: null
+        }
     }
 
     //手机登录
@@ -46,8 +54,43 @@ class Login extends React.Component {
         WeChat.isWXAppInstalled().then((isInstalled) => {
             if (isInstalled) {
                 WeChat.sendAuthRequest(scope, state).then(responseCode => {
-                    //this.getAccessToken(responseCode.code);
-                    alert(JSON.stringify(responseCode))
+                    alert(JSON.stringify(responseCode));
+                    const {code:code}=responseCode;
+                    const uuid = DeviceInfo.getUniqueID() + '/' + new Date().getTime();
+                    const url = ServiceURl.platformManager + 'weChatAppLogin';
+
+                    let formData = new FormData();
+                    formData.append("code", code);
+                    formData.append("uuid", uuid);
+                    const that = this;
+                    //获取tarjeta
+                    Request.postRequestLogin(url, formData, function (response) {
+                        console.log(JSON.stringify(response));
+                        let {code:code, tarjeta:tarjeta, newUser:newUser}=response;
+                        if (code === '200') {
+                            //获取我的维度好友名单
+                            that._getRoster(tarjeta);
+                            //保存tarjeta到本地
+                            that.setState({
+                                tarjeta: tarjeta
+                            });
+                            DeviceStorage.save('tarjeta', tarjeta);
+                            //判断用户是否是刚注册的用户
+                            if (newUser === 'N') {
+                                setTimeout(function () {
+                                    that._home()
+                                }, 3000);
+                                console.log('我在等待在等待--------------------------')
+                            } else {
+                                that._completeInfo();
+                            }
+                        } else {
+                            alert('验证码不正确')
+                        }
+                    }, function (err) {
+                        console.log(JSON.stringify(err))
+                    });
+
                 }).catch(err => {
                     //Alert.alert('登录授权发生错误：', err.message, [{text: '确定'}]);
                 })
@@ -63,20 +106,26 @@ class Login extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.btnWechat} onPress={this._weChatLogin.bind(this)}>
-                    <Image
-                        source={require('../img/login/wechat.jpg')}
-                        style={styles.icon}/>
-                    <Text style={styles.btn}  {...this.props}>微信登录{PixelRatio.get()}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnTel} onPress={this._telLogin.bind(this)}>
-                    <Image
-                        source={require('../img/login/tel.png')}
-                        style={styles.icon}/>
-                    <Text style={styles.btn}  {...this.props}>手机登录</Text>
-                </TouchableOpacity>
-            </View>
+            <ParallaxView
+                backgroundSource={require('../img/login/jianjie.jpg')}
+                windowHeight={300}
+                scrollableViewStyle={{backgroundColor: 'white'}}
+            >
+                <View style={styles.container}>
+                    <TouchableOpacity style={styles.btnWechat} onPress={this._weChatLogin.bind(this)}>
+                        <Image
+                            source={require('../img/login/wechat.jpg')}
+                            style={styles.icon}/>
+                        <Text style={styles.btn}  {...this.props}>微信登录</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnTel} onPress={this._telLogin.bind(this)}>
+                        <Image
+                            source={require('../img/login/tel.png')}
+                            style={styles.icon}/>
+                        <Text style={styles.btn}  {...this.props}>手机登录</Text>
+                    </TouchableOpacity>
+                </View>
+            </ParallaxView>
         );
     }
 
@@ -85,7 +134,7 @@ class Login extends React.Component {
         WeChat.isWXAppInstalled()
             .then((isInstalled) => {
                 if (isInstalled) {
-                    alert('您已经安装了微信，可以使用微信登录')
+                   // alert('您已经安装了微信，可以使用微信登录')
                 } else {
                     toastShort('没有安装微信软件，请您安装微信之后再试');
                 }
@@ -97,7 +146,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 200,
         justifyContent: 'center',
     },
     btnWechat: {

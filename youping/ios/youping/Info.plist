@@ -64,7 +64,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>需要您的同意</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>访问麦克风</string>
+	<string>访问麦克风！</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App调用相册，需要您的同意</string>
 	<key>UIAppFonts</key>
