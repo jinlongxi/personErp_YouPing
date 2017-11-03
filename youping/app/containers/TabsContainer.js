@@ -7,8 +7,12 @@ import DeciveStorage from '../utils/deviceStorage';
 import TabNavigator from 'react-native-tab-navigator';
 import Resource from './ResourceContainer';
 import Order from '../components/order/orderList';
-import About from '../components/about/aboutList';
+import About from '../containers/AboutContainer';
 import Navigation from '../utils/navigation';
+import JPushModule from 'jpush-react-native';
+import ServiceURl from '../utils/service';
+import Request from '../utils/request';
+import DeviceInfo from 'react-native-device-info';
 import {
     AppRegistry,
     StyleSheet,
@@ -78,10 +82,46 @@ class Tabs extends Component {
         );
     }
 
-    // componentWillMount() {
-    //     //这个是为了测试用的，不用的时候注释掉
-    //     DeciveStorage.save('tarjeta', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZSIsImRlbGVnYXRvck5hbWUiOiJkZWZhdWx0IiwiZXhwIjoxNTEwODg1MjcwLCJ1c2VyIjoiMTAwMzAiLCJpYXQiOjE1MDk1ODkyNzB9.8aQzBKetH0tcx71x3F1fkHSn2iCMO3eUyirE8Pr4m-U');
-    // }
+    //发送极光registration到后台
+    _postRegistrationId(registrationId) {
+        const url = ServiceURl.platformManager + 'regJpushRegId';
+        const deviceType = DeviceInfo.getUserAgent();
+        const data = '&regId=' + registrationId + '&deviceType=' + deviceType;
+        Request.postRequest(url, data, function (response) {
+            console.log("发送极光registration返回信息" + JSON.stringify(response));
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        });
+    }
+
+    componentWillMount() {
+        //这个是为了测试用的，不用的时候注释掉
+        DeciveStorage.save('tarjeta', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJwZSIsImRlbGVnYXRvck5hbWUiOiJkZWZhdWx0IiwiZXhwIjoxNTEwODg1MjcwLCJ1c2VyIjoiMTAwMzAiLCJpYXQiOjE1MDk1ODkyNzB9.8aQzBKetH0tcx71x3F1fkHSn2iCMO3eUyirE8Pr4m-U');
+
+        // //获取registrationId
+        // JPushModule.getRegistrationID((registrationId) => {
+        //     this._postRegistrationId(registrationId)
+        // });
+        // //接收消息
+        // JPushModule.addReceiveNotificationListener((map) => {
+        //     console.log("alertContent: 接收到的消息" + JSON.stringify(map.aps.alert));
+        //     //console.log("extras: " + map.extras);
+        //     // var extra = JSON.parse(map.extras);
+        //     // console.log(extra.key + ": " + extra.value);
+        // });
+        // //接受通知
+        // JPushModule.addReceiveCustomMsgListener((map) => {
+        //     console.log('alertContent: lalalalalalalalalalalalalalalalalalalalalalalalalalalallalaal'+JSON.stringify(map));
+        //     if (map.content === "loginNotification") {
+        //         this._loginOut()
+        //     }
+        //     console.log('sdaljhfgashdfjkgasdkfjhgsadfkhjagsdfkjhasgdfkasdjhfgasdkfjsga'+map.content.search('message'));
+        //     if (map.content.search('message')=='0') {
+        //         console.log('09090909090909090909090909090909090909090909090909090909');
+        //         this._singleChat(map.content.slice(8,13),map.content.slice(14,19),map.content.slice(20,25))
+        //     }
+        // });
+    }
 }
 
 const styles = StyleSheet.create({

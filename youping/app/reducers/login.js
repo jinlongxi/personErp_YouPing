@@ -6,6 +6,7 @@ const initialState = {
     isLoggedIn: false,
     tarjeta: null,
     status: null,
+    isLoading: true
 };
 
 export default function login(state = initialState, action) {
@@ -32,6 +33,7 @@ export default function login(state = initialState, action) {
         case TYPES.UPDATE_TOKEN:
             return Object.assign({}, state, {
                 isLoggedIn: true,
+                isLoading:false,
                 tarjeta: action.tarjeta,
                 status: 'done'
             });

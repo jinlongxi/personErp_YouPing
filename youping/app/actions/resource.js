@@ -34,13 +34,10 @@ export function fetchResourceList() {
 //发布资源
 export function releaceResource(picture, productName, productPrice) {
     return (dispatch) => {
-        dispatch({type: TYPES.RELEASE_RESOURCE_DOING});
-
         DeviceStorage.get('tarjeta').then((tags) => {
             DeviceStorage.get('productCategoryId').then((CategoryId)=> {
                 let url = ServiceURl.personManager + 'releaseResource?tarjeta=' + tags + '&productName=' + productName +
                     '&productPrice=' + productPrice + '&productCategoryId=' + CategoryId;
-                console.log("发布资源URL" + url);
                 let data = [];
                 data.push(picture);
                 Request.uploadImage(url, data, function (response) {
@@ -51,10 +48,29 @@ export function releaceResource(picture, productName, productPrice) {
                         dispatch(fetchResourceList())
                     }
                 }, function (err) {
-                    dispatch({type: TYPES.RELEASE_RESOURCE_ERROR});
+                    console.log(JSON.stringify(err));
                 });
             });
         });
 
     };
 }
+
+//下架资源
+export function salesDiscontinuation(productId) {
+    return (dispatch) => {
+        let url = ServiceURl.personManager + 'salesDiscontinuation';
+        let data = '&productId=' + productId;
+        Request.postRequest(url, data, function (success) {
+            console.log('下架商品' + success);
+            let {code:code}=success;
+            if (code === '200') {
+                dispatch({type: TYPES.DELETE_RESOURCE_SUCCESS, productId: productId});
+                //dispatch(fetchResourceList());
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        })
+    };
+}
+

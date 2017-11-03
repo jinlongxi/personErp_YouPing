@@ -10,7 +10,9 @@ const Youping_API={
     //PE平台
     platformManager:BaseURL+'platformManager/control/',
     //友评交易
-    personManager:BaseURL+'personManager/control/'
+    personManager:BaseURL+'personManager/control/',
+    //WEB分享页面
+    WebManager:BaseURL+'WebManager/control/'
 };
 
 export default Youping_API

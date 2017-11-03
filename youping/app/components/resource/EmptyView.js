@@ -25,7 +25,9 @@ class EmptyView extends React.Component {
                     <Text style={styles.text}>您还有没资源，是否要发布新资源</Text>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.btn} onPress={this._releaseResourse.bind(this)}>
+                    <TouchableOpacity style={styles.btn} onPress={()=> {
+                        this._releaseResourse.bind(this)()
+                    }}>
                         <Text style={styles.text}>发布资源</Text>
                     </TouchableOpacity>
                 </View>

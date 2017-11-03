@@ -17,7 +17,7 @@ import {
     PixelRatio
 } from 'react-native';
 
-const Login = ({loginState, weChatLogin})=> {
+const Login = ({ weChatLogin})=> {
     return (
         <ParallaxView
             backgroundSource={require('../../img/login/jianjie.jpg')}
@@ -25,7 +25,7 @@ const Login = ({loginState, weChatLogin})=> {
             scrollableViewStyle={{backgroundColor: 'white'}}
         >
             <View style={styles.container}>
-                <TouchableOpacity style={styles.btnWechat} onPress={weChatLogin}>
+                <TouchableOpacity style={styles.btnWechat} onPress={()=>{weChatLogin()}}>
                     <Image
                         source={require('../../img/login/wechat.jpg')}
                         style={styles.icon}/>

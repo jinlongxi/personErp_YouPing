@@ -13,13 +13,6 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity,
-    TextInput,
-    Image,
-    NavigatorIOS,
-    ScrollView,
-    Alert,
-    PixelRatio
 } from 'react-native';
 
 class ResourceView extends React.Component {

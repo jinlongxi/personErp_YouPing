@@ -19,33 +19,55 @@ import {
     View
 } from 'react-native';
 
-const App = ({loginState, dispatch})=> {
-    //判断是否存在TOKEN
-    DeviceStorage.get('tarjeta').then((tags) => {
-        if (tags) {
-            console.log(tags + '本地有TOKEN');
-            dispatch(updateToken(tags))
-        } else {
-            console.log(tags + '本地没有TOKEN');
+// const App = ({loginState, dispatch})=> {
+//     return (
+//         loginState.isLoggedIn ? <TabsContainer/>:<LoginContainer/>
+//     )
+// };
+class App extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            isLoggedIn:false
         }
-    });
+    }
+    render(){
+        console.log(this.state.isLoggedIn);
+        return (
+            this.state.isLoggedIn ? <TabsContainer/>:<LoginContainer/>
+        )
+    }
 
+    componentWillMount() {
+        this.props.updateToken();
+    }
 
-    return (
-        loginState ? <TabsContainer/>:<LoginContainer/>
-    )
-};
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            isLoggedIn:nextProps.loginState.isLoggedIn
+        })
+    }
+}
 
 const mapStateToProps = (state) => {
     WeChat.registerApp('wx5843eeb488708c80');
     return {
-        loginState: state.loginStore.isLoggedIn
+        loginState: state.loginStore
     }
 };
 const mapDispatchToProps = (dispatch) => {
-    const readActions = bindActionCreators(readCreators, dispatch);
     return {
-        readActions
+        updateToken:()=>{
+            //判断是否存在TOKEN
+            DeviceStorage.get('tarjeta').then((tags) => {
+                if (tags) {
+                    console.log(tags + '本地有TOKEN');
+                    dispatch(updateToken(tags))
+                } else {
+                    console.log(tags + '本地没有TOKEN');
+                }
+            });
+        }
     };
 };
 

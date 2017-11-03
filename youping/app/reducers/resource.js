@@ -8,10 +8,12 @@ const initialState = {
     productCategoryId: null,
     status: null,
     isLoading: false,
+    isRefresh:false
 };
 
 export default function resource(state = initialState, action) {
     switch (action.type) {
+        //请求商品列表
         case TYPES.FETCH_RESOURCE_LIST_DOING:
             return {
                 ...state,
@@ -28,25 +30,24 @@ export default function resource(state = initialState, action) {
         case TYPES.FETCH_RESOURCE_LIST_ERROR:
             return {
                 ...state,
-
                 status: 'error'
             };
-        case TYPES.RELEASE_RESOURCE_DOING:
-            return {
-                ...state,
-                status: 'doing'
-            };
+        //发布商品
         case TYPES.RELEASE_RESOURCE_SUCCESS:
             return {
                 ...state,
-                isEmpty: false,
                 status: 'done'
             };
-        case TYPES.RELEASE_RESOURCE_ERROR:
-            return {
-                ...state,
-                status: 'error'
-            };
+        //下架商品
+        case TYPES.DELETE_RESOURCE_SUCCESS:
+            return Object.assign({}, state, {
+                resourceList: state.resourceList.filter((item)=>{
+                    if(item.productId!==action.productId){
+                        return item
+                    }
+                }),
+                status: 'done'
+            });
         default:
             return state;
     }

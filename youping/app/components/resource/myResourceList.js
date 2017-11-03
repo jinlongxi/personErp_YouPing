@@ -7,6 +7,7 @@ import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
 import ReleaseResource from './releaseResource';
+import ResourceDetail from './resourceDetail';
 import {
     AppRegistry,
     StyleSheet,
@@ -38,7 +39,7 @@ class myResourceList extends React.Component {
                 <ScrollView>
                     {
                         this.state.show ? <ListView
-                            dataSource={this.state.dataSource||this.props.resourceState.resourceList}
+                            dataSource={this.state.dataSource || this.props.resourceState.resourceList}
                             initialListSize={10}    //设置显示条数
                             renderRow={this._renderRow}
                             renderSeparator={this._renderSeparator}
@@ -48,7 +49,9 @@ class myResourceList extends React.Component {
                         /> : Util.loading
                     }
                 </ScrollView>
-                <TouchableOpacity style={styles.btn} onPress={this._releaseResourse.bind(this)}>
+                <TouchableOpacity style={styles.btn} onPress={()=> {
+                    this._releaseResourse.bind(this)()
+                }}>
                     <Text style={styles.text}>发布资源</Text>
                 </TouchableOpacity>
             </View>
@@ -71,14 +74,21 @@ class myResourceList extends React.Component {
 
     //点击进入详情页面
     _showDetail(productId) {
+        const resourceList = this.props.resourceState.resourceList;
+        const selectResource = resourceList.filter((item)=> {
+            if (item.productId === productId) {
+                return item
+            }
+        });
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'ResourceDetail',
                 component: ResourceDetail,
                 params: {
-                    productId: productId,
-                    resourceType: 'my'
+                    selectResource: selectResource[0],
+                    salesDiscontinuation: this.props.salesDiscontinuation,
+                    wechatShare: this.props.wechatShare
                 }
             })
         }
@@ -87,7 +97,9 @@ class myResourceList extends React.Component {
     //渲染
     _renderRow(resource) {
         return !this.state.empty ?
-            <ResourceItem resource={resource} onPress={this._showDetail.bind(this, resource.productId)}/> : <EmptyPage/>
+            <ResourceItem resource={resource} onPress={()=> {
+                this._showDetail.bind(this, resource.productId)()
+            }}/> : <EmptyPage/>
     }
 
     //渲染分割线
@@ -100,6 +112,7 @@ class myResourceList extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props)
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
@@ -107,6 +120,16 @@ class myResourceList extends React.Component {
         this.setState({
             dataSource: ds.cloneWithRows(this.props.resourceState.resourceList),
             show: this.props.resourceState.isLoading
+        })
+    }
+    componentWillReceiveProps(nextProps) {
+        //设置数据源和加载状态
+        var ds = new ListView.DataSource({
+            rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+        });
+        this.setState({
+            dataSource: ds.cloneWithRows(nextProps.resourceState.resourceList),
+            show: nextProps.resourceState.isLoading
         })
     }
 }
