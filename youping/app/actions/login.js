@@ -37,13 +37,28 @@ export function weChatLogin(code) {
     };
 }
 
-//修改TOKEN状态
-export function updateToken(tarjeta) {
+//本地有TOKEN
+export function hasToken(tarjeta) {
     return {
-        type: TYPES.UPDATE_TOKEN,
+        type: TYPES.HAS_TOKEN,
         tarjeta: tarjeta
     }
 }
+
+//本地没有TOKEN
+export function noToken() {
+    return {
+        type: TYPES.NO_TOKEN,
+    }
+}
+
+//异地登录踢掉删除TOKEN
+export function deleteToken(){
+    return {
+        type:TYPES.DELETE_TOKEN
+    }
+}
+
 
 
 

@@ -5,7 +5,7 @@ import {AlertIOS} from 'react-native';
 import * as TYPES from '../constants/ActionTypes';
 import Request from '../utils/request';
 import ServiceURl from '../utils/service';
-import DeviceStorage from '../utils/deviceStorage'
+import DeviceStorage from '../utils/deviceStorage';
 
 //请求资源数据列表
 export function fetchResourceList() {
@@ -34,6 +34,8 @@ export function fetchResourceList() {
 //发布资源
 export function releaceResource(picture, productName, productPrice) {
     return (dispatch) => {
+        dispatch({type: TYPES.RELEASE_RESOURCE_DOING});
+
         DeviceStorage.get('tarjeta').then((tags) => {
             DeviceStorage.get('productCategoryId').then((CategoryId)=> {
                 let url = ServiceURl.personManager + 'releaseResource?tarjeta=' + tags + '&productName=' + productName +
@@ -45,6 +47,7 @@ export function releaceResource(picture, productName, productPrice) {
                     const {code:code}=response;
                     if (code === '200') {
                         dispatch({type: TYPES.RELEASE_RESOURCE_SUCCESS});
+                        //成功后刷新本地STORE中的资源列表
                         dispatch(fetchResourceList())
                     }
                 }, function (err) {

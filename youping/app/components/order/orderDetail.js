@@ -15,35 +15,28 @@ import {
     ScrollView,
 } from 'react-native';
 
-class ResourceDetail extends React.Component {
+class orderDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            resourceData: null,
-            resourceType: this.props.resourceType
+            orderData: null,
         };
-        this._wechatShare = this._wechatShare.bind(this);
-    }
-
-    //微信分享
-    _wechatShare() {
-        this.props.wechatShare(this.state.resourceData.productId, this.state.resourceData.detailImageUrl, this.state.resourceData.productName)
     }
 
     render() {
         return (
             <View style={{flex: 1}}>
                 <Header
-                    initObj={{backName: '返回', barTitle: '资源详情'}}
+                    initObj={{backName: '返回', barTitle: '订单详情'}}
                     navigator={this.props.navigator}
                 />
                 <ScrollView>
                     {
-                        this.state.resourceData == null ? null :
+                        this.state.orderData == null ? null :
                             <View style={styles.container}>
                                 {
-                                    this.state.resourceData.detailImageUrl != null ?
-                                        <Image source={{uri: this.state.resourceData.detailImageUrl}}
+                                    this.state.orderData.detailImageUrl != null ?
+                                        <Image source={{uri: this.state.orderData.detailImageUrl}}
                                                style={styles.image}
                                                accessibilityLabel="图片加载中。。。"
                                                blurRadius={1}
@@ -51,24 +44,23 @@ class ResourceDetail extends React.Component {
                                         />
                                         : null
                                 }
-                                <Text style={styles.title}>资源简介:{this.state.resourceData.productName}</Text>
-                                <Text style={styles.text}>资源编号:{this.state.resourceData.productId}</Text>
+                                <Text style={styles.title}>订单简介:{this.state.orderData.productName}</Text>
+                                <Text style={styles.text}>订单编号:{this.state.orderData.orderId}</Text>
+                                <Text style={styles.text}>购买人:{this.state.orderData.personInfoMap.firstName}</Text>
                             </View>
                     }
                 </ScrollView>
-                <TouchableOpacity style={styles.cencelOrder} onPress={()=> {
-                    this._wechatShare()
-                }}>
+                <TouchableOpacity style={styles.cencelOrder} onPress={()=> {}}>
                     <Text style={styles.placeOrder_btn}
-                    >微信分享</Text>
+                    >与买家交谈</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.setState({
-            resourceData: this.props.selectResource
+            orderData: this.props.selectOrder
         })
     }
 }
@@ -128,4 +120,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ResourceDetail
+export default orderDetail

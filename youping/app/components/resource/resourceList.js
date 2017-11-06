@@ -9,7 +9,6 @@ import HeaderBar from '../common/headerBar';
 import ReleaseResource from './releaseResource';
 import ResourceDetail from './resourceDetail';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     View,
@@ -20,7 +19,7 @@ import {
     ScrollView
 } from 'react-native';
 
-class myResourceList extends React.Component {
+class ResourceList extends React.Component {
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -39,7 +38,7 @@ class myResourceList extends React.Component {
                 <ScrollView>
                     {
                         this.state.show ? <ListView
-                            dataSource={this.state.dataSource || this.props.resourceState.resourceList}
+                            dataSource={this.state.dataSource}
                             initialListSize={10}    //设置显示条数
                             renderRow={this._renderRow}
                             renderSeparator={this._renderSeparator}
@@ -87,7 +86,6 @@ class myResourceList extends React.Component {
                 component: ResourceDetail,
                 params: {
                     selectResource: selectResource[0],
-                    salesDiscontinuation: this.props.salesDiscontinuation,
                     wechatShare: this.props.wechatShare
                 }
             })
@@ -99,7 +97,7 @@ class myResourceList extends React.Component {
         return !this.state.empty ?
             <ResourceItem resource={resource} onPress={()=> {
                 this._showDetail.bind(this, resource.productId)()
-            }}/> : <EmptyPage/>
+            }} {...this.props}/> : <EmptyPage/>
     }
 
     //渲染分割线
@@ -154,4 +152,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default myResourceList
+export default ResourceList

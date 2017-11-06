@@ -3,10 +3,14 @@
  */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import ResourceView from '../components/resource/ResourceView'
+import ResourceView from '../components/resource/resourceView'
 import {fetchResourceList, releaceResource, salesDiscontinuation} from '../actions/resource';
 import * as WeChat from 'react-native-wechat';
-import ServiceURL from '../utils/service'
+import ServiceURL from '../utils/service';
+import {
+    Alert,
+    Platform
+} from 'react-native'
 
 const mapStateToProps = (state) => {
     return {
@@ -23,13 +27,12 @@ const mapDispatchToProps = (dispatch)=> {
         onclick: (picture, productName, productPrice)=> {
             dispatch(releaceResource(picture, productName, productPrice))
         },
-        //资源详情
-        goResourceDetail: ()=> {
-
-        },
         //下架商品
         salesDiscontinuation: (productId)=> {
-            dispatch(salesDiscontinuation(productId))
+            Platform.OS == 'ios' ? Alert.alert('下架资源', '是否确定？', [{text: '取消'}, {
+                text: '确定',
+                onPress: () => dispatch(salesDiscontinuation(productId))
+            }]) : Alert.alert('下架资源', '是否确定？', [{text: '确定'}])
         },
         //微信分享
         wechatShare: (productId, picture, productName)=> {

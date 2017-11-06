@@ -2,11 +2,10 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
-import OrderItem from './orderItem';
+import MessageItem from './messageItem';
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
-import orderDetail from './orderDetail';
 import {
     AppRegistry,
     StyleSheet,
@@ -19,7 +18,7 @@ import {
     ScrollView
 } from 'react-native';
 
-class orderList extends React.Component {
+class messageList extends React.Component {
     constructor(props) {
         super(props);
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -34,7 +33,7 @@ class orderList extends React.Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <HeaderBar initObj={{backName: '', barTitle: '我的订单'}}/>
+                <HeaderBar initObj={{backName: '', barTitle: '消息列表'}}/>
                 <ScrollView>
                     {
                         this.state.show ? <ListView
@@ -52,32 +51,10 @@ class orderList extends React.Component {
         );
     }
 
-    //点击进入订单详情页面
-    _showDetail(productId) {
-        const orderList = this.props.orderState.orderList;
-        const selectOrder = orderList.filter((item)=> {
-            if (item.productId === productId) {
-                return item
-            }
-        });
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'orderDetail',
-                component: orderDetail,
-                params: {
-                    selectOrder: selectOrder[0],
-                }
-            })
-        }
-    }
-
     //渲染
     _renderRow(resource) {
         return !this.state.empty ?
-            <OrderItem resource={resource} onPress={()=> {
-                this._showDetail.bind(this, resource.productId)()
-            }}/> : <EmptyPage/>
+            <MessageItem resource={resource}/> : <EmptyPage/>
     }
 
     //渲染分割线
@@ -90,26 +67,27 @@ class orderList extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props)
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
         });
         this.setState({
-            dataSource: ds.cloneWithRows(this.props.orderState.orderList),
-            show: this.props.orderState.isLoading
+            dataSource: ds.cloneWithRows(this.props.messageState.messageList),
+            show: this.props.messageState.isLoading
         })
     }
 
-    componentWillReceiveProps(nextProps) {
-        //设置数据源和加载状态
-        var ds = new ListView.DataSource({
-            rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-        });
-        this.setState({
-            dataSource: ds.cloneWithRows(nextProps.orderState.orderList),
-            show: nextProps.orderState.isLoading
-        })
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     //设置数据源和加载状态
+    //     var ds = new ListView.DataSource({
+    //         rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+    //     });
+    //     this.setState({
+    //         dataSource: ds.cloneWithRows(nextProps.messageState.orderList),
+    //         show: nextProps.messageState.isLoading
+    //     })
+    // }
 }
 
 
@@ -132,4 +110,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default orderList
+export default messageList

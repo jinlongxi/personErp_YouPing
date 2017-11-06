@@ -20,8 +20,8 @@ class myResourceItem extends React.Component {
     }
 
     //删除资源
-    _deleteReource(productId){
-        alert('删除资源'+productId)
+    _deleteReource(productId) {
+        this.props.salesDiscontinuation(productId)
     }
 
     render() {
@@ -29,18 +29,18 @@ class myResourceItem extends React.Component {
         // Buttons
         var swipeoutBtns = [
             {
-                text: '删除',
-                backgroundColor:'red',
-                onPress:this._deleteReource.bind(this,resource.productId)
+                text: '下架',
+                backgroundColor: 'red',
+                onPress: this._deleteReource.bind(this, resource.productId)
             },
             {
                 text: '屏蔽',
-                backgroundColor:'blue',
+                backgroundColor: 'blue',
             }
 
         ];
         return (
-            <Swipeout right={swipeoutBtns} style={{backgroundColor:'white'}}>
+            <Swipeout right={swipeoutBtns} autoClose={true} style={{backgroundColor: 'white'}}>
                 <TouchableOpacity style={styles.item} {...this.props} >
 
                     <View style={styles.imageContainer}>

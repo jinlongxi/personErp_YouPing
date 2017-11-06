@@ -73,6 +73,7 @@ class ReleaseResource extends React.Component {
     //发布资源
     _releaseResourse() {
         this.props.onClick(this.state.avatarSource, this.state.text, this.state.productPrice)
+        this.props.navigator.pop();
     }
 
     render() {
@@ -86,7 +87,9 @@ class ReleaseResource extends React.Component {
                 {
                     this.state.show ?
                         <ScrollView>
-                            <TouchableOpacity onPress={()=>{this._selectPhotos()}} style={styles.item_container}>
+                            <TouchableOpacity onPress={()=> {
+                                this._selectPhotos()
+                            }} style={styles.item_container}>
                                 {
                                     this.state.avatarSource == null ?
                                         <Image
@@ -123,7 +126,9 @@ class ReleaseResource extends React.Component {
                                     keyboardShouldPersistTaps={true}
                                 />
                             </View>
-                            <TouchableOpacity style={styles.item_container} onPress={()=>{this._releaseResourse()}}>
+                            <TouchableOpacity style={styles.item_container} onPress={()=> {
+                                this._releaseResourse()
+                            }}>
                                 <Text style={styles.releaseBtn}>发布资源</Text>
                             </TouchableOpacity>
                         </ScrollView>
@@ -131,10 +136,6 @@ class ReleaseResource extends React.Component {
                 }
             </View>
         );
-    }
-
-    componentWillMount() {
-        console.log(this.props)
     }
 }
 

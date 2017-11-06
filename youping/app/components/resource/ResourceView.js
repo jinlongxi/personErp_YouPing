@@ -5,8 +5,8 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
-import EmptyView from './EmptyView';
-import MyResourceList from './myResourceList'
+import EmptyView from './emptyView';
+import ResourceList from './resourceList'
 import Util from '../../utils/util'
 import {
     AppRegistry,
@@ -21,19 +21,17 @@ class ResourceView extends React.Component {
     }
 
     render() {
-
         const Loading = this.props.resourceState.isLoading;
         return (
             Loading ? <View style={{flex: 1}}>
                 {
                     this.props.resourceState.resourceList.length !== 0 ?
-                        <MyResourceList {...this.props}/>
+                        <ResourceList {...this.props}/>
                         :
                         <EmptyView {...this.props}/>
                 }
             </View> : Util.loading
         )
-
     }
 }
 
