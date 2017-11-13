@@ -15,6 +15,7 @@ export function fetchResourceList() {
         //发送请求，获取TOKEN
         const url = ServiceURl.personManager + 'queryMyResource';
         Request.postRequest(url, '', function (response) {
+            console.log('查询我的资源' + JSON.stringify(response));
             let {code:code, productCategoryId:productCategoryId, myResourceList:myResourceList}=response;
             if (code === '200') {
                 DeviceStorage.save('productCategoryId', productCategoryId);
@@ -43,7 +44,7 @@ export function releaceResource(picture, productName, productPrice) {
                 let data = [];
                 data.push(picture);
                 Request.uploadImage(url, data, function (response) {
-                    console.log('发布资源' + JSON.stringify(response));
+                    //console.log('发布资源' + JSON.stringify(response));
                     const {code:code}=response;
                     if (code === '200') {
                         dispatch({type: TYPES.RELEASE_RESOURCE_SUCCESS});

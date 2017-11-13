@@ -15,6 +15,8 @@ import Request from '../utils/request';
 import DeviceInfo from 'react-native-device-info';
 import DeviceStorage from '../utils/deviceStorage';
 import {deleteToken} from '../actions/login';
+import {fetchMessageList, fetchMessageOne} from '../actions/message';
+import {fetchOrderList} from '../actions/order'
 import {
     AppRegistry,
     StyleSheet,
@@ -73,9 +75,9 @@ class Tabs extends Component {
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon}
-                                                 source={require("../img/tabs/search.png")}/>}
+                                                 source={require("../img/tabs/message.png")}/>}
                         renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]}
-                                                         source={require("../img/tabs/search.png")}/>}
+                                                         source={require("../img/tabs/message.png")}/>}
                         onPress={() => this.setState({selectedTab: 'Message'})}>
                         <Navigation component={Message}/>
                     </TabNavigator.Item>
@@ -102,7 +104,7 @@ class Tabs extends Component {
         const deviceType = DeviceInfo.getUserAgent();
         const data = '&regId=' + registrationId + '&deviceType=' + deviceType;
         Request.postRequest(url, data, function (response) {
-            console.log("发送极光registration返回信息" + JSON.stringify(response));
+            //console.log("发送极光registration返回信息" + JSON.stringify(response));
         }, function (err) {
             console.log(JSON.stringify(err))
         });
@@ -115,6 +117,22 @@ class Tabs extends Component {
         alert('异地登录')
     }
 
+    //刷新聊天列表数据
+    _updateMessageList() {
+        this.props.updateMessagelist();
+
+    }
+
+    //刷新单聊数据
+    _updateMessageOne(partyIdFrom) {
+        this.props.updateMessageOne(partyIdFrom);
+    }
+
+    //刷新订单
+    _updateOrderList() {
+        this.props.updateOrderList();
+    }
+
     componentWillMount() {
         //获取registrationId
         JPushModule.getRegistrationID((registrationId) => {
@@ -122,23 +140,25 @@ class Tabs extends Component {
         });
         //接收消息
         JPushModule.addReceiveNotificationListener((map) => {
-            console.log("alertContent: 接收到的消息" + JSON.stringify(map.aps.alert));
-            //console.log("extras: " + map.extras);
-            // var extra = JSON.parse(map.extras);
-            // console.log(extra.key + ": " + extra.value);
+            console.log("显示在手机的消息" + JSON.stringify(map));
         });
         //接受通知
         JPushModule.addReceiveCustomMsgListener((map) => {
-            console.log('alertContent: lalalalalalalalalalalalalalalalalalalalalalalalalalalallalaal' + JSON.stringify(map));
+            console.log('接受到的推送内容:' + JSON.stringify(map));
+            //挤掉当前用户
             if (map.content === "loginNotification") {
                 this._loginOut()
-            }
-            console.log('sdaljhfgashdfjkgasdkfjhgsadfkhjagsdfkjhasgdfkasdjhfgasdkfjsga' + map.content.search('message'));
-            if (map.content.search('message') == '0') {
-                console.log('09090909090909090909090909090909090909090909090909090909');
-                this._singleChat(map.content.slice(8, 13), map.content.slice(14, 19), map.content.slice(20, 25))
+            } else if (map.content === "message") {
+                this._updateMessageList();
+                this._updateMessageOne(map.extras.objectId);
+            } else if (map.content === "order") {
+                this._updateOrderList()
             }
         });
+        //清楚角标
+        // JPushModule.cleanTags((success) => {
+        //     console.log('清楚角标：' + JSON.stringify(success))
+        // })
     }
 }
 
@@ -175,13 +195,23 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         //判断是否存在TOKEN
-       loginOut:()=>{
-           dispatch(deleteToken())
-       }
+        loginOut: ()=> {
+            dispatch(deleteToken())
+        },
+        //刷新消息列表
+        updateMessagelist: ()=> {
+            dispatch(fetchMessageList())
+        },
+        //刷新单聊数据
+        updateMessageOne: (partyIdFrom)=> {
+            dispatch(fetchMessageOne(partyIdFrom))
+        },
+        //刷新订单列表
+        updateOrderList: ()=> {
+            dispatch(fetchOrderList())
+        }
     };
 };
 
-
-const TabsContainer = connect(mapStateToProps,mapDispatchToProps)(Tabs);
-
+const TabsContainer = connect(mapStateToProps, mapDispatchToProps)(Tabs);
 export default TabsContainer

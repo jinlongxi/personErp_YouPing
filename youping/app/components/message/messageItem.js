@@ -2,6 +2,7 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
+import BadgeView from '../common/badgeView';
 import {
     AppRegistry,
     StyleSheet,
@@ -20,33 +21,29 @@ class messageItem extends React.Component {
 
     render() {
         var resource = this.props.resource;
+        console.log(resource)
         return (
             <TouchableOpacity style={styles.item} {...this.props} >
 
                 <View style={styles.imageContainer}>
                     {
                         resource.user != null ?
-                            <View>
-                                <Image
-                                    source={{uri: resource.user.avatar}}
-                                    style={styles.image}
-                                    defaultSource={require('../../img/loading.gif')}
-                                />
-                                <Text style={{textAlign: 'center', marginTop: 3}}>{resource.user.name}</Text>
-                            </View>
+                            <BadgeView
+                                title={resource.user.name}
+                                padding={8}
+                                badgeStyle={{flex: 1}}
+                                badgeText={resource.badge}
+                                renderImage={()=><Image style={styles.image} source={{uri: resource.user.avatar}}/>}
+                            />
                             : null
                     }
                 </View>
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
-                        <Text numberOfLines={1}>资源名称:鱼肉</Text>
-                    </View>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.publisher_author}
+                        <Text style={styles.text}
                               numberOfLines={1}>{resource.text}</Text>
-                        <Text style={styles.publisher_author}
-                              numberOfLines={1}>{resource.messageTime}</Text>
-
+                        <Text style={styles.date}
+                              numberOfLines={1}>{resource.createdAt}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -73,7 +70,6 @@ const styles = StyleSheet.create({
         borderRadius: 40
     },
     contentContainer: {
-        flex: 1,
         margin: 15,
         justifyContent: 'center',
     },
@@ -81,25 +77,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 6
     },
-    publisher_author: {
-        color: "#A3A3A3",
-        fontSize: 13
-    },
-    price: {
-        color: '#2bb2a3',
+    text: {
+        color: "#A1A1A1",
         fontSize: 16
     },
-    pages: {
-        color: "#ff00ff",
-        marginLeft: 10
+    date:{
+        color: "#A4A4A4",
+        fontSize: 14
     },
-    buy: {
-        color: "red",
-        fontSize: 13
-    },
-    sell: {
-        color: "blue",
-        fontSize: 13
+    badge: {
+        backgroundColor: 'red',
+        textAlign: 'right',
     }
 });
 

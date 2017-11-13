@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import MessageView from '../components/message/messageView';
 import {connect} from 'react-redux';
-import {fetchMessageList} from '../actions/message'
+import {fetchMessageList, fetchMessageOne, sendMessageOne} from '../actions/message'
 
 const mapStateToProps = (state) => {
     return {
@@ -13,9 +13,12 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch)=> {
-    //请求数据
-    dispatch(fetchMessageList());
-    return {}
+    return {
+        //查询聊天列表
+        getMessageList: ()=> {
+            dispatch(fetchMessageList());
+        },
+    }
 };
 
 const OrderContainer = connect(

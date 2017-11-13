@@ -11,8 +11,9 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-var HeaderBar = React.createClass({
-    render: function () {
+
+class HeaderBar extends React.Component {
+    render() {
         //获取对象  按钮名称   头部Title
         var headContent = this.props.initObj;
         return (
@@ -22,12 +23,8 @@ var HeaderBar = React.createClass({
                 </View>
             </View>
         )
-    },
-    //返回按钮的事件处理器
-    _pop: function () {
-        this.props.navigator.pop();
     }
-});
+}
 
 var styles = StyleSheet.create({
     header: {
@@ -46,7 +43,7 @@ var styles = StyleSheet.create({
     title_container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems:'center'
+        alignItems: 'center'
     },
     title: {
         color: '#fff',
@@ -56,4 +53,4 @@ var styles = StyleSheet.create({
     }
 });
 
-module.exports = HeaderBar;
+export default HeaderBar;

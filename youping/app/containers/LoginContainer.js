@@ -21,11 +21,12 @@ const mapDispatchToProps = (dispatch)=> {
     return {
         //微信登录
         weChatLogin: ()=> {
-            let scope = 'snsapi_userinfo';
-            let state = 'wechat_sdk_demo';
             WeChat.isWXAppInstalled().then((isInstalled) => {
+                console.log('已安装微信');
                 if (isInstalled) {
-                    WeChat.sendAuthRequest(scope, state).then(responseCode => {
+                    let scope = 'snsapi_userinfo';
+                    let state = 'wechat_sdk_demo';
+                    WeChat.sendAuthRequest(scope,state).then(responseCode => {
                         const {code:code} =responseCode;
                         dispatch(weChatLogin(code))
                     }).catch(err => {

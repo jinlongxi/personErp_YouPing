@@ -12,7 +12,9 @@ const Youping_API = {
     //友评交易
     personManager: BaseURL + 'personManager/control/',
     //WEB分享页面
-    WebManager: 'www.lyndonspace.com:3400/' + 'WebManager/control/'
+    WebManager: 'http://www.lyndonspace.com:3400/' + 'WebManager/control/',
+    //临时
+    WebManagerNew: BaseURL + 'WebManager/control/',
 };
 
 export default Youping_API

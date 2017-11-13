@@ -6,6 +6,7 @@ import MessageItem from './messageItem';
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
+import SingleChat from '../../containers/chatContainer';
 import {
     AppRegistry,
     StyleSheet,
@@ -25,7 +26,8 @@ class messageList extends React.Component {
         this.state = {
             dataSource: ds.cloneWithRows(['row 1']),
             show: false,
-            empty: false
+            empty: false,
+            data: null,
         };
         this._renderRow = this._renderRow.bind(this)
     }
@@ -53,8 +55,9 @@ class messageList extends React.Component {
 
     //渲染
     _renderRow(resource) {
+        console.log(resource)
         return !this.state.empty ?
-            <MessageItem resource={resource}/> : <EmptyPage/>
+            <MessageItem resource={resource} onPress={this._singleChat.bind(this, resource)}/> : <EmptyPage/>
     }
 
     //渲染分割线
@@ -64,6 +67,21 @@ class messageList extends React.Component {
             backgroundColor: "#CCCCCC"
         };
         return <View style={style} key="{sectionID+rowID}"/>
+    }
+
+    //跳转到聊天页面
+    _singleChat(resource) {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'SingleChat',
+                component: SingleChat,
+                params: {
+                    ...this.props,
+                    selectResource: resource
+                }
+            })
+        }
     }
 
     componentDidMount() {
@@ -77,17 +95,6 @@ class messageList extends React.Component {
             show: this.props.messageState.isLoading
         })
     }
-
-    // componentWillReceiveProps(nextProps) {
-    //     //设置数据源和加载状态
-    //     var ds = new ListView.DataSource({
-    //         rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-    //     });
-    //     this.setState({
-    //         dataSource: ds.cloneWithRows(nextProps.messageState.orderList),
-    //         show: nextProps.messageState.isLoading
-    //     })
-    // }
 }
 
 
