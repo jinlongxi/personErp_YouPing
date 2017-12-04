@@ -33,6 +33,10 @@ class ResourceView extends React.Component {
             </View> : Util.loading
         )
     }
+ 
+    componentWillMount() {
+        this.props.getResourceList()
+    }
 }
 
 export default ResourceView

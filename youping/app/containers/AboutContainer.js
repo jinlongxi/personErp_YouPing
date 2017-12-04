@@ -3,8 +3,10 @@
  */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchMyInfo} from '../actions/about';
+import {fetchMyInfo, uploadPaymentMethods} from '../actions/about';
+import {deleteToken} from '../actions/login';
 import AboutView from '../components/about/AboutView';
+import DeviceStorage from '../utils/deviceStorage';
 const mapStateToProps = (state) => {
     return {
         aboutState: state.aboutStore
@@ -13,11 +15,17 @@ const mapStateToProps = (state) => {
 
 
 const mapDispatchToProps = (dispatch)=> {
+    //请求个人信息数据
     dispatch(fetchMyInfo());
     return {
-        getAboutInfo: ()=> {
-            //请求数据
-            dispatch(fetchMyInfo());
+        //退出登录
+        loginOut: ()=> {
+            DeviceStorage.delete('tarjeta');
+            dispatch(deleteToken())
+        },
+        //收款方式
+        PaymentMethods: (image, partyContentType)=> {
+            dispatch(uploadPaymentMethods(image, partyContentType))
         }
     }
 };

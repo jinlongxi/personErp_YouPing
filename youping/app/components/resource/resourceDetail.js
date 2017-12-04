@@ -2,8 +2,11 @@
  * Created by jinlongxi on 17/9/15.
  */
 import React, {Component} from 'react';
-import Header from '../common/header';
-import SectionViewList from '../common/sectionList';
+import Header from '../../containers/headerContainer';
+import AddResourceDesc from './addResourceDesc';
+import Util from '../../utils/util';
+import ImageList from '../common/imageList';
+import ExpandableView from 'react-native-expandable-view';
 import {
     AppRegistry,
     StyleSheet,
@@ -18,58 +21,84 @@ import {
 class ResourceDetail extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            resourceData: null,
-            resourceType: this.props.resourceType
-        };
-        this._wechatShare = this._wechatShare.bind(this);
+        this._weChatShare = this._weChatShare.bind(this);
     }
 
     //微信分享
-    _wechatShare() {
-        this.props.wechatShare(this.state.resourceData.productId, this.state.resourceData.detailImageUrl, this.state.resourceData.productName)
+    _weChatShare() {
+        this.props.weChatShare(this.props.selectResource.productId,
+            this.props.selectResource.detailImageUrl,
+            this.props.selectResource.productName)
+    }
+
+    //完善信息
+    _addResourceDesc() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'AddResourceDesc',
+                component: AddResourceDesc,
+                params: {
+                    selectResource: this.props.selectResource,
+                    addResourceDesc: this.props.addResourceDesc//传递提交方法
+                }
+            })
+        }
     }
 
     render() {
+        const resourceData = this.props.selectResource;
+        const loading = this.props.resourceState.isLoading;
         return (
-            <View style={{flex: 1}}>
-                <Header
-                    initObj={{backName: '返回', barTitle: '资源详情'}}
-                    navigator={this.props.navigator}
-                />
-                <ScrollView>
-                    {
-                        this.state.resourceData == null ? null :
-                            <View style={styles.container}>
-                                {
-                                    this.state.resourceData.detailImageUrl != null ?
-                                        <Image source={{uri: this.state.resourceData.detailImageUrl}}
-                                               style={styles.image}
-                                               accessibilityLabel="图片加载中。。。"
-                                               blurRadius={1}
-                                               defaultSource={require('../../img/loading.gif')}
-                                        />
-                                        : null
-                                }
-                                <Text style={styles.title}>资源简介:{this.state.resourceData.productName}</Text>
-                                <Text style={styles.text}>资源编号:{this.state.resourceData.productId}</Text>
-                            </View>
-                    }
-                </ScrollView>
-                <TouchableOpacity style={styles.cencelOrder} onPress={()=> {
-                    this._wechatShare()
-                }}>
-                    <Text style={styles.placeOrder_btn}
-                    >微信分享</Text>
-                </TouchableOpacity>
-            </View>
+            loading ?
+                <View style={{flex: 1}}>
+                    <Header
+                        initObj={{backName: '返回', barTitle: '资源详情', backType: 'resource',refresh:true}}
+                        navigator={this.props.navigator}
+                    />
+                    <ScrollView>
+                        {
+                            resourceData == null ? null :
+                                <View style={styles.container}>
+                                    {
+                                        resourceData.detailImageUrl != null ?
+                                            <Image source={{uri: resourceData.detailImageUrl}}
+                                                   style={styles.image}
+                                                   accessibilityLabel="图片加载中。。。"
+                                                   blurRadius={1}
+                                                   defaultSource={require('../../img/loading.gif')}
+                                            />
+                                            : null
+                                    }
+                                    <Text style={styles.title}>资源简介:{resourceData.productName}</Text>
+                                    <Text style={styles.text}>资源编号:{resourceData.productId}</Text>
+                                    {
+                                        resourceData.morePicture.length > 0 ?
+                                            <View style={{flex: 1}}>
+                                                <ImageList data={resourceData.morePicture}/>
+                                                <Text style={styles.text}>{resourceData.description}</Text>
+                                            </View>
+                                            : null
+                                    }
+                                </View>
+                        }
+                    </ScrollView>
+                    <View style={styles.btnContainer}>
+                        <TouchableOpacity style={styles.addDesc_btn} onPress={()=> {
+                            this._addResourceDesc()
+                        }}>
+                            <Text style={styles.placeOrder_btn}
+                            >完善信息</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.weChatShare_btn} onPress={()=> {
+                            this._weChatShare()
+                        }}>
+                            <Text style={styles.placeOrder_btn}
+                            >微信分享</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> : Util.isLoading
         )
-    }
-
-    componentDidMount() {
-        this.setState({
-            resourceData: this.props.selectResource
-        })
     }
 }
 
@@ -105,26 +134,36 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'gray'
     },
-    placeOrder: {//下单
-        backgroundColor: '#3497FF',
-        height: 55,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        borderRadius: 5
-    },
-    placeOrder_btn: {//下单按钮
+    //按钮文本样式
+    placeOrder_btn: {
         alignSelf: 'center',
         fontSize: 20,
         color: '#FFFFFF',
     },
-    cencelOrder: {
+    //微信分享
+    weChatShare_btn: {
         backgroundColor: '#90EE90',
+        width: 160,
         height: 55,
         justifyContent: 'center',
         alignItems: 'center',
         margin: 10,
         borderRadius: 5
+    },
+    //完善信息按钮
+    addDesc_btn: {
+        backgroundColor: '#83ccfc',
+        width: 160,
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 10,
+        borderRadius: 5
+    },
+    //按钮容器
+    btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     }
 });
 

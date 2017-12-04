@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react';
 import Util from '../../utils/util';
+import PaymentMethods from './PaymentMethods';
 import {
     AppRegistry,
     StyleSheet,
@@ -14,12 +15,33 @@ import {
     ScrollView
 } from 'react-native';
 
-const AccountList = ({aboutState})=> {
-    return (
-        <View style={styles.container}>
-            <ScrollView>
-                {
-                    aboutState.isLoading ?
+class AccountList extends React.Component {
+    constructor(props) {
+        super(props);
+        this._paymentMethod = this._paymentMethod.bind(this);
+    }
+
+    //收款方式
+    _paymentMethod() {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'PaymentMethods',
+                component: PaymentMethods,
+                params: {
+                    PaymentMethods: this.props.PaymentMethods,
+                    aboutState: this.props.aboutState
+                },
+            })
+        }
+    }
+
+    render() {
+        const aboutState = this.props.aboutState;
+        return (
+            aboutState.isLoading ?
+                <View style={styles.container}>
+                    <ScrollView>
                         <View style={styles.accountInfo}>
                             <View style={styles.image}>
                                 <Image source={{uri: aboutState.myInfo.headPortrait}}
@@ -35,28 +57,37 @@ const AccountList = ({aboutState})=> {
                             <View style={styles.textContainer}>
                                 <Text style={styles.text}>电话:{aboutState.myInfo.contactNumber}</Text>
                             </View>
-                            <TouchableOpacity style={styles.loginOut}>
+                            <TouchableOpacity style={styles.PaymentMethods} onPress={()=> {
+                                this._paymentMethod()
+                            }
+                            }>
+                                <Text style={styles.text}>收款方式</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.loginOut} onPress={()=> {
+                                this.props.loginOut()
+                            }
+                            }>
                                 <Text style={styles.text}>退出登录</Text>
                             </TouchableOpacity>
                         </View>
-                        : Util.loading
-                }
-            </ScrollView>
-        </View>
-    );
-};
+                    </ScrollView>
+                </View>
+                : Util.loading
+        )
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        marginTop: 20,
+        marginTop:20,
     },
     accountInfo: {
         justifyContent: 'center',
     },
     image: {
-        height: 300,
+        height: 250,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -80,6 +111,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 40
     },
+    //退出登录
     loginOut: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -93,6 +125,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 40,
         color: '#f0f0f0'
+    },
+    //收款方式
+    PaymentMethods: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFD39B',
+        margin: 20
     }
 });
 

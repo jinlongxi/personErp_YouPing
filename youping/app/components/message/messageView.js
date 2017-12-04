@@ -20,16 +20,15 @@ class messageView extends React.Component {
     }
 
     render() {
-        //console.log(this.props.messageState);
+        const Loading = this.props.messageState.isLoading;
         return (
-            this.props.messageState.messageList.length > 0 ?
-                this.props.messageState.isLoading ?
+            Loading ?
+                this.props.messageState.messageList.length > 0 ?
                     <MessageList {...this.props}/> :
-                    Util.loading
-                :
-                <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-                    <Text style={{textAlign: 'center'}}>目前没有人了联系你呢。。。</Text>
-                </View>
+                    <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+                        <Text style={{textAlign: 'center'}}>目前没有人了联系你呢。。。</Text>
+                    </View>
+                : Util.loading
         )
     }
 

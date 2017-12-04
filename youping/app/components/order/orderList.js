@@ -54,19 +54,16 @@ class orderList extends React.Component {
 
     //点击进入订单详情页面
     _showDetail(productId) {
-        const orderList = this.props.orderState.orderList;
-        const selectOrder = orderList.filter((item)=> {
-            if (item.productId === productId) {
-                return item
-            }
-        });
+        this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'orderDetail',
                 component: orderDetail,
                 params: {
-                    selectOrder: selectOrder[0],
+                    //selectOrder: selectOrder[0],
+                    productId:productId,
+                    ...this.props
                 }
             })
         }

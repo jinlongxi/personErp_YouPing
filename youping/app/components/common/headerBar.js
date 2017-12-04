@@ -29,7 +29,7 @@ class HeaderBar extends React.Component {
 var styles = StyleSheet.create({
     header: {
         height: 50,
-        backgroundColor: "#3497FF",
+        backgroundColor: "#3A5FCD",
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

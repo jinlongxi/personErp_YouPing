@@ -20,8 +20,16 @@ class messageItem extends React.Component {
     }
 
     render() {
-        var resource = this.props.resource;
-        console.log(resource)
+        let resource = this.props.resource;
+        console.log(resource);
+        let text;
+        if(resource.text.search("https://")!==-1||resource.text.search("<button")!==-1){
+            text='图片消息'
+        } else if(resource.text.search("latitude")!==-1){
+            text='位置消息'
+        }else{
+            text=resource.text
+        }
         return (
             <TouchableOpacity style={styles.item} {...this.props} >
 
@@ -41,7 +49,7 @@ class messageItem extends React.Component {
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
                         <Text style={styles.text}
-                              numberOfLines={1}>{resource.text}</Text>
+                              numberOfLines={1}>{text}</Text>
                         <Text style={styles.date}
                               numberOfLines={1}>{resource.createdAt}</Text>
                     </View>

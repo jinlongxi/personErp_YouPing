@@ -68,3 +68,5 @@
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**
+
+-keepclasscom.tencent.mm.sdk.** {*;}  //微信混淆设置  确保安全

@@ -7,7 +7,8 @@ const initialState = {
     isLoading: false,
     status: null,
     chatData: [],
-    partyId: null
+    partyId: null,
+    isRefreshBack:false//当返回时是否刷新页面
 };
 
 export default function message(state = initialState, action) {
@@ -16,6 +17,7 @@ export default function message(state = initialState, action) {
         case TYPES.FETCH_MESSAGE_LIST_DOING:
             return {
                 ...state,
+                isLoading: false,
                 messageList: [],
                 status: 'doing'
             };
@@ -33,7 +35,6 @@ export default function message(state = initialState, action) {
         //获取单聊数据
         case TYPES.FETCH_SINGLE_MESSAGE_DOING:
             return Object.assign({}, state, {
-                chatData: [],
                 status: 'doing'
             });
         case TYPES.FETCH_SINGLE_MESSAGE_SUCCESS:

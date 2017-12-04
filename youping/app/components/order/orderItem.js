@@ -27,7 +27,7 @@ class OrderItem extends React.Component {
                     {
                         resource.detailImageUrl != null ?
                             <Image
-                                source={{uri: resource.detailImageUrl}}
+                                source={{uri: resource.detailImageUrl + '?x-oss-process=image/resize,w_100,h_100/quality,q_80'}}
                                 style={styles.image}
                                 defaultSource={require('../../img/loading.gif')}
                             />

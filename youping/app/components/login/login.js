@@ -3,6 +3,7 @@
  */
 import React, {Component} from 'react';
 import ParallaxView from 'react-native-parallax-view';
+import Util from '../../utils/util';
 import {
     AppRegistry,
     StyleSheet,
@@ -17,22 +18,26 @@ import {
     PixelRatio
 } from 'react-native';
 
-const Login = ({ weChatLogin})=> {
+const Login = ({loginState, weChatLogin})=> {
+    const loading = loginState.isLoading;
     return (
-        <ParallaxView
-            backgroundSource={require('../../img/login/jianjie.jpg')}
-            windowHeight={300}
-            scrollableViewStyle={{backgroundColor: 'white'}}
-        >
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.btnWechat} onPress={()=>{weChatLogin()}}>
-                    <Image
-                        source={require('../../img/login/wechat.jpg')}
-                        style={styles.icon}/>
-                    <Text style={styles.btn}>微信登录</Text>
-                </TouchableOpacity>
-            </View>
-        </ParallaxView>
+        loading ?
+            <ParallaxView
+                backgroundSource={require('../../img/login/jianjie.jpg')}
+                windowHeight={300}
+                scrollableViewStyle={{backgroundColor: 'white'}}
+            >
+                <View style={styles.container}>
+                    <TouchableOpacity style={styles.btnWechat} onPress={()=> {
+                        weChatLogin()
+                    }}>
+                        <Image
+                            source={require('../../img/login/wechat.jpg')}
+                            style={styles.icon}/>
+                        <Text style={styles.btn}>微信登录</Text>
+                    </TouchableOpacity>
+                </View>
+            </ParallaxView> : Util.loading
     );
 };
 

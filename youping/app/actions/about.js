@@ -5,6 +5,7 @@ import {AlertIOS} from 'react-native';
 import * as TYPES from '../constants/ActionTypes';
 import Request from '../utils/request';
 import ServiceURl from '../utils/service';
+import DeviceStorage from '../utils/deviceStorage';
 
 //请求我的信息数据
 export function fetchMyInfo() {
@@ -28,3 +29,26 @@ export function fetchMyInfo() {
     };
 }
 
+//上传支付方法图片
+export function uploadPaymentMethods(image, partyContentType) {
+    return (dispatch) => {
+        dispatch({type: TYPES.UPLOAD_PAYMENTMETHODS_DOING});
+        DeviceStorage.get('tarjeta').then((tags) => {
+                let url = ServiceURl.personManager + 'updatePersonPaymentQrCode?tarjeta=' + tags + '&partyContentType=' + partyContentType;
+                let data = [];
+                data.push(image);
+                Request.uploadImage(url, data, function (response) {
+                    console.log('上传支付图片:' + JSON.stringify(response));
+                    const {code:code}=response;
+                    if (code === '200') {
+                        dispatch({type: TYPES.UPLOAD_PAYMENTMETHODS_SUCCESS,image:image,partyContentType:partyContentType});
+                        //刷新个人数据
+                        dispatch(fetchMyInfo())
+                    }
+                }, function (err) {
+                    dispatch({type: TYPES.UPLOAD_PAYMENTMETHODS_ERROR});
+                    console.log(JSON.stringify(err));
+                });
+        });
+    };
+}

@@ -4,7 +4,8 @@
 import React, {Component} from 'react';
 import MessageView from '../components/message/messageView';
 import {connect} from 'react-redux';
-import {fetchMessageList, fetchMessageOne, sendMessageOne} from '../actions/message'
+import {fetchMessageList} from '../actions/message'
+import {hideTabBar} from '../actions/tab'
 
 const mapStateToProps = (state) => {
     return {
@@ -17,6 +18,10 @@ const mapDispatchToProps = (dispatch)=> {
         //查询聊天列表
         getMessageList: ()=> {
             dispatch(fetchMessageList());
+        },
+        //隐藏TAB
+        hiddenTabBar:()=>{
+            dispatch(hideTabBar())
         },
     }
 };

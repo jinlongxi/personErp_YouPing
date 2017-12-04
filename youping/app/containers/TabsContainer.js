@@ -16,7 +16,8 @@ import DeviceInfo from 'react-native-device-info';
 import DeviceStorage from '../utils/deviceStorage';
 import {deleteToken} from '../actions/login';
 import {fetchMessageList, fetchMessageOne} from '../actions/message';
-import {fetchOrderList} from '../actions/order'
+import {fetchOrderList} from '../actions/order';
+import Button from '../components/common/buttons';
 import {
     AppRegistry,
     StyleSheet,
@@ -36,9 +37,14 @@ class Tabs extends Component {
     }
 
     render() {
+        let tabBarHeight;
+        this.props.tabState.isHidden ? tabBarHeight = 0 : tabBarHeight = 50;
         return (
             <View style={styles.container}>
-                <TabNavigator>
+                <TabNavigator
+                    tabBarStyle={{height: tabBarHeight, overflow: 'hidden'}}
+                    sceneStyle={{paddingBottom: tabBarHeight}}
+                >
                     <TabNavigator.Item
                         //设置选中的位置
                         selected={this.state.selectedTab === 'Event'}
@@ -51,7 +57,7 @@ class Tabs extends Component {
                         //图标
                         renderIcon={() => <Image style={styles.icon} source={require('../img/tabs/home.png')}/>}
                         //选中时图标
-                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]}
+                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
                                                          source={require("../img/tabs/home.png")}/>}
                         //点击Event
                         onPress={() => this.setState({selectedTab: 'Event'})}>
@@ -64,7 +70,7 @@ class Tabs extends Component {
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon}
                                                  source={require("../img/tabs/manager.png")}/>}
-                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]}
+                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
                                                          source={require("../img/tabs/manager.png")}/>}
                         onPress={() => this.setState({selectedTab: 'Device'})}>
                         <Navigation component={Order}/>
@@ -76,7 +82,7 @@ class Tabs extends Component {
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon}
                                                  source={require("../img/tabs/message.png")}/>}
-                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]}
+                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
                                                          source={require("../img/tabs/message.png")}/>}
                         onPress={() => this.setState({selectedTab: 'Message'})}>
                         <Navigation component={Message}/>
@@ -88,7 +94,7 @@ class Tabs extends Component {
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon}
                                                  source={require("../img/tabs/contact.png")}/>}
-                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: 'red'}]}
+                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
                                                          source={require("../img/tabs/contact.png")}/>}
                         onPress={() => this.setState({selectedTab: 'User'})}>
                         <Navigation component={About}/>
@@ -125,6 +131,7 @@ class Tabs extends Component {
 
     //刷新单聊数据
     _updateMessageOne(partyIdFrom) {
+        console.log('推送过来的ID' + partyIdFrom)
         this.props.updateMessageOne(partyIdFrom);
     }
 
@@ -133,7 +140,7 @@ class Tabs extends Component {
         this.props.updateOrderList();
     }
 
-    componentWillMount() {
+    componentDidMount() {
         //获取registrationId
         JPushModule.getRegistrationID((registrationId) => {
             this._postRegistrationId(registrationId)
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     },
     selectedTabText: {
         fontSize: 10,
-        color: 'red'
+        color: '#1e90ff'
     },
     icon: {
         width: 22,
@@ -189,7 +196,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        loginState: state.loginStore
+        tabState: state.tabStore
     }
 };
 const mapDispatchToProps = (dispatch) => {

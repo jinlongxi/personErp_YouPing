@@ -4,6 +4,7 @@ import resourceReducer from './resource';
 import aboutReducer from './about';
 import orderReducer from './order';
 import messageReducer from './message';
+import tabReducer from './tab';
 
 export default combineReducers({
     loginStore: loginReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
     orderStore: orderReducer,
     aboutStore: aboutReducer,
     messageStore: messageReducer,
+    tabStore:tabReducer
 });

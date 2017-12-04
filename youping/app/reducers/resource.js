@@ -4,7 +4,6 @@ import * as TYPES from '../constants/ActionTypes';
 
 const initialState = {
     resourceList: [],
-    isEmpty: null,
     productCategoryId: null,
     status: null,
     isLoading: false,
@@ -18,6 +17,7 @@ export default function resource(state = initialState, action) {
             return {
                 ...state,
                 resourceList: [],
+                isLoading: false,
                 status: 'doing'
             };
         case TYPES.FETCH_RESOURCE_LIST_SUCCESS:
@@ -44,6 +44,24 @@ export default function resource(state = initialState, action) {
                 ...state,
                 isLoading: true,
                 status: 'done'
+            };
+        //添加资源描述
+        case TYPES.ADD_RESOURCE_DESC_DOING:
+            return {
+                ...state,
+                isLoading: false,
+                status: 'doing'
+            };
+        case TYPES.ADD_RESOURCE_DESC_SUCCESS:
+            return {
+                ...state,
+                isLoading: true,
+                status: 'done'
+            };
+        case TYPES.ADD_RESOURCE_DESC_ERROR:
+            return {
+                ...state,
+                status: 'error'
             };
         //下架商品
         case TYPES.DELETE_RESOURCE_SUCCESS:

@@ -8,6 +8,8 @@ import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
 import ReleaseResource from './releaseResource';
 import ResourceDetail from './resourceDetail';
+import Button from '../common/buttons';
+import { COLOR, ThemeProvider,Toolbar } from 'react-native-material-ui';
 import {
     StyleSheet,
     Text,
@@ -48,24 +50,24 @@ class ResourceList extends React.Component {
                         /> : Util.loading
                     }
                 </ScrollView>
-                <TouchableOpacity style={styles.btn} onPress={()=> {
-                    this._releaseResourse.bind(this)()
-                }}>
-                    <Text style={styles.text}>发布资源</Text>
-                </TouchableOpacity>
+                <Button.ColoredRaisedButton onPress={()=> {
+                    this._releaseResource.bind(this)()
+                }}/>
             </View>
         );
     }
 
     //发布资源
-    _releaseResourse() {
+    _releaseResource() {
+        this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'ReleaseResource',
                 component: ReleaseResource,
                 params: {
-                    onClick: this.props.onclick
+                    releaseResource: this.props.releaseResource,
+                    ...this.props
                 },
             })
         }
@@ -73,6 +75,7 @@ class ResourceList extends React.Component {
 
     //点击进入详情页面
     _showDetail(productId) {
+        this.props.hiddenTabBar();
         const resourceList = this.props.resourceState.resourceList;
         const selectResource = resourceList.filter((item)=> {
             if (item.productId === productId) {
@@ -85,8 +88,10 @@ class ResourceList extends React.Component {
                 name: 'ResourceDetail',
                 component: ResourceDetail,
                 params: {
-                    selectResource: selectResource[0],
-                    wechatShare: this.props.wechatShare
+                    selectResource: selectResource[0],//选中的数据
+                    weChatShare: this.props.weChatShare,//微信分享
+                    addResourceDesc: this.props.addResourceDesc,//完善资料
+                    resourceState: this.props.resourceState
                 }
             })
         }
@@ -110,7 +115,6 @@ class ResourceList extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
@@ -120,6 +124,7 @@ class ResourceList extends React.Component {
             show: this.props.resourceState.isLoading
         })
     }
+
     componentWillReceiveProps(nextProps) {
         //设置数据源和加载状态
         var ds = new ListView.DataSource({

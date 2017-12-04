@@ -22,12 +22,11 @@ import {
 class messageList extends React.Component {
     constructor(props) {
         super(props);
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows(['row 1']),
             show: false,
             empty: false,
-            data: null,
         };
         this._renderRow = this._renderRow.bind(this)
     }
@@ -55,7 +54,6 @@ class messageList extends React.Component {
 
     //渲染
     _renderRow(resource) {
-        console.log(resource)
         return !this.state.empty ?
             <MessageItem resource={resource} onPress={this._singleChat.bind(this, resource)}/> : <EmptyPage/>
     }
@@ -71,13 +69,14 @@ class messageList extends React.Component {
 
     //跳转到聊天页面
     _singleChat(resource) {
+        console.log(resource)
+        this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'SingleChat',
                 component: SingleChat,
                 params: {
-                    ...this.props,
                     selectResource: resource
                 }
             })
@@ -85,7 +84,6 @@ class messageList extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
@@ -95,6 +93,18 @@ class messageList extends React.Component {
             show: this.props.messageState.isLoading
         })
     }
+
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(2222222222222222)
+    //     //设置数据源和加载状态
+    //     var ds = new ListView.DataSource({
+    //         rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+    //     });
+    //     this.setState({
+    //         dataSource: ds.cloneWithRows(nextProps.messageState.messageList),
+    //         show: this.props.messageState.isLoading
+    //     })
+    // }
 }
 
 

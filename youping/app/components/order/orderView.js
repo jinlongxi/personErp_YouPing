@@ -21,8 +21,8 @@ class orderView extends React.Component {
     }
 
     render() {
-        console.log('我的订单列表'+this.props.orderState.isLoading);
         const Loading = this.props.orderState.isLoading;
+        console.log(this.props)
         return (
             Loading ? <View style={{flex: 1}}>
                 {
@@ -34,6 +34,10 @@ class orderView extends React.Component {
                 }
             </View> : Util.loading
         )
+    }
+
+    componentWillMount() {
+        this.props.getOrderList();
     }
 }
 

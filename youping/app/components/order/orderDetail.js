@@ -2,8 +2,8 @@
  * Created by jinlongxi on 17/9/15.
  */
 import React, {Component} from 'react';
-import Header from '../common/header';
-import SectionViewList from '../common/sectionList';
+import Header from '../../containers/headerContainer';
+import ButtonMenu from './buttonMenu';
 import {
     AppRegistry,
     StyleSheet,
@@ -19,24 +19,25 @@ class orderDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            orderData: null,
-        };
+            orderData: null
+        }
     }
 
     render() {
+        const orderData = this.state.orderData;
         return (
             <View style={{flex: 1}}>
                 <Header
-                    initObj={{backName: '返回', barTitle: '订单详情'}}
+                    initObj={{backName: '返回', barTitle: '订单详情', backType: 'order', refresh: true}}
                     navigator={this.props.navigator}
                 />
                 <ScrollView>
                     {
-                        this.state.orderData == null ? null :
+                        orderData == null ? null :
                             <View style={styles.container}>
                                 {
-                                    this.state.orderData.detailImageUrl != null ?
-                                        <Image source={{uri: this.state.orderData.detailImageUrl}}
+                                    orderData.detailImageUrl != null ?
+                                        <Image source={{uri: orderData.detailImageUrl}}
                                                style={styles.image}
                                                accessibilityLabel="图片加载中。。。"
                                                blurRadius={1}
@@ -44,24 +45,46 @@ class orderDetail extends React.Component {
                                         />
                                         : null
                                 }
-                                <Text style={styles.title}>订单简介:{this.state.orderData.productName}</Text>
-                                <Text style={styles.text}>订单编号:{this.state.orderData.orderId}</Text>
-                                <Text style={styles.text}>购买人:{this.state.orderData.personInfoMap.firstName}</Text>
+                                <Text style={styles.title}>订单简介:{orderData.productName}</Text>
+                                <Text style={styles.text}>订单编号:{orderData.orderId}</Text>
+                                <Text style={styles.text}>订单状态:{orderData.statusId}</Text>
+                                <Text style={styles.text}>是否收款:{orderData.orderPayStatus}</Text>
+                                <Text style={styles.text}>购买人:{orderData.personInfoMap.firstName}</Text>
+                                <Text style={styles.text}>收货地址:{orderData.personAddressInfoMap.contactAddress}</Text>
                             </View>
                     }
                 </ScrollView>
-                <TouchableOpacity style={styles.cencelOrder} onPress={()=> {}}>
-                    <Text style={styles.placeOrder_btn}
-                    >与买家交谈</Text>
-                </TouchableOpacity>
+                <ButtonMenu orderData={orderData} {...this.props}/>
             </View>
         )
     }
 
     componentWillMount() {
+        console.log(this.props);
+        const orderList = this.props.orderState.orderList;
+        const selectOrder = orderList.filter((item)=> {
+            if (item.productId === this.props.productId) {
+                return item
+            }
+        });
+        //请求订单详情数据
         this.setState({
-            orderData: this.props.selectOrder
+            orderData: selectOrder[0]
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+        // const orderList = nextProps.orderState.orderList;
+        // const selectOrder = orderList.filter((item)=> {
+        //     if (item.productId === nextProps.productId) {
+        //         return item
+        //     }
+        // });
+        // //请求订单详情数据
+        // this.setState({
+        //     orderData: selectOrder[0]
+        // })
     }
 }
 
@@ -110,14 +133,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#FFFFFF',
     },
-    cencelOrder: {
-        backgroundColor: '#90EE90',
-        height: 55,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        borderRadius: 5
-    }
 });
 
 export default orderDetail

@@ -30,11 +30,12 @@ JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
      [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
   [JPUSHService setupWithOption:launchOptions appKey:@"cb43c0495515a6827a191fbf"
                         channel:nil apsForProduction:nil];
+
   NSURL *jsCodeLocation;
   
   //  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-  //jsCodeLocation = [NSURL URLWithString:@"http://192.168.3.3:8081/index.ios.bundle?platform=ios&dev=true"];
-  jsCodeLocation = [[NSBundle mainBundle]URLForResource:@"main" withExtension:@"jsbundle"];
+   jsCodeLocation = [NSURL URLWithString:@"http://192.168.3.3:8081/index.ios.bundle?platform=ios&dev=true"];
+  //jsCodeLocation = [[NSBundle mainBundle]URLForResource:@"main" withExtension:@"jsbundle"];
   
   
   //start

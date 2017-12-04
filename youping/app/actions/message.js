@@ -2,6 +2,7 @@ import {AlertIOS} from 'react-native';
 import * as TYPES from '../constants/ActionTypes';
 import Request from '../utils/request';
 import ServiceURl from '../utils/service';
+import DeviceStorage from '../utils/deviceStorage';
 
 //请求消息列表数据
 export function fetchMessageList() {
@@ -25,7 +26,6 @@ export function fetchMessageList() {
 }
 //请求一对一消息
 export function fetchMessageOne(partyIdFrom, click) {
-    console.log('不是推送来的吗：'+click);
     return (dispatch) => {
         dispatch({type: TYPES.FETCH_SINGLE_MESSAGE_DOING});
         const url = ServiceURl.platformManager + 'loadAllMessage?bizType=findOne&click=' + click;
@@ -38,7 +38,7 @@ export function fetchMessageOne(partyIdFrom, click) {
                     type: TYPES.FETCH_SINGLE_MESSAGE_SUCCESS,
                     textList: messages,
                     partyId: partyId
-                })
+                });
             }
         }, function (err) {
             console.log(JSON.stringify(err));
@@ -47,16 +47,41 @@ export function fetchMessageOne(partyIdFrom, click) {
     };
 }
 
-//发送一对一消息
-export function sendMessageOne(text, partyIdTo, objectId) {
-    console.log('发送消息所需要的参数' + text + partyIdTo + objectId);
+//发送文本消息
+export function sendMessageOne(message, partyIdTo, objectId, messageLogTypeId) {
     return (dispatch) => {
         const url = ServiceURl.WebManagerNew + 'pushMessage';
-        const data = '&text=' + text + '&partyIdTo=' + partyIdTo + '&objectId=' + objectId;
+        let data;
+        if (messageLogTypeId === 'TEXT') {
+            data = '&text=' + message + '&partyIdTo=' + partyIdTo + '&objectId=' + objectId + '&messageLogTypeId=' + messageLogTypeId;
+        } else if (messageLogTypeId === 'LOCATION') {
+            data = '&text=' + JSON.stringify(message) + '&partyIdTo=' + partyIdTo + '&objectId=' + objectId + '&messageLogTypeId=' + messageLogTypeId;
+        }
         Request.postRequest(url, data, function (response) {
-            console.log('发送消息' + JSON.stringify(response));
+            console.log('发送文本消息成功');
         }, function (err) {
             console.log(JSON.stringify(err));
         });
     };
 }
+
+//发送图片消息
+export function sendImageMessage(images, partyIdTo, objectId, messageLogTypeId,pay_qr_code) {
+    console.log(images, partyIdTo, objectId, messageLogTypeId,pay_qr_code);
+    return (dispatch) => {
+        DeviceStorage.get('tarjeta').then((tags) => {
+            let url = ServiceURl.WebManagerNew + 'pushMessage?tarjeta=' + tags + '&partyIdTo=' + partyIdTo +
+                '&objectId=' + objectId + '&messageLogTypeId=' + messageLogTypeId+'&pay_qr_code='+pay_qr_code;
+            Request.uploadImage(url, images, function (response) {
+                console.log('发送图片消息成功'+JSON.stringify(response));
+                const {code:code}=response;
+                if (code === '200') {
+                }
+            }, function (err) {
+                console.log(JSON.stringify(err));
+            });
+        });
+    };
+}
+
+

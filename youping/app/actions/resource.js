@@ -33,27 +33,51 @@ export function fetchResourceList() {
 }
 
 //发布资源
-export function releaceResource(picture, productName, productPrice) {
+export function releaseResource(picture, productName, productPrice) {
     return (dispatch) => {
         dispatch({type: TYPES.RELEASE_RESOURCE_DOING});
 
         DeviceStorage.get('tarjeta').then((tags) => {
             DeviceStorage.get('productCategoryId').then((CategoryId)=> {
                 let url = ServiceURl.personManager + 'releaseResource?tarjeta=' + tags + '&productName=' + productName +
-                    '&productPrice=' + productPrice + '&productCategoryId=' + CategoryId;
+                    '&productPrice=' + productPrice + '&productCategoryId=' + CategoryId+'&quantityTotal='+'';
                 let data = [];
                 data.push(picture);
                 Request.uploadImage(url, data, function (response) {
-                    //console.log('发布资源' + JSON.stringify(response));
+                    console.log('发布资源' + JSON.stringify(response));
                     const {code:code}=response;
                     if (code === '200') {
                         dispatch({type: TYPES.RELEASE_RESOURCE_SUCCESS});
-                        //成功后刷新本地STORE中的资源列表
+                        //刷新资源列表
                         dispatch(fetchResourceList())
                     }
                 }, function (err) {
                     console.log(JSON.stringify(err));
                 });
+            });
+        });
+    };
+}
+
+//添加描述
+export function addProductContent(images, description, productId) {
+    return (dispatch) => {
+        console.log('开始添加描述');
+        dispatch({type: TYPES.ADD_RESOURCE_DESC_DOING});
+        DeviceStorage.get('tarjeta').then((tags) => {
+            let url = ServiceURl.personManager + 'addProductContent?tarjeta=' + tags + '&description=' + description +
+                '&productId=' + productId;
+            Request.uploadImage(url, images, function (response) {
+                //console.log('添加资源描述' + JSON.stringify(response));
+                const {code:code}=response;
+                if (code === '200') {
+                    dispatch({type: TYPES.ADD_RESOURCE_DESC_SUCCESS});
+                    //刷新资源列表
+                    dispatch(fetchResourceList())
+                }
+            }, function (err) {
+                dispatch({type: TYPES.ADD_RESOURCE_DESC_ERROR});
+                console.log(JSON.stringify(err));
             });
         });
 
@@ -65,12 +89,10 @@ export function salesDiscontinuation(productId) {
     return (dispatch) => {
         let url = ServiceURl.personManager + 'salesDiscontinuation';
         let data = '&productId=' + productId;
-        Request.postRequest(url, data, function (success) {
-            console.log('下架商品' + success);
-            let {code:code}=success;
+        Request.postRequest(url, data, function (response) {
+            let {code:code}=response;
             if (code === '200') {
                 dispatch({type: TYPES.DELETE_RESOURCE_SUCCESS, productId: productId});
-                //dispatch(fetchResourceList());
             }
         }, function (err) {
             console.log(JSON.stringify(err))

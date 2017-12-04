@@ -19,11 +19,11 @@ var Header = React.createClass({
         var headContent = this.props.initObj;
         return (
             <View style={styles.header}>
-                <TouchableOpacity style={styles.left_btn} onPress={this._pop}>
-                    <Icon/>
-                    <Text style={styles.btn_text}>{headContent.backName}</Text>
-                </TouchableOpacity>
                 <View style={styles.title_container}>
+                    <TouchableOpacity style={styles.left_btn} onPress={this._pop}>
+                        <Icon/>
+                        <Text style={styles.btn_text}>{headContent.backName}</Text>
+                    </TouchableOpacity>
                     <Text style={styles.title} numberOfLines={1}>{headContent.barTitle}</Text>
                 </View>
             </View>
@@ -31,14 +31,30 @@ var Header = React.createClass({
     },
     //返回按钮的事件处理器
     _pop: function () {
-        this.props.navigator.pop();
+        //刷新之前的页面
+        if (this.props.initObj.backType === 'message') {
+            this.props.getMessageList();
+            this.props.navigator.popToTop();
+        } else if (this.props.initObj.backType === 'resource') {
+            this.props.getResourceList();
+            this.props.navigator.pop();
+        } else if (this.props.initObj.backType === 'order') {
+            this.props.getOrderList();
+            this.props.navigator.pop();
+        }else{
+            this.props.navigator.pop();
+        }
+        //是否显示TABBAR
+        if (this.props.initObj.refresh) {
+            this.props.showTab()
+        }
     }
 });
 
 var styles = StyleSheet.create({
     header: {
         height: 50,
-        backgroundColor: "#3497FF",
+        backgroundColor: "#3A5FCD",
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -46,24 +62,26 @@ var styles = StyleSheet.create({
     },
     left_btn: {
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+        position: 'absolute',
+        left: 0
     },
     btn_text: {
         color: '#fff',
         fontSize: 17,
         fontWeight: 'bold',
+
     },
     title_container: {
         flex: 1,
-        justifyContent: 'center',
-        marginLeft:90
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
     title: {
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
         lineHeight: 18,
+        textAlign: 'center',
     }
 });
 

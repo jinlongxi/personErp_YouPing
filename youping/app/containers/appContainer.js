@@ -7,11 +7,9 @@ import React, {Component} from 'react';
 import LoginContainer from '../containers/loginContainer';
 import TabsContainer from '../containers/tabsContainer'
 import {connect} from 'react-redux';
-import * as WeChat from 'react-native-wechat';
 import DeviceStorage from '../utils/deviceStorage';
 import {hasToken, noToken} from '../actions/login';
-import {bindActionCreators} from 'redux';
-import * as readCreators from '../actions/resource';
+import Util from '../utils/util';
 import {
     Platform,
     StyleSheet,
@@ -29,12 +27,8 @@ class App extends React.Component {
     }
 
     render() {
-        console.log(this.state.isLoggedIn);
         return (
-            this.state.hasToken ? this.state.isLoggedIn ? <TabsContainer/> : <LoginContainer/> :
-                <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}><Text
-                    style={{textAlign: 'center'}}>数据加载中...</Text></View>
-
+            this.state.hasToken ? this.state.isLoggedIn ? <TabsContainer/> : <LoginContainer/> : Util.bootUp
         )
     }
 
@@ -54,7 +48,6 @@ class App extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-    WeChat.registerApp('wx5843eeb488708c80');
     return {
         loginState: state.loginStore
     }
@@ -65,12 +58,12 @@ const mapDispatchToProps = (dispatch) => {
         judgeToken: ()=> {
             DeviceStorage.get('tarjeta').then((tags) => {
                 if (tags) {
-                    console.log(tags + '本地有TOKEN');
+                    console.log('本地有TOKEN，不需要重新登录');
                     setTimeout(function () {
                         dispatch(hasToken(tags))
                     }, 1000);
                 } else {
-                    console.log(tags + '本地有TOKEN');
+                    console.log('本地没有TOKEN，需要登录');
                     setTimeout(function () {
                         dispatch(noToken())
                     }, 1000);
