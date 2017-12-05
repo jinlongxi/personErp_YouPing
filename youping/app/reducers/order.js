@@ -15,6 +15,8 @@ export default function order(state = initialState, action) {
         case TYPES.FETCH_ORDER_LIST_DOING:
             return {
                 ...state,
+                orderList: [],
+                isLoading: false,
                 status: 'doing'
             };
         //请求订单列表

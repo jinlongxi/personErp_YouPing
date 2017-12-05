@@ -42,6 +42,8 @@ class OrderItem extends React.Component {
                         <Text style={styles.publisher_author}
                               numberOfLines={1}>订单状态:{resource.statusId}</Text>
                         <Text style={styles.publisher_author}
+                              numberOfLines={1}>支付状态:{resource.orderPayStatus}</Text>
+                        <Text style={styles.publisher_author}
                               numberOfLines={1}>单价:{resource.unitPrice}</Text>
 
                         <Text style={styles.buy}
@@ -55,24 +57,25 @@ class OrderItem extends React.Component {
 
 const styles = StyleSheet.create({
     item: {
+        flex:1,
         flexDirection: 'row',
-        height: 120,
         padding: 10,
-        width: 300,
+        justifyContent:'space-between',
     },
     imageContainer: {
+        flex:1,
         justifyContent: 'center',
-        alignItems: 'center'
     },
     image: {
-        width: 80,
-        height: 80,
+        width: 100,
+        height: 100,
         borderWidth: 1,
         borderColor: 'gray'
     },
     contentContainer: {
         flex: 1,
-        margin: 15
+        margin: 15,
+        alignItems:'flex-start'
     },
     textContainer: {
         justifyContent: 'center',

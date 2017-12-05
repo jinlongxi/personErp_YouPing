@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import Header from '../../containers/headerContainer';
-import ButtonMenu from './buttonMenu';
+import ButtonMenu from '../message/buttonMenu';
 import {
     AppRegistry,
     StyleSheet,
@@ -63,7 +63,7 @@ class orderDetail extends React.Component {
         console.log(this.props);
         const orderList = this.props.orderState.orderList;
         const selectOrder = orderList.filter((item)=> {
-            if (item.productId === this.props.productId) {
+            if (item.orderId === this.props.orderId) {
                 return item
             }
         });

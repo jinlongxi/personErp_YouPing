@@ -4,7 +4,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {fetchMessageOne, sendMessageOne, sendImageMessage} from '../actions/message'
-import Header from '../containers/headerContainer';
+import Header from '../components/common/header';
 import {GiftedChat, Actions, Bubble, SystemMessage} from 'react-native-gifted-chat';
 import CustomActions from '../components/chat/CustomActions';
 import CustomView from '../components/chat/CustomView';
@@ -188,7 +188,7 @@ class SingleChat extends React.Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message', refresh: true}}
+                <Header initObj={{backName: '返回', barTitle: '单聊页面'}}
                         navigator={this.props.navigator}
                 />
                 <GiftedChat

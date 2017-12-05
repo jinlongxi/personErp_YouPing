@@ -17,7 +17,6 @@ import DeviceStorage from '../utils/deviceStorage';
 import {deleteToken} from '../actions/login';
 import {fetchMessageList, fetchMessageOne} from '../actions/message';
 import {fetchOrderList} from '../actions/order';
-import Button from '../components/common/buttons';
 import {
     AppRegistry,
     StyleSheet,
@@ -63,39 +62,39 @@ class Tabs extends Component {
                         onPress={() => this.setState({selectedTab: 'Event'})}>
                         <Navigation component={Resource}/>
                     </TabNavigator.Item>
-                    <TabNavigator.Item
-                        selected={this.state.selectedTab === 'Device'}
-                        title="订单"
-                        titleStyle={styles.tabText}
-                        selectedTitleStyle={styles.selectedTabText}
-                        renderIcon={() => <Image style={styles.icon}
-                                                 source={require("../img/tabs/manager.png")}/>}
-                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
-                                                         source={require("../img/tabs/manager.png")}/>}
-                        onPress={() => this.setState({selectedTab: 'Device'})}>
-                        <Navigation component={Order}/>
-                    </TabNavigator.Item>
+                    {/*<TabNavigator.Item*/}
+                        {/*selected={this.state.selectedTab === 'Device'}*/}
+                        {/*title="订单"*/}
+                        {/*titleStyle={styles.tabText}*/}
+                        {/*selectedTitleStyle={styles.selectedTabText}*/}
+                        {/*renderIcon={() => <Image style={styles.icon}*/}
+                                                 {/*source={require("../img/tabs/manager.png")}/>}*/}
+                        {/*renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}*/}
+                                                         {/*source={require("../img/tabs/manager.png")}/>}*/}
+                        {/*onPress={() => this.setState({selectedTab: 'Device'})}>*/}
+                        {/*<Navigation component={Order}/>*/}
+                    {/*</TabNavigator.Item>*/}
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'Message'}
-                        title="消息"
-                        titleStyle={styles.tabText}
-                        selectedTitleStyle={styles.selectedTabText}
-                        renderIcon={() => <Image style={styles.icon}
-                                                 source={require("../img/tabs/message.png")}/>}
-                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
-                                                         source={require("../img/tabs/message.png")}/>}
-                        onPress={() => this.setState({selectedTab: 'Message'})}>
-                        <Navigation component={Message}/>
-                    </TabNavigator.Item>
-                    <TabNavigator.Item
-                        selected={this.state.selectedTab === 'User'}
-                        title="关于"
+                        title="客户"
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
                         renderIcon={() => <Image style={styles.icon}
                                                  source={require("../img/tabs/contact.png")}/>}
                         renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
                                                          source={require("../img/tabs/contact.png")}/>}
+                        onPress={() => this.setState({selectedTab: 'Message'})}>
+                        <Navigation component={Message}/>
+                    </TabNavigator.Item>
+                    <TabNavigator.Item
+                        selected={this.state.selectedTab === 'User'}
+                        title="管理"
+                        titleStyle={styles.tabText}
+                        selectedTitleStyle={styles.selectedTabText}
+                        renderIcon={() => <Image style={styles.icon}
+                                                 source={require("../img/tabs/manager.png")}/>}
+                        renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}
+                                                         source={require("../img/tabs/manager.png")}/>}
                         onPress={() => this.setState({selectedTab: 'User'})}>
                         <Navigation component={About}/>
                     </TabNavigator.Item>

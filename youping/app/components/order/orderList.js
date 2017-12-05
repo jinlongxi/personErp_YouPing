@@ -53,7 +53,7 @@ class orderList extends React.Component {
     }
 
     //点击进入订单详情页面
-    _showDetail(productId) {
+    _showDetail(orderId) {
         this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
@@ -62,7 +62,7 @@ class orderList extends React.Component {
                 component: orderDetail,
                 params: {
                     //selectOrder: selectOrder[0],
-                    productId:productId,
+                    orderId:orderId,
                     ...this.props
                 }
             })
@@ -73,7 +73,7 @@ class orderList extends React.Component {
     _renderRow(resource) {
         return !this.state.empty ?
             <OrderItem resource={resource} onPress={()=> {
-                this._showDetail.bind(this, resource.productId)()
+                this._showDetail.bind(this, resource.orderId)()
             }}/> : <EmptyPage/>
     }
 

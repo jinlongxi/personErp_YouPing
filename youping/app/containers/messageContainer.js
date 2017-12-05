@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import MessageView from '../components/message/messageView';
 import {connect} from 'react-redux';
-import {fetchMessageList} from '../actions/message'
+import {fetchMessageList,queryConsumerInfo} from '../actions/message'
 import {hideTabBar} from '../actions/tab'
 
 const mapStateToProps = (state) => {
@@ -23,6 +23,10 @@ const mapDispatchToProps = (dispatch)=> {
         hiddenTabBar:()=>{
             dispatch(hideTabBar())
         },
+        //获取客户信息
+        queryConsumerInfo:(realPartyId)=>{
+            dispatch(queryConsumerInfo(realPartyId))
+        }
     }
 };
 

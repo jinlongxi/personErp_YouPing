@@ -6,7 +6,7 @@ import MessageItem from './messageItem';
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
-import SingleChat from '../../containers/chatContainer';
+import ClientInfo from '../../containers/clientContainer';
 import {
     AppRegistry,
     StyleSheet,
@@ -34,7 +34,7 @@ class messageList extends React.Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <HeaderBar initObj={{backName: '', barTitle: '消息列表'}}/>
+                <HeaderBar initObj={{backName: '', barTitle: '客户列表'}}/>
                 <ScrollView>
                     {
                         this.state.show ? <ListView
@@ -55,7 +55,7 @@ class messageList extends React.Component {
     //渲染
     _renderRow(resource) {
         return !this.state.empty ?
-            <MessageItem resource={resource} onPress={this._singleChat.bind(this, resource)}/> : <EmptyPage/>
+            <MessageItem resource={resource} onPress={this._clientInfo.bind(this, resource)}/> : <EmptyPage/>
     }
 
     //渲染分割线
@@ -67,17 +67,19 @@ class messageList extends React.Component {
         return <View style={style} key="{sectionID+rowID}"/>
     }
 
-    //跳转到聊天页面
-    _singleChat(resource) {
+    //跳转到客户信息页面
+    _clientInfo(resource){
         console.log(resource)
+        this.props.queryConsumerInfo(resource.user.realPartyId);
         this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'SingleChat',
-                component: SingleChat,
+                name: 'ClientInfo',
+                component: ClientInfo,
                 params: {
-                    selectResource: resource
+                    selectResource: resource,
+                    messageState:this.props.messageState
                 }
             })
         }

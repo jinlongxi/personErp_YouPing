@@ -55,7 +55,7 @@ class Scanner extends Component {
                     {
                         text: '确定发货', onPress: () => {
                         this.props.navigator.pop();
-                        this.props.delivery(e.data, this.props.orderData.orderId)
+                        this.props.delivery(e.data)
                     }
                     },
                     {

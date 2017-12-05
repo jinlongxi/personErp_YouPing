@@ -26,7 +26,7 @@ class messageView extends React.Component {
                 this.props.messageState.messageList.length > 0 ?
                     <MessageList {...this.props}/> :
                     <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-                        <Text style={{textAlign: 'center'}}>目前没有人了联系你呢。。。</Text>
+                        <Text style={{textAlign: 'center'}}>客户还在路上。。。</Text>
                     </View>
                 : Util.loading
         )

@@ -49,6 +49,8 @@ class messageItem extends React.Component {
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
                         <Text style={styles.text}
+                              numberOfLines={1}>刚刚购买了你的商品</Text>
+                        <Text style={styles.text}
                               numberOfLines={1}>{text}</Text>
                         <Text style={styles.date}
                               numberOfLines={1}>{resource.createdAt}</Text>

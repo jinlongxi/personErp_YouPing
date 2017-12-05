@@ -7,8 +7,10 @@ const initialState = {
     isLoading: false,
     status: null,
     chatData: [],
+    orderData:[],
     partyId: null,
-    isRefreshBack:false//当返回时是否刷新页面
+    isRefreshBack: false,//当返回时是否刷新页面
+    clientData: []
 };
 
 export default function message(state = initialState, action) {
@@ -47,6 +49,13 @@ export default function message(state = initialState, action) {
             return {
                 ...state,
                 status: 'error'
+            };
+        //请求客户信息
+        case TYPES.FETCH_CLIENT_LIST_SUCCESS:
+            return {
+                ...state,
+                clientData: action.queryConsumerInfoList,
+                orderData:action.orderList
             };
         default:
             return state;

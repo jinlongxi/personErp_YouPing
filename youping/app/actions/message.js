@@ -66,20 +66,87 @@ export function sendMessageOne(message, partyIdTo, objectId, messageLogTypeId) {
 }
 
 //发送图片消息
-export function sendImageMessage(images, partyIdTo, objectId, messageLogTypeId,pay_qr_code) {
-    console.log(images, partyIdTo, objectId, messageLogTypeId,pay_qr_code);
+export function sendImageMessage(images, partyIdTo, objectId, messageLogTypeId, pay_qr_code) {
+    console.log(images, partyIdTo, objectId, messageLogTypeId, pay_qr_code);
     return (dispatch) => {
         DeviceStorage.get('tarjeta').then((tags) => {
             let url = ServiceURl.WebManagerNew + 'pushMessage?tarjeta=' + tags + '&partyIdTo=' + partyIdTo +
-                '&objectId=' + objectId + '&messageLogTypeId=' + messageLogTypeId+'&pay_qr_code='+pay_qr_code;
+                '&objectId=' + objectId + '&messageLogTypeId=' + messageLogTypeId + '&pay_qr_code=' + pay_qr_code;
             Request.uploadImage(url, images, function (response) {
-                console.log('发送图片消息成功'+JSON.stringify(response));
+                console.log('发送图片消息成功' + JSON.stringify(response));
                 const {code:code}=response;
                 if (code === '200') {
                 }
             }, function (err) {
                 console.log(JSON.stringify(err));
             });
+        });
+    };
+}
+
+//获取客户信息
+export function queryConsumerInfo(realPartyId) {
+    return (dispatch) => {
+        let url = ServiceURl.personManager + 'queryConsumerInfo?realPartyId=' + realPartyId;
+        Request.postRequest(url, '', function (response) {
+            console.log('获取客户信息' + JSON.stringify(response));
+            const {code:code,queryConsumerInfoList:queryConsumerInfoList,orderList:orderList}=response;
+            if (code === '200') {
+                dispatch({type: TYPES.FETCH_CLIENT_LIST_SUCCESS,queryConsumerInfoList:queryConsumerInfoList,orderList:orderList});
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err));
+        });
+    };
+}
+
+//确定发货
+export function fetchDelivery(code, orderId, name, carrierCode, expressCode) {
+    console.log(code, orderId, name, carrierCode, expressCode);
+    return (dispatch) => {
+        const url = ServiceURl.platformManager + 'updateShipGroupShipInfoForWeChat?code=' + code + '&orderId=' + orderId +
+            '&name=' + name + '&carrierCode=' + carrierCode;
+        Request.postRequest(url, '', function (response) {
+            console.log('确定发货' + JSON.stringify(response));
+            const {code:code}=response;
+            if (code === '200') {
+                dispatch(fetchOrderList())
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err));
+        });
+    };
+}
+
+
+//获取物流信息
+export function fetchLogistics(codeNumber, orderId) {
+    return (dispatch) => {
+        const url = ServiceURl.platformManager + 'queryExpressInfo?code=' + codeNumber+'&orderId='+orderId;
+        Request.postRequest(url, '', function (response) {
+            console.log('获取物流信息' + JSON.stringify(response));
+            const {code:code, name:name, carrierCode:carrierCode, expressCode:expressCode}=response;
+            if (code === '200') {
+                dispatch(fetchDelivery(codeNumber, orderId, name, carrierCode, expressCode))
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err));
+        });
+    };
+}
+
+//确定已收款
+export function fetchPaymentReceived(productId,realPartyId) {
+    return (dispatch) => {
+        const url = ServiceURl.personManager + 'confirmPayment?productId=' + productId+'&realPartyId='+realPartyId;
+        Request.postRequest(url, '', function (response) {
+            console.log('确认已收款' + JSON.stringify(response));
+            const {code:code}=response;
+            if (code === '200') {
+                //dispatch(queryConsumerInfo(realPartyId))
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err));
         });
     };
 }

@@ -53,8 +53,9 @@ export function fetchDelivery(code, orderId, name, carrierCode, expressCode) {
             '&name=' + name + '&carrierCode=' + carrierCode;
         Request.postRequest(url, '', function (response) {
             console.log('确定发货' + JSON.stringify(response));
+            const {code:code}=response;
             if (code === '200') {
-
+                dispatch(fetchOrderList())
             }
         }, function (err) {
             console.log(JSON.stringify(err));

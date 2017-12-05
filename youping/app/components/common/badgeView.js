@@ -49,7 +49,7 @@ class badgeView extends React.Component {
                 <Text
                     allowFontScaling={true}
                     numberOfLines={1}
-                    style={{marginTop: padding, width: 80}}
+                    style={{marginTop: padding, width: 80,textAlign:'center'}}
                 >{title}</Text>
             </View>
         );
