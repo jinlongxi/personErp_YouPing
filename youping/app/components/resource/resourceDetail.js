@@ -7,6 +7,8 @@ import AddResourceDesc from './addResourceDesc';
 import Util from '../../utils/util';
 import ImageList from '../common/imageList';
 import ExpandableView from 'react-native-expandable-view';
+import Chart from './chart';
+import ButtonMenu from './buttonMenu';
 import {
     AppRegistry,
     StyleSheet,
@@ -48,12 +50,13 @@ class ResourceDetail extends React.Component {
 
     render() {
         const resourceData = this.props.selectResource;
+        console.log(resourceData);
         const loading = this.props.resourceState.isLoading;
         return (
             loading ?
                 <View style={{flex: 1}}>
                     <Header
-                        initObj={{backName: '返回', barTitle: '资源详情', backType: 'resource',refresh:true}}
+                        initObj={{backName: '返回', barTitle: '资源详情', backType: 'resource', refresh: true}}
                         navigator={this.props.navigator}
                     />
                     <ScrollView>
@@ -72,6 +75,7 @@ class ResourceDetail extends React.Component {
                                     }
                                     <Text style={styles.title}>资源简介:{resourceData.productName}</Text>
                                     <Text style={styles.text}>资源编号:{resourceData.productId}</Text>
+                                    <Chart/>
                                     {
                                         resourceData.morePicture.length > 0 ?
                                             <View style={{flex: 1}}>
@@ -83,18 +87,19 @@ class ResourceDetail extends React.Component {
                                 </View>
                         }
                     </ScrollView>
-                    <View style={styles.btnContainer}>
-                        <TouchableOpacity style={styles.addDesc_btn} onPress={()=> {
+                    <View style={{position: 'absolute', right: 0, top: 500,width:300,height:100}}>
+                        <ButtonMenu  {...this.props}/>
+                    </View>
+                    <View style={styles.footer}>
+                        <TouchableOpacity style={styles.emptying} onPress={()=> {
                             this._addResourceDesc()
                         }}>
-                            <Text style={styles.placeOrder_btn}
-                            >完善信息</Text>
+                            <Text style={styles.footer_btn_text}>完善资料</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.weChatShare_btn} onPress={()=> {
+                        <TouchableOpacity style={styles.moving} onPress={()=> {
                             this._weChatShare()
                         }}>
-                            <Text style={styles.placeOrder_btn}
-                            >微信分享</Text>
+                            <Text style={styles.footer_btn_text}>微信分享</Text>
                         </TouchableOpacity>
                     </View>
                 </View> : Util.isLoading
@@ -160,11 +165,28 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 5
     },
-    //按钮容器
-    btnContainer: {
+    //底部
+    footer: {
         flexDirection: 'row',
-        justifyContent: 'space-around'
-    }
+        width: Util.windowSize.width,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    emptying: {
+        flex: 1,
+        backgroundColor: '#FFAEB9'
+    },
+    moving: {
+        flex: 1,
+        backgroundColor: '#28a745'
+    },
+    footer_btn_text: {
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        fontSize: 18,
+        color: 'white',
+        textAlign: 'center'
+    },
 });
 
 export default ResourceDetail

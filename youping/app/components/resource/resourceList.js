@@ -9,7 +9,7 @@ import HeaderBar from '../common/headerBar';
 import ReleaseResource from './releaseResource';
 import ResourceDetail from './resourceDetail';
 import Button from '../common/buttons';
-import { COLOR, ThemeProvider,Toolbar } from 'react-native-material-ui';
+import {COLOR, ThemeProvider, Toolbar} from 'react-native-material-ui';
 import {
     StyleSheet,
     Text,
@@ -91,7 +91,9 @@ class ResourceList extends React.Component {
                     selectResource: selectResource[0],//选中的数据
                     weChatShare: this.props.weChatShare,//微信分享
                     addResourceDesc: this.props.addResourceDesc,//完善资料
-                    resourceState: this.props.resourceState
+                    resourceState: this.props.resourceState,
+                    spreadProduct: this.props.spreadProduct,//推广产品
+                    salesDiscontinuation:this.props.salesDiscontinuation//下架商品
                 }
             })
         }

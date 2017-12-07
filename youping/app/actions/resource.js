@@ -40,7 +40,7 @@ export function releaseResource(picture, productName, productPrice) {
         DeviceStorage.get('tarjeta').then((tags) => {
             DeviceStorage.get('productCategoryId').then((CategoryId)=> {
                 let url = ServiceURl.personManager + 'releaseResource?tarjeta=' + tags + '&productName=' + productName +
-                    '&productPrice=' + productPrice + '&productCategoryId=' + CategoryId+'&quantityTotal='+'';
+                    '&productPrice=' + productPrice + '&productCategoryId=' + CategoryId + '&quantityTotal=' + '';
                 let data = [];
                 data.push(picture);
                 Request.uploadImage(url, data, function (response) {
@@ -93,6 +93,24 @@ export function salesDiscontinuation(productId) {
             let {code:code}=response;
             if (code === '200') {
                 dispatch({type: TYPES.DELETE_RESOURCE_SUCCESS, productId: productId});
+            }
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        })
+    };
+}
+
+//发送推广信息
+export function spreadProduct(productId, text, roleTypeId) {
+    console.log(productId, text, roleTypeId)
+    return (dispatch) => {
+        let url = ServiceURl.personManager + 'spreadProduct';
+        let data = '&productId=' + productId + '&text=' + text + '&roleTypeId=' + roleTypeId;
+        Request.postRequest(url, data, function (response) {
+            console.log('推送消息' + JSON.stringify(response));
+            let {code:code}=response;
+            if (code === '200') {
+               // dispatch({type: TYPES.DELETE_RESOURCE_SUCCESS, productId: productId});
             }
         }, function (err) {
             console.log(JSON.stringify(err))

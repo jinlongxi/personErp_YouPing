@@ -7,7 +7,7 @@ import Util from '../../utils/util';
 import Data from './data';
 import SingleChat from '../../containers/chatContainer';
 import Scanner from '../common/scanner';
-import ButtonMenu from '../message/buttonMenu';
+import ButtonMenu from '../resource/buttonMenu';
 ;
 import deviceStorage from '../../utils/deviceStorage';
 import {
@@ -48,7 +48,7 @@ class Reservoir extends React.Component {
             selectBtn: 1,
             text: '',
             dataSource: ds.cloneWithRows(['row 1']),
-            dataSource1: ds.cloneWithRows(['row 1']),
+            dataSource1: ds.cloneWithRows(['row 2']),
             promptValue: null
         };
         this._paymentReceived = this._paymentReceived.bind(this);
@@ -56,40 +56,48 @@ class Reservoir extends React.Component {
 
     _renderRow(item) {
         return (
-            <View style={styles.item} {...this.props}>
-                {
-                    item.productPartyRole === '已购买' ? null :
-                        <View style={styles.item}>
-                            <Text style={[{flex: 1,}, styles.txt,]}>{item.productName}</Text>
-                            <Text style={{fontSize: 16}}>{item.productPartyRole}</Text>
-                        </View>
-                }
-            </View>
+            item.productPartyRole === '已购买' ? null :
+                <View style={styles.item}>
+                    <Image
+                        source={{uri: item.detailImageUrl}}
+                        style={styles.productImage}
+                        defaultSource={require('../../img/loading.gif')}
+                    />
+                    <TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}
+                                      onPress={this._singleChat.bind(this, item)}>
+                        <Text style={{color: '#fff'}}>联系买家</Text>
+                    </TouchableOpacity>
+                    <Text style={{fontSize: 16, width: 82, textAlign: 'center'}}>{item.productPartyRole}</Text>
+                </View>
         )
     };
 
     _renderRowOrder(item) {
         return (
             <View style={styles.item} {...this.props}>
+                <Image
+                    source={{uri: item.detailImageUrl}}
+                    style={styles.productImage}
+                    defaultSource={require('../../img/loading.gif')}
+                />
+                <TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}
+                                  onPress={this._singleChat.bind(this, item)}>
+                    <Text style={{color: '#fff'}}>联系买家</Text>
+                </TouchableOpacity>
                 {
-                    <View style={styles.item}>
-                        <Text style={[{flex: 1,}, styles.txt,]}>{item.productName}</Text>
-                        {
-                            item.isConfirmPay !== 'FALSE' ? null :
-                                <TouchableOpacity style={{backgroundColor: '#F37B22', padding: 10, marginRight: 10}}
-                                                  onPress={()=>this._paymentReceived(item.productId)}
-                                >
-                                    <Text style={{color: '#fff'}}>确认收款</Text>
-                                </TouchableOpacity>
-                        }
-                        {
-                            item.orderStatusCode === '1' ?  <Text style={{fontSize:16}}>交易已完成</Text> :
-                                <TouchableOpacity style={{backgroundColor: '#F37B22', padding: 10}}
-                                                  onPress={()=>this._showDialog(item.orderId)}>
-                                    <Text style={{color: '#fff'}}>确认发货</Text>
-                                </TouchableOpacity>
-                        }
-                    </View>
+                    item.isConfirmPay !== 'FALSE' ? null :
+                        <TouchableOpacity style={{backgroundColor: '#F37B22', padding: 10}}
+                                          onPress={()=>this._paymentReceived(item.productId)}
+                        >
+                            <Text style={{color: '#fff'}}>确认收款</Text>
+                        </TouchableOpacity>
+                }
+                {
+                    item.orderStatusCode === '1' ? <Text style={{fontSize: 16}}>交易已完成</Text> :
+                        <TouchableOpacity style={{backgroundColor: '#F37B22', padding: 10}}
+                                          onPress={()=>this._showDialog(item.orderId)}>
+                            <Text style={{color: '#fff'}}>确认发货</Text>
+                        </TouchableOpacity>
                 }
             </View>
         )
@@ -138,14 +146,16 @@ class Reservoir extends React.Component {
     }
 
     //跳转到聊天页面
-    _singleChat() {
+    _singleChat(item) {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'SingleChat',
                 component: SingleChat,
                 params: {
-                    selectResource: this.props.selectResource
+                    selectResource: this.props.selectResource,
+                    productId: item.productId,
+                    productName: item.productName
                 }
             })
         }
@@ -166,7 +176,7 @@ class Reservoir extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message', refresh: true}}
+                <Header initObj={{backName: '返回', barTitle: '客户信息', backType: 'message', refresh: true}}
                         navigator={this.props.navigator}
                 />
                 <View style={styles.main}>
@@ -186,7 +196,7 @@ class Reservoir extends React.Component {
                                     }}>
                                     <Text style={styles.position_btn_text}>客户关系:</Text>
                                     <Text
-                                        style={styles.position_btn_text}>潜在客户</Text>
+                                        style={styles.position_btn_text}>{this.props.messageState.partyRelation}</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.position}>
@@ -206,46 +216,39 @@ class Reservoir extends React.Component {
                     </View>
 
                     <ScrollView style={styles.list} showsVerticalScrollIndicator={false}>
-                        <ListView
-                            dataSource={this.state.dataSource}
-                            renderRow={this._renderRow.bind(this)}
-                            renderSeparator={this._renderSeparator}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        />
-                        <ListView
-                            dataSource={this.state.dataSource1}
-                            renderRow={this._renderRowOrder.bind(this)}
-                            renderSeparator={this._renderSeparator}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        />
+                        {
+                            this.props.messageState.clientData.length > 0 ?
+                                <ListView
+                                    dataSource={this.state.dataSource}
+                                    renderRow={this._renderRow.bind(this)}
+                                    renderSeparator={this._renderSeparator}
+                                    showsVerticalScrollIndicator={false}
+                                    showsHorizontalScrollIndicator={false}
+                                />
+                                : null
+                        }
+                        {
+                            this.props.messageState.orderData.length > 0 ?
+                                <ListView
+                                    dataSource={this.state.dataSource1}
+                                    renderRow={this._renderRowOrder.bind(this)}
+                                    renderSeparator={this._renderSeparator}
+                                    showsVerticalScrollIndicator={false}
+                                    showsHorizontalScrollIndicator={false}
+                                /> : null
+                        }
                     </ScrollView>
-                </View>
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.moving} onPress={this._singleChat.bind(this)}>
-                        <Text style={styles.footer_btn_text}>聊天</Text>
-                    </TouchableOpacity>
                 </View>
             </View>
         );
     }
 
-    // componentWillMount() {
-    //     console.log(this.props);
-    //     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    //     this.setState({
-    //         dataSource: ds.cloneWithRows(this.props.messageState.clientData)
-    //     })
-    // }
-
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps)
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({
             dataSource: ds.cloneWithRows(nextProps.messageState.clientData),
             dataSource1: ds.cloneWithRows(nextProps.messageState.orderData)
-        })
+        });
     }
 }
 
@@ -274,15 +277,23 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderRadius: 40,
     },
+    productImage: {
+        width: 60,
+        height: 60,
+        borderWidth: 1,
+        borderColor: 'gray',
+        margin: 5,
+        borderRadius: 3
+    },
     btnContainer: {
-        padding: 10,
+        padding: 15,
         flexDirection: 'column',
     },
     position: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 210
+        width: 230
     },
     position_btn: {
         flex: 1,
@@ -308,11 +319,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     item: {
-        padding: 15,
         backgroundColor: 'white',
         borderWidth: 0,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 5,
+        justifyContent: 'space-between'
     },
     footer: {
         flexDirection: 'row',

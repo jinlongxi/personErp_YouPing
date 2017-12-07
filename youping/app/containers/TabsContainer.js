@@ -129,9 +129,9 @@ class Tabs extends Component {
     }
 
     //刷新单聊数据
-    _updateMessageOne(partyIdFrom) {
-        console.log('推送过来的ID' + partyIdFrom)
-        this.props.updateMessageOne(partyIdFrom);
+    _updateMessageOne(partyIdFrom,click,productId) {
+        console.log('推送过来的ID' + partyIdFrom,productId);
+        this.props.updateMessageOne(partyIdFrom,click,productId);
     }
 
     //刷新订单
@@ -156,7 +156,7 @@ class Tabs extends Component {
                 this._loginOut()
             } else if (map.content === "message") {
                 this._updateMessageList();
-                this._updateMessageOne(map.extras.objectId);
+                this._updateMessageOne(map.extras.objectId,'123',map.extras.productId);
             } else if (map.content === "order") {
                 this._updateOrderList()
             }
@@ -209,8 +209,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchMessageList())
         },
         //刷新单聊数据
-        updateMessageOne: (partyIdFrom)=> {
-            dispatch(fetchMessageOne(partyIdFrom))
+        updateMessageOne: (partyIdFrom,click,productId)=> {
+            dispatch(fetchMessageOne(partyIdFrom,click,productId))
         },
         //刷新订单列表
         updateOrderList: ()=> {

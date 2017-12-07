@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import Header from '../../containers/headerContainer';
-import ButtonMenu from '../message/buttonMenu';
+import ButtonMenu from '../resource/buttonMenu';
 import {
     AppRegistry,
     StyleSheet,

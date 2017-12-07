@@ -25,13 +25,14 @@ export function fetchMessageList() {
     };
 }
 //请求一对一消息
-export function fetchMessageOne(partyIdFrom, click) {
+export function fetchMessageOne(partyIdFrom, click,productId) {
+    console.log(partyIdFrom, click,productId)
     return (dispatch) => {
         dispatch({type: TYPES.FETCH_SINGLE_MESSAGE_DOING});
         const url = ServiceURl.platformManager + 'loadAllMessage?bizType=findOne&click=' + click;
-        const data = '&partyIdFrom=' + partyIdFrom;
+        const data = '&partyIdFrom=' + partyIdFrom+'&productId='+productId;
         Request.postRequest(url, data, function (response) {
-            //console.log('我的一对一聊天记录' + JSON.stringify(response));
+            console.log('我的一对一聊天记录' + JSON.stringify(response));
             const {code:code, messages:messages, partyId:partyId}=response;
             if (code === '200') {
                 dispatch({
@@ -90,9 +91,9 @@ export function queryConsumerInfo(realPartyId) {
         let url = ServiceURl.personManager + 'queryConsumerInfo?realPartyId=' + realPartyId;
         Request.postRequest(url, '', function (response) {
             console.log('获取客户信息' + JSON.stringify(response));
-            const {code:code,queryConsumerInfoList:queryConsumerInfoList,orderList:orderList}=response;
+            const {code:code,queryConsumerInfoList:queryConsumerInfoList,orderList:orderList,partyRelation:partyRelation}=response;
             if (code === '200') {
-                dispatch({type: TYPES.FETCH_CLIENT_LIST_SUCCESS,queryConsumerInfoList:queryConsumerInfoList,orderList:orderList});
+                dispatch({type: TYPES.FETCH_CLIENT_LIST_SUCCESS,queryConsumerInfoList:queryConsumerInfoList,orderList:orderList,partyRelation:partyRelation});
             }
         }, function (err) {
             console.log(JSON.stringify(err));

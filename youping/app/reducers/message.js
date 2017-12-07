@@ -10,7 +10,8 @@ const initialState = {
     orderData:[],
     partyId: null,
     isRefreshBack: false,//当返回时是否刷新页面
-    clientData: []
+    clientData: [],
+    partyRelation:''
 };
 
 export default function message(state = initialState, action) {
@@ -55,7 +56,8 @@ export default function message(state = initialState, action) {
             return {
                 ...state,
                 clientData: action.queryConsumerInfoList,
-                orderData:action.orderList
+                orderData:action.orderList,
+                partyRelation:action.partyRelation
             };
         default:
             return state;

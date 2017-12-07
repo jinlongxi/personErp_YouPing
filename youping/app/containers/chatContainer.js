@@ -58,7 +58,7 @@ class SingleChat extends React.Component {
         //发送图片
         const image = messages[0].image;
         const pay_qr_code = messages[0].pay_qr_code;
-        if (image&&!pay_qr_code) {
+        if (image && !pay_qr_code) {
             const imageArray = [];
             for (var i = 0; i < messages.length; i++) {
                 let source = {uri: messages[i].image};
@@ -68,14 +68,14 @@ class SingleChat extends React.Component {
             this.props.sendImageMessage(imageArray, realPartyId, objectId)
         }
         //发送收款二维码
-        if (image&&pay_qr_code) {
+        if (image && pay_qr_code) {
             const imageArray = [];
             for (var i = 0; i < messages.length; i++) {
                 let source = {uri: messages[i].pay_qr_code};
                 imageArray.push(source)
             }
             console.log(imageArray);
-            this.props.sendImageMessage(imageArray, realPartyId, objectId,'Y')
+            this.props.sendImageMessage(imageArray, realPartyId, objectId, 'Y')
         }
         //发送位置
         const location = messages[0].location;
@@ -188,7 +188,7 @@ class SingleChat extends React.Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <Header initObj={{backName: '返回', barTitle: '单聊页面'}}
+                <Header initObj={{backName: '返回', barTitle: '关于->'+this.props.productName}}
                         navigator={this.props.navigator}
                 />
                 <GiftedChat
@@ -231,6 +231,7 @@ class SingleChat extends React.Component {
     }
 
     componentWillMount() {
+        console.log(this.props)
         this._isMounted = true;
         let realPartyId;
         if (this.props.selectResource.user) {
@@ -240,7 +241,7 @@ class SingleChat extends React.Component {
         }
 
         //请求数据
-        this.props.getSingleChatL(realPartyId);
+        this.props.getSingleChatL(realPartyId, this.props.productId);
     }
 
     componentWillUnmount() {
@@ -256,7 +257,7 @@ class SingleChat extends React.Component {
         for (var i = 0; i < data.length; i++) {
             if (partyId == data[i].user.fromParty) {
                 if (data[i].messageLogTypeId === 'TEXT') {
-                    if(data[i].text.search("<button")===-1){
+                    if (data[i].text.search("<button") === -1) {
                         messagesNew.push({
                             _id: i,
                             text: data[i].text,
@@ -296,7 +297,7 @@ class SingleChat extends React.Component {
                 }
             } else {
                 if (data[i].messageLogTypeId === 'TEXT') {
-                    if(data[i].text.search("<button")===-1){
+                    if (data[i].text.search("<button") === -1) {
                         messagesNew.push({
                             _id: i,
                             text: data[i].text,
@@ -364,16 +365,17 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch)=> {
     return {
         //查询单聊数据
-        getSingleChatL: (partyIdFrom)=> {
-            dispatch(fetchMessageOne(partyIdFrom, 'click'));
+        getSingleChatL: (partyIdFrom, productId)=> {
+            console.log(partyIdFrom, productId)
+            dispatch(fetchMessageOne(partyIdFrom, 'click', productId));
         },
         //发送消息
         sendMessage: (text, partyIdTo, objectId)=> {
             dispatch(sendMessageOne(text, partyIdTo, objectId, 'TEXT'))
         },
         //发送图片消息
-        sendImageMessage: (images, partyIdTo, objectId,pay_qr_code)=> {
-            dispatch(sendImageMessage(images, partyIdTo, objectId, 'IMAGE',pay_qr_code))
+        sendImageMessage: (images, partyIdTo, objectId, pay_qr_code)=> {
+            dispatch(sendImageMessage(images, partyIdTo, objectId, 'IMAGE', pay_qr_code))
         },
         //发送位置消息
         sendLocationMessage: (location, partyIdTo, objectId,)=> {

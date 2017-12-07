@@ -4,7 +4,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import ResourceView from '../components/resource/resourceView'
-import {fetchResourceList, releaseResource, salesDiscontinuation, addProductContent} from '../actions/resource';
+import {
+    fetchResourceList,
+    releaseResource,
+    salesDiscontinuation,
+    addProductContent,
+    spreadProduct
+} from '../actions/resource';
 import {hideTabBar, showTabBar} from '../actions/tab'
 import * as WeChat from 'react-native-wechat';
 import ServiceURL from '../utils/service';
@@ -35,6 +41,10 @@ const mapDispatchToProps = (dispatch)=> {
                 text: '确定',
                 onPress: () => dispatch(salesDiscontinuation(productId))
             }]) : Alert.alert('下架资源', '是否确定？', [{text: '确定'}])
+        },
+        //发送推广消息
+        spreadProduct: (productId, text, roleTypeId)=> {
+            dispatch(spreadProduct(productId, text, roleTypeId))
         },
         //微信分享
         weChatShare: (productId, picture, productName)=> {
