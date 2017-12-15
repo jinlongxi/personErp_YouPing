@@ -33,16 +33,14 @@ export function fetchResourceList() {
 }
 
 //发布资源
-export function releaseResource(picture, productName, productPrice) {
+export function releaseResource(data, productName, description) {
+    console.log(data, productName, description);
     return (dispatch) => {
         dispatch({type: TYPES.RELEASE_RESOURCE_DOING});
-
         DeviceStorage.get('tarjeta').then((tags) => {
             DeviceStorage.get('productCategoryId').then((CategoryId)=> {
                 let url = ServiceURl.personManager + 'releaseResource?tarjeta=' + tags + '&productName=' + productName +
-                    '&productPrice=' + productPrice + '&productCategoryId=' + CategoryId + '&quantityTotal=' + '';
-                let data = [];
-                data.push(picture);
+                    '&description=' + description + '&productCategoryId=' + CategoryId + '&quantityTotal=' + '';
                 Request.uploadImage(url, data, function (response) {
                     console.log('发布资源' + JSON.stringify(response));
                     const {code:code}=response;

@@ -8,7 +8,8 @@ import {
     Text,
     View,
     Navigator,
-    TouchableOpacity
+    TouchableOpacity,
+    Platform
 } from 'react-native';
 
 var Icon = require('./left_icon');
@@ -58,7 +59,7 @@ var styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 15,
+        paddingTop: Platform.OS==='ios'?15:0
     },
     left_btn: {
         flexDirection: 'row',

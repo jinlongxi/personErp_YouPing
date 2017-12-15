@@ -8,7 +8,6 @@ import com.airbnb.android.react.maps.MapsPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.wix.autogrowtextinput.AutoGrowTextInputPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
-import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.theweflex.react.WeChatPackage;
 
@@ -43,13 +42,11 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new WeChatPackage(),
-            new MapsPackage(),
-            new ImagePickerPackage(),
-            new AutoGrowTextInputPackage(),
-            new RCTCameraPackage(),
-            new ReactNativeDialogsPackage(),
-            new ReactMaterialKitPackage(),
+                    new WeChatPackage(),
+                    new MapsPackage(),
+                    new AutoGrowTextInputPackage(),
+                    new RCTCameraPackage(),
+                    new ReactMaterialKitPackage(),
                     new ReactNativeContacts(),
                     new WeChatPackage(),
                     new VectorIconsPackage(),

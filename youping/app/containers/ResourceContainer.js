@@ -32,8 +32,8 @@ const mapDispatchToProps = (dispatch)=> {
             dispatch(fetchResourceList());
         },
         //发布资源
-        releaseResource: (picture, productName, productPrice)=> {
-            dispatch(releaseResource(picture, productName, productPrice))
+        releaseResource: (picture, productName, productDesc)=> {
+            dispatch(releaseResource(picture, productName, productDesc))
         },
         //下架商品
         salesDiscontinuation: (productId)=> {
@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch)=> {
                             description: '分享自:友评交易平台',
                             thumbImage: picture,
                             type: 'news',
-                            webpageUrl: ServiceURL.WebManager + 'shareProduct?productId=' + productId
+                            webpageUrl: ServiceURL.WebManager + 'myStory?productId=' + productId
 
                         })
                             .catch((error) => {

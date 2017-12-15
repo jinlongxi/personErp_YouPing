@@ -7,7 +7,9 @@ const initialState = {
     productCategoryId: null,
     status: null,
     isLoading: false,
-    isRefresh: false
+    isRefresh: false,
+    releaseProductName:'',
+    releaseProductDesc:''
 };
 
 export default function resource(state = initialState, action) {

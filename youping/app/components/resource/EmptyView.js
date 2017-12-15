@@ -5,7 +5,7 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
-import ReleaseResource from './releaseResource';
+import ReleaseResource from './releaseProduct';
 import Button from '../common/buttons';
 import AutoTypingText from 'react-native-auto-typing-text';
 import {

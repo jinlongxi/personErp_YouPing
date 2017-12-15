@@ -3,10 +3,8 @@
  */
 import React, {Component} from 'react';
 import Header from '../../containers/headerContainer';
-import AddResourceDesc from './addResourceDesc';
 import Util from '../../utils/util';
 import ImageList from '../common/imageList';
-import ExpandableView from 'react-native-expandable-view';
 import Chart from './chart';
 import ButtonMenu from './buttonMenu';
 import {
@@ -31,21 +29,6 @@ class ResourceDetail extends React.Component {
         this.props.weChatShare(this.props.selectResource.productId,
             this.props.selectResource.detailImageUrl,
             this.props.selectResource.productName)
-    }
-
-    //完善信息
-    _addResourceDesc() {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'AddResourceDesc',
-                component: AddResourceDesc,
-                params: {
-                    selectResource: this.props.selectResource,
-                    addResourceDesc: this.props.addResourceDesc//传递提交方法
-                }
-            })
-        }
     }
 
     render() {
@@ -87,15 +70,10 @@ class ResourceDetail extends React.Component {
                                 </View>
                         }
                     </ScrollView>
-                    <View style={{position: 'absolute', right: 0, top: 500,width:300,height:100}}>
+                    <View style={styles.buttonMenu}>
                         <ButtonMenu  {...this.props}/>
                     </View>
                     <View style={styles.footer}>
-                        <TouchableOpacity style={styles.emptying} onPress={()=> {
-                            this._addResourceDesc()
-                        }}>
-                            <Text style={styles.footer_btn_text}>完善资料</Text>
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.moving} onPress={()=> {
                             this._weChatShare()
                         }}>
@@ -113,10 +91,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20
     },
     title: {
-        marginTop: 10,
         marginLeft: 10,
         marginBottom: 10,
         fontSize: 16,
@@ -132,12 +108,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     image: {
-        width: 300,
-        height: 200,
+        width: Util.windowSize.width - 10,
+        height: 300,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: 'gray'
+        borderColor: 'gray',
+        margin: 10
     },
     //按钮文本样式
     placeOrder_btn: {
@@ -187,6 +164,14 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center'
     },
+    //功能按钮
+    buttonMenu: {
+        position: 'absolute',
+        right: 0,
+        top: Util.windowSize.height*0.75,
+        width: Util.windowSize.width*0.9,
+        height: Util.windowSize.height*0.15
+    }
 });
 
 export default ResourceDetail

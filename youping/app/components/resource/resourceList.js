@@ -6,10 +6,9 @@ import ResourceItem from './resourceItem'
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
-import ReleaseResource from './releaseResource';
 import ResourceDetail from './resourceDetail';
 import Button from '../common/buttons';
-import {COLOR, ThemeProvider, Toolbar} from 'react-native-material-ui';
+import releaseProduct from './releaseProduct';
 import {
     StyleSheet,
     Text,
@@ -63,11 +62,11 @@ class ResourceList extends React.Component {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'ReleaseResource',
-                component: ReleaseResource,
+                name: 'releaseProduct',
+                component: releaseProduct,
                 params: {
                     releaseResource: this.props.releaseResource,
-                    ...this.props
+                    showTabBar:this.props.showTabBar
                 },
             })
         }
@@ -93,7 +92,7 @@ class ResourceList extends React.Component {
                     addResourceDesc: this.props.addResourceDesc,//完善资料
                     resourceState: this.props.resourceState,
                     spreadProduct: this.props.spreadProduct,//推广产品
-                    salesDiscontinuation:this.props.salesDiscontinuation//下架商品
+                    salesDiscontinuation: this.props.salesDiscontinuation//下架商品
                 }
             })
         }
