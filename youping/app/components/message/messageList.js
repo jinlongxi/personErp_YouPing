@@ -79,6 +79,7 @@ class messageList extends React.Component {
                 component: ClientInfo,
                 params: {
                     selectResource: resource,
+                    realPartyId:resource.user.realPartyId,
                     messageState:this.props.messageState
                 }
             })

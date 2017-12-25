@@ -8,8 +8,8 @@ import Data from './data';
 import SingleChat from '../../containers/chatContainer';
 import Scanner from '../common/scanner';
 import ButtonMenu from '../resource/buttonMenu';
-;
 import deviceStorage from '../../utils/deviceStorage';
+import ChatWebView   from  './chatWebView';
 import {
     AppRegistry,
     StyleSheet,
@@ -64,7 +64,7 @@ class Reservoir extends React.Component {
                         defaultSource={require('../../img/loading.gif')}
                     />
                     <TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}
-                                      onPress={this._singleChat.bind(this, item)}>
+                                      onPress={this._goChatWebView.bind(this, item)}>
                         <Text style={{color: '#fff'}}>联系买家</Text>
                     </TouchableOpacity>
                     <Text style={{fontSize: 16, width: 82, textAlign: 'center'}}>{item.productPartyRole}</Text>
@@ -81,7 +81,7 @@ class Reservoir extends React.Component {
                     defaultSource={require('../../img/loading.gif')}
                 />
                 <TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}
-                                  onPress={this._singleChat.bind(this, item)}>
+                                  onPress={this._goChatWebView.bind(this, item)}>
                     <Text style={{color: '#fff'}}>联系买家</Text>
                 </TouchableOpacity>
                 {
@@ -118,6 +118,26 @@ class Reservoir extends React.Component {
             {cancelable: false}
         )
 
+    }
+
+    //点击进入聊天webView
+    _goChatWebView(item) {
+
+        const username=item.payToPartyId
+        const password=item.payToPartyId+'111'
+        const payToPartyId=this.props.realPartyId;
+        const url = "https://www.yo-pe.com/pejump/"+username+'/'+password+"/"+payToPartyId
+        console.log(url);
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'ChatWebView',
+                component: ChatWebView,
+                params: {
+                    url:url
+                }
+            })
+        }
     }
 
     //打开扫描仪

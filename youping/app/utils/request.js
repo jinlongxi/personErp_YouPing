@@ -70,7 +70,5 @@ const Request = {
             .then((responseData)=>successCallback(responseData))
             .catch((error)=>failCallback(error))
     }
-
 };
-
 export default Request
