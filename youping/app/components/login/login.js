@@ -28,7 +28,7 @@ const Login = ({loginState, weChatLogin})=> {
                 scrollableViewStyle={{backgroundColor: 'white'}}
             >
                 <View style={styles.container}>
-                    <TouchableOpacity style={styles.btnWechat} onPress={()=> {
+                    <TouchableOpacity style={styles.btnWeChat} onPress={()=> {
                         weChatLogin()
                     }}>
                         <Image
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    btnWechat: {
+    btnWeChat: {
         marginTop: 200,
         width: 100,
         height: 44,

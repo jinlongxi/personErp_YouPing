@@ -25,7 +25,7 @@ var options = {
     cancelButtonTitle: '取消',
     takePhotoButtonTitle: '拍照',
     chooseFromLibraryButtonTitle: '相册图片',
-    allowsEditing: false,
+    allowsEditing: true,
     storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -52,7 +52,7 @@ class ReleaseProductImage extends React.Component {
                 </View>
                 <ScrollView style={{padding: 10}}>
                     <View style={styles.productNameContainer}>
-                        <Text style={styles.productName_text}>产品封面:</Text>
+                        <Text style={styles.productName_text}>产品封面(必填):</Text>
                         {
                             this.state.mainImage == null ? <TouchableOpacity style={styles.productMain_Image}
                                                                              onPress={()=>this._uploadMainImage()}>
@@ -63,7 +63,7 @@ class ReleaseProductImage extends React.Component {
 
                     </View>
                     <View style={styles.productDescContainer}>
-                        <Text style={styles.productDesc_text}>相关图片:</Text>
+                        <Text style={styles.productDesc_text}>相关图片(必填最少一张):</Text>
                         {
                             this.state.aboutImages !== null ?
                                 <ImageList data={this.state.aboutImages}/>

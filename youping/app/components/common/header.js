@@ -34,13 +34,13 @@ var Header = React.createClass({
     _pop: function () {
         //刷新之前的页面
         if (this.props.initObj.backType === 'message') {
-            this.props.getMessageList();
+            //this.props.getMessageList();
             this.props.navigator.popToTop();
         } else if (this.props.initObj.backType === 'resource') {
-            this.props.getResourceList();
+            //this.props.getResourceList();
             this.props.navigator.pop();
         } else if (this.props.initObj.backType === 'order') {
-            this.props.getOrderList();
+            //this.props.getOrderList();
             this.props.navigator.pop();
         }else{
             this.props.navigator.pop();

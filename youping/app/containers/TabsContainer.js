@@ -24,7 +24,8 @@ import {
     View,
     AsyncStorage,
     ScrollView,
-    Image
+    Image,
+    Platform
 } from 'react-native'
 
 class Tabs extends Component {
@@ -63,16 +64,16 @@ class Tabs extends Component {
                         <Navigation component={Resource}/>
                     </TabNavigator.Item>
                     {/*<TabNavigator.Item*/}
-                        {/*selected={this.state.selectedTab === 'Device'}*/}
-                        {/*title="订单"*/}
-                        {/*titleStyle={styles.tabText}*/}
-                        {/*selectedTitleStyle={styles.selectedTabText}*/}
-                        {/*renderIcon={() => <Image style={styles.icon}*/}
-                                                 {/*source={require("../img/tabs/manager.png")}/>}*/}
-                        {/*renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}*/}
-                                                         {/*source={require("../img/tabs/manager.png")}/>}*/}
-                        {/*onPress={() => this.setState({selectedTab: 'Device'})}>*/}
-                        {/*<Navigation component={Order}/>*/}
+                    {/*selected={this.state.selectedTab === 'Device'}*/}
+                    {/*title="订单"*/}
+                    {/*titleStyle={styles.tabText}*/}
+                    {/*selectedTitleStyle={styles.selectedTabText}*/}
+                    {/*renderIcon={() => <Image style={styles.icon}*/}
+                    {/*source={require("../img/tabs/manager.png")}/>}*/}
+                    {/*renderSelectedIcon={() => <Image style={[styles.icon, {tintColor: '#1e90ff'}]}*/}
+                    {/*source={require("../img/tabs/manager.png")}/>}*/}
+                    {/*onPress={() => this.setState({selectedTab: 'Device'})}>*/}
+                    {/*<Navigation component={Order}/>*/}
                     {/*</TabNavigator.Item>*/}
                     <TabNavigator.Item
                         selected={this.state.selectedTab === 'Message'}
@@ -124,14 +125,14 @@ class Tabs extends Component {
 
     //刷新聊天列表数据
     _updateMessageList() {
+        console.log('接受到消息刷新消息列表');
         this.props.updateMessagelist();
-
     }
 
     //刷新单聊数据
-    _updateMessageOne(partyIdFrom,click,productId) {
-        console.log('推送过来的ID' + partyIdFrom,productId);
-        this.props.updateMessageOne(partyIdFrom,click,productId);
+    _updateMessageOne(partyIdFrom, click, productId) {
+        console.log('推送过来的ID' + partyIdFrom, productId);
+        this.props.updateMessageOne(partyIdFrom, click, productId);
     }
 
     //刷新订单
@@ -139,32 +140,72 @@ class Tabs extends Component {
         this.props.updateOrderList();
     }
 
+    onReceiveMessage(message) {
+    }
+
+    onOpenMessage(message) {
+    }
+
     componentDidMount() {
         //获取registrationId
         JPushModule.getRegistrationID((registrationId) => {
             this._postRegistrationId(registrationId)
         });
-        //接收消息
-        JPushModule.addReceiveNotificationListener((map) => {
-            console.log("显示在手机的消息" + JSON.stringify(map));
-        });
-        //接受通知
-        JPushModule.addReceiveCustomMsgListener((map) => {
-            console.log('接受到的推送内容:' + JSON.stringify(map));
-            //挤掉当前用户
-            if (map.content === "loginNotification") {
-                this._loginOut()
-            } else if (map.content === "message") {
-                this._updateMessageList();
-                this._updateMessageOne(map.extras.objectId,'123',map.extras.productId);
-            } else if (map.content === "order") {
-                this._updateOrderList()
-            }
-        });
-        //清楚角标
-        // JPushModule.cleanTags((success) => {
-        //     console.log('清楚角标：' + JSON.stringify(success))
-        // })
+        if (Platform.OS === 'android') {
+            // JPushModule.notifyJSDidLoad((resultCode) => {
+            //     if (resultCode === 0) { }
+            // });
+            JPushModule.notifyJSDidLoad((resultCode) => {
+
+            });
+            JPushModule.addReceiveCustomMsgListener((map) => {
+                console.log('接受到的推送内容:' + JSON.stringify(map));
+                //挤掉当前用户
+                if (map.content === "loginNotification") {
+                    this._loginOut()
+                } else if (map.content === "message") {
+                    this._updateMessageList();
+                    //this._updateMessageOne(map.extras.objectId,'123',map.extras.productId);
+                } else if (map.content === "order") {
+                    this._updateOrderList()
+                }
+            });
+            JPushModule.addReceiveNotificationListener((map) => {
+                console.log("显示在手机的消息" + JSON.stringify(map));
+            });
+            // JPushModule.addReceiveOpenNotificationListener((map) => {
+            //     console.log("Opening notification!");
+            //     console.log("map.extra: " + map.extras);
+            //     // JPushModule.jumpToPushActivity("SecondActivity");
+            // });
+            // JPushModule.addGetRegistrationIdListener((registrationId) => {
+            //     console.log("Device register succeed, registrationId " + registrationId);
+            // });
+        } else {
+            //接收消息
+            JPushModule.addReceiveNotificationListener((map) => {
+                console.log("显示在手机的消息" + JSON.stringify(map));
+            });
+            //接受通知
+            JPushModule.addReceiveCustomMsgListener((map) => {
+                console.log('接受到的推送内容:' + JSON.stringify(map));
+                //挤掉当前用户
+                if (map.content === "loginNotification") {
+                    this._loginOut()
+                } else if (map.content === "message") {
+                    this._updateMessageList();
+                    //this._updateMessageOne(map.extras.objectId,'123',map.extras.productId);
+                } else if (map.content === "order") {
+                    this._updateOrderList()
+                }
+            });
+            //清楚角标
+            // JPushModule.cleanTags((success) => {
+            //     console.log('清楚角标：' + JSON.stringify(success))
+            // })
+        }
+
+
     }
 }
 
@@ -209,8 +250,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(fetchMessageList())
         },
         //刷新单聊数据
-        updateMessageOne: (partyIdFrom,click,productId)=> {
-            dispatch(fetchMessageOne(partyIdFrom,click,productId))
+        updateMessageOne: (partyIdFrom, click, productId)=> {
+            dispatch(fetchMessageOne(partyIdFrom, click, productId))
         },
         //刷新订单列表
         updateOrderList: ()=> {
@@ -218,6 +259,5 @@ const mapDispatchToProps = (dispatch) => {
         }
     };
 };
-
 const TabsContainer = connect(mapStateToProps, mapDispatchToProps)(Tabs);
 export default TabsContainer

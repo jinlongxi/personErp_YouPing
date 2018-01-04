@@ -27,7 +27,8 @@ import {
     BackHandler,
     Platform,
     Keyboard,
-    AlertIOS
+    AlertIOS,
+    InteractionManager
 } from 'react-native';
 class Reservoir extends React.Component {
     constructor(props) {
@@ -49,7 +50,8 @@ class Reservoir extends React.Component {
             text: '',
             dataSource: ds.cloneWithRows(['row 1']),
             dataSource1: ds.cloneWithRows(['row 2']),
-            promptValue: null
+            promptValue: null,
+            clientData:null
         };
         this._paymentReceived = this._paymentReceived.bind(this);
     }
@@ -59,14 +61,14 @@ class Reservoir extends React.Component {
             item.productPartyRole === '已购买' ? null :
                 <View style={styles.item}>
                     <Image
-                        source={{uri: item.detailImageUrl}}
+                        source={{uri: item.detailImageUrl+'?x-oss-process=image/resize,m_fill,h_100,w_100'}}
                         style={styles.productImage}
                         defaultSource={require('../../img/loading.gif')}
                     />
-                    <TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}
-                                      onPress={this._goChatWebView.bind(this, item)}>
-                        <Text style={{color: '#fff'}}>联系买家</Text>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}*/}
+                                      {/*onPress={this._goChatWebView.bind(this, item)}>*/}
+                        {/*<Text style={{color: '#fff'}}>联系买家</Text>*/}
+                    {/*</TouchableOpacity>*/}
                     <Text style={{fontSize: 16, width: 82, textAlign: 'center'}}>{item.productPartyRole}</Text>
                 </View>
         )
@@ -76,14 +78,14 @@ class Reservoir extends React.Component {
         return (
             <View style={styles.item} {...this.props}>
                 <Image
-                    source={{uri: item.detailImageUrl}}
+                    source={{uri: item.detailImageUrl+'?x-oss-process=image/resize,m_fill,h_100,w_100'}}
                     style={styles.productImage}
                     defaultSource={require('../../img/loading.gif')}
                 />
-                <TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}
-                                  onPress={this._goChatWebView.bind(this, item)}>
-                    <Text style={{color: '#fff'}}>联系买家</Text>
-                </TouchableOpacity>
+                {/*<TouchableOpacity style={{backgroundColor: '#CAE1FF', padding: 10, borderRadius: 20}}*/}
+                                  {/*onPress={this._goChatWebView.bind(this, item)}>*/}
+                    {/*<Text style={{color: '#fff'}}>联系买家</Text>*/}
+                {/*</TouchableOpacity>*/}
                 {
                     item.isConfirmPay !== 'FALSE' ? null :
                         <TouchableOpacity style={{backgroundColor: '#F37B22', padding: 10}}
@@ -121,12 +123,13 @@ class Reservoir extends React.Component {
     }
 
     //点击进入聊天webView
-    _goChatWebView(item) {
-
-        const username=item.payToPartyId
-        const password=item.payToPartyId+'111'
-        const payToPartyId=this.props.realPartyId;
-        const url = "https://www.yo-pe.com/pejump/"+username+'/'+password+"/"+payToPartyId
+    _goChatWebView() {
+        const item =this.state.clientData[0];
+        const username = item.payToPartyId;
+        const password = item.payToPartyId + '111';
+        const payToPartyId = this.props.realPartyId;
+        const productId = item.productId;
+        const url = "https://www.yo-pe.com/pejump/" + username + '/' + password + "/" + payToPartyId + '/' + productId;
         console.log(url);
         const {navigator} = this.props;
         if (navigator) {
@@ -134,7 +137,7 @@ class Reservoir extends React.Component {
                 name: 'ChatWebView',
                 component: ChatWebView,
                 params: {
-                    url:url
+                    url: url
                 }
             })
         }
@@ -156,7 +159,7 @@ class Reservoir extends React.Component {
 
     //对话框
     _showDialog(orderId) {
-        deviceStorage.save('orderId', orderId)
+        deviceStorage.save('orderId', orderId);
         AlertIOS.prompt('请输入快递单号', orderId, this.customButtons, 'plain-text')
     }
 
@@ -166,20 +169,20 @@ class Reservoir extends React.Component {
     }
 
     //跳转到聊天页面
-    _singleChat(item) {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'SingleChat',
-                component: SingleChat,
-                params: {
-                    selectResource: this.props.selectResource,
-                    productId: item.productId,
-                    productName: item.productName
-                }
-            })
-        }
-    }
+    // _singleChat(item) {
+    //     const {navigator} = this.props;
+    //     if (navigator) {
+    //         navigator.push({
+    //             name: 'SingleChat',
+    //             component: SingleChat,
+    //             params: {
+    //                 selectResource: this.props.selectResource,
+    //                 productId: item.productId,
+    //                 productName: item.productName
+    //             }
+    //         })
+    //     }
+    // }
 
     _renderSeparator(sectionID, rowID) {
         return (
@@ -258,16 +261,26 @@ class Reservoir extends React.Component {
                                 /> : null
                         }
                     </ScrollView>
+                    <View style={styles.footer}>
+                        <TouchableOpacity style={styles.moving} onPress={
+                            this._goChatWebView.bind(this)
+                        }>
+                            <Text style={styles.footer_btn_text}>联系买家</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );
     }
 
     componentWillReceiveProps(nextProps) {
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({
-            dataSource: ds.cloneWithRows(nextProps.messageState.clientData),
-            dataSource1: ds.cloneWithRows(nextProps.messageState.orderData)
+        InteractionManager.runAfterInteractions(() => {
+            var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+            this.setState({
+                dataSource: ds.cloneWithRows(nextProps.messageState.clientData),
+                dataSource1: ds.cloneWithRows(nextProps.messageState.orderData),
+                clientData:nextProps.messageState.clientData
+            });
         });
     }
 }

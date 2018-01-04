@@ -17,6 +17,7 @@ import {
 
 var customerWebView = React.createClass({
     render: function () {
+        console.log(this.props.url)
         return (
             <View style={{backgroundColor:'white',flex:1}}>
                 <Header
@@ -28,7 +29,7 @@ var customerWebView = React.createClass({
                 />
                 <WebView
                     startInLoadingState={true}
-                    source={{url:this.props.url}}
+                    source={{uri:this.props.url}}
                 />
             </View>
         )

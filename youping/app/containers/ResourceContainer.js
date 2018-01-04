@@ -47,7 +47,7 @@ const mapDispatchToProps = (dispatch)=> {
             dispatch(spreadProduct(productId, text, roleTypeId))
         },
         //微信分享
-        weChatShare: (productId, picture, productName)=> {
+        weChatShare: (productId, picture, productName,payToPartyId)=> {
             WeChat.isWXAppInstalled()
                 .then((isInstalled) => {
                     if (isInstalled) {
@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch)=> {
                             description: '分享自:友评交易平台',
                             thumbImage: picture,
                             type: 'news',
-                            webpageUrl: ServiceURL.WebManager + 'myStory?productId=' + productId
+                            webpageUrl: ServiceURL.WebManager + 'myStory?productId=' + productId+'&payToPartyId='+payToPartyId
 
                         })
                             .catch((error) => {

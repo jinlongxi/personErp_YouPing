@@ -26,8 +26,11 @@ const mapDispatchToProps = (dispatch)=> {
                 if (isInstalled) {
                     let scope = 'snsapi_userinfo';
                     let state = 'wechat_sdk_demo';
+                    console.log(111123233)
                     WeChat.sendAuthRequest(scope,state).then(responseCode => {
                         const {code:code} =responseCode;
+                        console.log(JSON.stringify(responseCode))
+                        Alert.alert(JSON.stringify(responseCode))
                         dispatch(weChatLogin(code))
                     }).catch(err => {
                         Alert.alert('登录授权发生错误：', err.message, [{text: '确定'}]);

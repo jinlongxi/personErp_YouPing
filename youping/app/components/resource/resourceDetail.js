@@ -7,6 +7,7 @@ import Util from '../../utils/util';
 import ImageList from '../common/imageList';
 import Chart from './chart';
 import ButtonMenu from './buttonMenu';
+import DeciveStorage from '../../utils/deviceStorage';
 import {
     AppRegistry,
     StyleSheet,
@@ -26,9 +27,14 @@ class ResourceDetail extends React.Component {
 
     //微信分享
     _weChatShare() {
-        this.props.weChatShare(this.props.selectResource.productId,
-            this.props.selectResource.detailImageUrl,
-            this.props.selectResource.productName)
+        const that=this;
+        DeciveStorage.get('partyId').then((partyId)=> {
+            that.props.weChatShare(that.props.selectResource.productId,
+                that.props.selectResource.detailImageUrl,
+                that.props.selectResource.productName,partyId)
+        });
+
+
     }
 
     render() {
@@ -48,7 +54,7 @@ class ResourceDetail extends React.Component {
                                 <View style={styles.container}>
                                     {
                                         resourceData.detailImageUrl != null ?
-                                            <Image source={{uri: resourceData.detailImageUrl}}
+                                            <Image source={{uri: resourceData.detailImageUrl+'?x-oss-process=image/resize,m_fill,h_500,w_500'}}
                                                    style={styles.image}
                                                    accessibilityLabel="图片加载中。。。"
                                                    blurRadius={1}
@@ -58,7 +64,7 @@ class ResourceDetail extends React.Component {
                                     }
                                     <Text style={styles.title}>资源简介:{resourceData.productName}</Text>
                                     <Text style={styles.text}>资源编号:{resourceData.productId}</Text>
-                                    <Chart/>
+                                    {/*<Chart/>*/}
                                     {
                                         resourceData.morePicture.length > 0 ?
                                             <View style={{flex: 1}}>
@@ -70,9 +76,9 @@ class ResourceDetail extends React.Component {
                                 </View>
                         }
                     </ScrollView>
-                    <View style={styles.buttonMenu}>
-                        <ButtonMenu  {...this.props}/>
-                    </View>
+                    {/*<View style={styles.buttonMenu}>*/}
+                    {/*<ButtonMenu  {...this.props}/>*/}
+                    {/*</View>*/}
                     <View style={styles.footer}>
                         <TouchableOpacity style={styles.moving} onPress={()=> {
                             this._weChatShare()
@@ -168,9 +174,9 @@ const styles = StyleSheet.create({
     buttonMenu: {
         position: 'absolute',
         right: 0,
-        top: Util.windowSize.height*0.75,
-        width: Util.windowSize.width*0.9,
-        height: Util.windowSize.height*0.15
+        top: Util.windowSize.height * 0.75,
+        width: Util.windowSize.width * 0.9,
+        height: Util.windowSize.height * 0.15
     }
 });
 

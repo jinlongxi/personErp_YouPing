@@ -69,7 +69,6 @@ class messageList extends React.Component {
 
     //跳转到客户信息页面
     _clientInfo(resource){
-        console.log(resource)
         this.props.queryConsumerInfo(resource.user.realPartyId);
         this.props.hiddenTabBar();
         const {navigator} = this.props;
@@ -96,18 +95,6 @@ class messageList extends React.Component {
             show: this.props.messageState.isLoading
         })
     }
-
-    // componentWillReceiveProps(nextProps) {
-    //     console.log(2222222222222222)
-    //     //设置数据源和加载状态
-    //     var ds = new ListView.DataSource({
-    //         rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-    //     });
-    //     this.setState({
-    //         dataSource: ds.cloneWithRows(nextProps.messageState.messageList),
-    //         show: this.props.messageState.isLoading
-    //     })
-    // }
 }
 
 

@@ -100,7 +100,7 @@ export function salesDiscontinuation(productId) {
 
 //发送推广信息
 export function spreadProduct(productId, text, roleTypeId) {
-    console.log(productId, text, roleTypeId)
+    console.log(productId, text, roleTypeId);
     return (dispatch) => {
         let url = ServiceURl.personManager + 'spreadProduct';
         let data = '&productId=' + productId + '&text=' + text + '&roleTypeId=' + roleTypeId;

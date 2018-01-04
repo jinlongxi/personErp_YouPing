@@ -21,11 +21,12 @@ export function weChatLogin(code) {
 
         //发送请求，获取TOKEN
         Request.postRequestLogin(url, formData, function (response) {
-            console.log(JSON.stringify(response));
-            let {code:code, tarjeta:tarjeta}=response;
+            console.log("微信登录返回数据:"+JSON.stringify(response));
+            let {code:code, tarjeta:tarjeta,partyId:partyId}=response;
             if (code === '200') {
                 //保存tarjeta到本地
                 DeciveStorage.save('tarjeta', tarjeta);
+                DeciveStorage.save('partyId', partyId);
                 dispatch({'type': TYPES.WECHAT_LOGIN_SUCCESS, tarjeta: tarjeta});
             } else {
                 alert('登录失败')
