@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 
 
-class HeaderBar extends React.Component {
+class HeaderBar extends Component {
     render() {
         //获取对象  按钮名称   头部Title
-        var headContent = this.props.initObj;
+        const headContent = this.props.initObj;
         return (
             <View style={styles.header}>
                 <View style={styles.title_container}>
@@ -27,7 +27,7 @@ class HeaderBar extends React.Component {
     }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     header: {
         height: 50,
         backgroundColor: "#3A5FCD",

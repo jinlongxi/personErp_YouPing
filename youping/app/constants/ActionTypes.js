@@ -29,6 +29,8 @@ export const ADD_RESOURCE_DESC_ERROR = 'ADD_RESOURCE_DESC_ERROR';
 
 export const FETCH_RESOURCE_CUSTMER_INFO = 'FETCH_RESOURCE_CUSTMER_INFO';
 
+export const FETCH_RESOURCE_FEATURE_INFO = 'FETCH_RESOURCE_FEATURE_INFO';
+
 /*订单模块**********************************************************/
 
 export const FETCH_ORDER_LIST_DOING = 'FETCH_ORDER_LIST_DOING';

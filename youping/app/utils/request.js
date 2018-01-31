@@ -56,9 +56,11 @@ const Request = {
     //上传图片
     uploadImage: function (url, data, successCallback, failCallback) {
         let formData = new FormData();      //因为需要上传多张图片,所以需要遍历数组,把图片的路径数组放入formData中
-        for (var i = 0; i < data.length; i++) {
-            let file = {uri: data[i].uri, type: 'multipart/form-data', name: 'a.jpg'};   //这里的key(uri和type和name)不能改变,
-            formData.append("images", file);   //这里的files就是后台需要的key
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                let file = {uri: data[i].uri, type: 'multipart/form-data', name: 'a.jpg'};   //这里的key(uri和type和name)不能改变,
+                formData.append("images", file);   //这里的files就是后台需要的key
+            }
         }
         fetch(url, {
             method: 'POST',

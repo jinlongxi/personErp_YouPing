@@ -55,17 +55,21 @@ class orderDetail extends React.Component {
                                         />
                                         : null
                                 }
-                                <Text style={styles.title}>订单简介:{orderData.productName}</Text>
-                                <Text style={styles.text}>订单编号:{orderData.orderId}
-                                    /客户:{orderData.personInfoMap.firstName}</Text>
-                                <Text style={styles.text}>订单状态:{this.state.deliveryStatus}/支付状态:{this.state.orderPayStatus}</Text>
-                                <Text
-                                    style={styles.text}>收货地址:{orderData.personAddressInfoMap.contactAddress}</Text>
-                                {
-                                    this.state.expressInfo == null ? null :
-                                        <Text
-                                            style={styles.text}>{this.state.expressInfo}</Text>
-                                }
+                                <View>
+                                    <Text style={styles.title}>订单简介=></Text>
+                                    <Text style={styles.text}>资源名称: {orderData.productName}</Text>
+                                    <Text style={styles.text}>订单编号: {orderData.orderId}</Text>
+                                    <Text style={styles.text}>客户姓名: {orderData.personInfoMap.firstName}</Text>
+                                    <Text
+                                        style={styles.text}>订单状态: {this.state.deliveryStatus} —— 支付状态:{this.state.orderPayStatus}</Text>
+                                    <Text
+                                        style={styles.text}>收货地址: {orderData.personAddressInfoMap.contactAddress}</Text>
+                                    {
+                                        this.state.expressInfo == null ? null :
+                                            <Text
+                                                style={styles.text}>{this.state.expressInfo}</Text>
+                                    }
+                                </View>
                             </View>
                     }
 
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:10
+        paddingTop: 10
     },
     title: {
         marginTop: 10,
@@ -135,8 +139,9 @@ const styles = StyleSheet.create({
         height: 200,
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: 'gray'
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#bbb',
+        borderRadius: 2
     },
     placeOrder: {//下单
         backgroundColor: '#3497FF',

@@ -15,7 +15,7 @@ import {
 const {width, height} =Util.windowSize;
 //全局变量
 const cols = 3;
-const boxW = 100;
+const boxW = width*0.28;
 const vMargin = (width - cols * boxW) / (cols + 1);
 const hMargin = 20;
 class ImageList extends Component {
@@ -52,11 +52,16 @@ const styles = StyleSheet.create({
             width: boxW,
             height: boxW,
             marginLeft: vMargin,
-            marginTop: hMargin
+            marginTop: hMargin,
+            borderWidth:StyleSheet.hairlineWidth,
+            justifyContent:'center',
+            padding:2,
+            borderColor:'#ddd',
+            borderRadius:2
         },
         imageStyle: {
-            width: 80,
-            height: 80
+            width: '100%',
+            height: '100%',
         },
         titleName: {
             backgroundColor: 'red'

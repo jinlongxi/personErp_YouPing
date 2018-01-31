@@ -62,8 +62,7 @@ class messageList extends React.Component {
     //渲染分割线
     _renderSeparator(sectionID, rowID) {
         var style = {
-            height: 1,
-            backgroundColor: "#CCCCCC"
+            borderBottomColor: '#bbb', borderBottomWidth: StyleSheet.hairlineWidth
         };
         return <View style={style} key={sectionID + rowID}/>
     }
@@ -87,7 +86,7 @@ class messageList extends React.Component {
                     params: {
                         url: url,
                         productId: productId,
-                        payToPartyId:payToPartyId
+                        payToPartyId: payToPartyId
                     }
                 })
             }

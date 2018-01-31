@@ -60,10 +60,10 @@ class myResourceItem extends React.Component {
                         </View>
                         <View style={styles.textContainer}>
                             <Text style={{color: '#FA8072'}}>潜在客户:({resource.placingCustCount}) </Text>
-                            <Text style={{color: '#B03060'}}>实际客户:({resource.custCount}) </Text>
+                            <Text style={{color: '#698B22'}}>转发:({resource.partnerCount}) </Text>
                         </View>
                         <View style={styles.textContainer}>
-                            <Text style={{color: '#698B22'}}>转发:({resource.partnerCount}) </Text>
+                            <Text style={{color: '#B03060'}}>实际客户:({resource.custCount}) </Text>
                             <Text style={{color: '#8470FF'}}>浏览:({resource.visitorCount}) </Text>
                         </View>
                     </View>
@@ -89,8 +89,8 @@ const styles = StyleSheet.create({
     image: {
         width: 80,
         height: 80,
-        borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: '#bbb',
+        borderWidth: StyleSheet.hairlineWidth,
         borderRadius: 2
     },
     contentContainer: {
@@ -103,10 +103,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         padding: 5,
+        width: "100%"
     },
     resourceTitle: {
-        fontSize: 18,
-        color: '#1d1d1d',
+        fontSize: 16,
+        color: '#8B8989',
     },
     publisher_author: {
         color: "#A3A3A3",

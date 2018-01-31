@@ -10,7 +10,8 @@ import {
     salesDiscontinuation,
     addProductContent,
     spreadProduct,
-    queryCustSalesReport
+    queryCustSalesReport,
+    queryProductFeatures
 } from '../actions/resource';
 import {hideTabBar, showTabBar} from '../actions/tab'
 import * as WeChat from 'react-native-wechat';
@@ -33,8 +34,9 @@ const mapDispatchToProps = (dispatch)=> {
             dispatch(fetchResourceList());
         },
         //发布资源
-        releaseResource: (picture, productName, productDesc, productPrice, quantityTotal)=> {
-            dispatch(releaseResource(picture, productName, productDesc, productPrice, quantityTotal))
+        releaseResource: (picture, productName, productDesc, productPrice, quantityTotal,productFeatures)=> {
+            console.log(picture, productName, productDesc, productPrice, quantityTotal,productFeatures);
+            dispatch(releaseResource(picture, productName, productDesc, productPrice, quantityTotal,productFeatures))
         },
         //下架商品
         salesDiscontinuation: (productId)=> {
@@ -80,9 +82,14 @@ const mapDispatchToProps = (dispatch)=> {
         showTabBar: ()=> {
             dispatch(showTabBar())
         },
+        //查询客户关系，浏览记录详情列表
         queryCustSalesReport:(productId)=>{
             console.log(productId)
             dispatch(queryCustSalesReport(productId))
+        },
+        //查询资源特征信息
+        queryProductFeatures:(productId)=>{
+            dispatch(queryProductFeatures(productId))
         }
     }
 };

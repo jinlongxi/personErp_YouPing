@@ -31,7 +31,7 @@ var options = {
     }
 };
 
-class paymentMethods extends React.Component {
+class paymentMethods extends Component {
     constructor(props) {
         super(props);
         this.state = {

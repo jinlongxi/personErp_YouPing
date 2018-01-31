@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     image: {
         width: 50,
         height: 50,
-        borderWidth: 1,
-        borderColor: 'gray',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#bbb',
         borderRadius: 2
     },
     textContainer: {

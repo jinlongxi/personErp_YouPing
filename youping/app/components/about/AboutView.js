@@ -15,7 +15,7 @@ import {
     ScrollView
 } from 'react-native';
 
-class AccountList extends React.Component {
+class AccountList extends Component {
     constructor(props) {
         super(props);
         this._paymentMethod = this._paymentMethod.bind(this);
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     image1: {
         height: 150,
         width: 150,
-        borderWidth: 1,
-        borderColor: '#1d1d1d',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#bbb',
         borderRadius: 75
     },
     textContainer: {

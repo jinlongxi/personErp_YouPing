@@ -7,7 +7,7 @@ import
 }
     from 'react-native'
 
-class SingleChat extends React.Component {
+class SingleChat extends Component {
     constructor(props) {
         super(props);
         this.state = {

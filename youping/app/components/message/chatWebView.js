@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
     image: {
         width: 80,
         height: 80,
-        borderWidth: 1,
-        borderColor: 'gray',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#bbb',
         borderRadius: 2
     },
     contentContainer: {

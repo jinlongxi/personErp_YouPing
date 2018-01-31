@@ -43,7 +43,8 @@ class ResourceDetail extends React.Component {
             custList: null,
             visitorList: null,
             placingCustList: null,
-            partnerList: null
+            partnerList: null,
+            productFeaturesList: null
         };
         this._toggleModal = this._toggleModal.bind(this);
         this.iosMarginTop = Platform.OS == 'ios' ? {marginTop: 10, flex: 1} : {width: '100%'};
@@ -119,7 +120,53 @@ class ResourceDetail extends React.Component {
                                     <Text style={styles.title}>资源描述=></Text>
                                     <Text style={styles.text}>{resourceData.description}</Text>
                                 </View>
-                                <View style={{flex: 1}}>
+                                <View style={styles.textContainer}>
+                                    <Text style={styles.title}>资源特征=></Text>
+                                    {
+                                        this.state.productFeaturesList != null ?
+                                            this.state.productFeaturesList.map((item, index)=> {
+                                                let optionTitle = Object.keys(item);
+                                                let optionList = Object.values(item);
+                                                console.log(optionTitle, optionList);
+                                                return (
+                                                    <View key={optionTitle[0] + index} style={{
+                                                        borderWidth: StyleSheet.hairlineWidth,
+                                                        borderColor: '#bbb',
+                                                        margin: 10,
+                                                        paddingVertical: 5,
+                                                        width: '100%'
+                                                    }}>
+                                                        <Text
+                                                            style={[styles.text, {color: '#EEB422'}]}>特征项:{optionTitle[0]}</Text>
+                                                        <View style={{
+                                                            borderColor: '#bbb',
+                                                            borderRadius: 2,
+                                                            padding: 5,
+                                                            margin: 5,
+                                                            flexDirection: 'row',
+                                                            justifyContent: 'space-between',
+                                                            flexWrap: 'wrap'
+                                                        }}>
+                                                            {
+                                                                optionList[0].map((data)=> {
+                                                                    return (
+                                                                        <Text key={data + index + 1}
+                                                                              style={{
+                                                                                  color: 'black',
+                                                                                  borderWidth: StyleSheet.hairlineWidth,
+                                                                                  padding: 5,
+                                                                              }}>{data}</Text>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </View>
+                                                    </View>
+                                                )
+                                            })
+                                            : null
+                                    }
+                                </View>
+                                <View style={{flex: 1, height: 500}}>
                                     <ScrollableTabView
                                         tabBarActiveTextColor="#53ac49"
                                         renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>
@@ -200,6 +247,23 @@ class ResourceDetail extends React.Component {
         })
     }
 
+    //查询资源特征信息
+    queryProductFeatures(productId) {
+        const that = this;
+        let url = ServiceURl.personManager + 'queryProductFeatures';
+        let data = '&productId=' + productId;
+        Request.postRequest(url, data, function (response) {
+            console.log('查询资源特征信息' + JSON.stringify(response));
+            let {productFeaturesList:productFeaturesList}=response;
+            console.log(productFeaturesList);
+            that.setState({
+                productFeaturesList: productFeaturesList
+            })
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        })
+    }
+
     componentWillMount() {
         const imageList = [];
         imageList.push({
@@ -217,7 +281,8 @@ class ResourceDetail extends React.Component {
     }
 
     componentDidMount() {
-        this.queryCustSalesReport(this.props.selectResource.productId)
+        this.queryCustSalesReport(this.props.selectResource.productId);
+        this.queryProductFeatures(this.props.selectResource.productId);
     }
 
 }
@@ -227,12 +292,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'center',
-        alignItems: 'center',
     },
 
     textContainer: {
         width: '90%',
-        padding: 20
+        padding: 20,
     },
     title: {
         marginLeft: 10,

@@ -117,7 +117,8 @@ class ResourceList extends React.Component {
                     resourceState: this.props.resourceState,
                     spreadProduct: this.props.spreadProduct,//推广产品
                     salesDiscontinuation: this.props.salesDiscontinuation,//下架商品
-                    queryCustSalesReport:this.props.queryCustSalesReport//
+                    queryCustSalesReport:this.props.queryCustSalesReport,//查询客户信息
+                    queryProductFeatures:this.props.queryProductFeatures//查询资源特征信息
                 }
             })
         }
@@ -134,8 +135,7 @@ class ResourceList extends React.Component {
     //渲染分割线
     _renderSeparator(sectionID, rowID) {
         var style = {
-            height: 1,
-            backgroundColor: "#CCCCCC"
+            borderBottomColor: '#bbb', borderBottomWidth: StyleSheet.hairlineWidth
         };
         return <View style={style} key={sectionID + rowID}/>
     }

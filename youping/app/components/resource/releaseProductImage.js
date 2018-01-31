@@ -135,13 +135,13 @@ class ReleaseProductImage extends React.Component {
     _releaseProduct() {
         let images = this.state.aboutImages;
         images.unshift({uri: this.state.mainImage.uri});
-        this.props.releaseResource(images, this.props.productName, this.props.productDesc,this.props.productPrice,this.props.quantityTotal);
+        this.props.releaseResource(images, this.props.productName, this.props.productDesc,this.props.productPrice,this.props.quantityTotal,this.props.productFeatures);
         this.props.showTabBar();
         this.props.navigator.popToTop()
     }
 
     componentWillMount() {
-        console.log(this.props)
+        console.log(this.props.productFeatures)
     }
 }
 

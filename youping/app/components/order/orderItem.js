@@ -35,7 +35,7 @@ class OrderItem extends React.Component {
                 </View>
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
-                        <Text numberOfLines={1}>资源名称:{resource.productName}</Text>
+                        <Text numberOfLines={1} style={styles.productName}>资源名称:{resource.productName}</Text>
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.publisher_author}
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     image: {
         width: 80,
         height: 80,
-        borderWidth: 1,
-        borderColor: 'gray',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#bbb',
         borderRadius: 2
     },
     contentContainer: {
@@ -85,6 +85,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingVertical: 2
+    },
+    productName:{
+        fontSize: 16,
+        color: '#8B8989',
     },
     publisher_author: {
         color: "#D2691E",

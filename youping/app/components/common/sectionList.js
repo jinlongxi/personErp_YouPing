@@ -6,7 +6,7 @@ import {
     SectionList,
 } from 'react-native';
 
-class SectionViewList extends React.Component {
+class SectionViewList extends Component {
 
     constructor(props) {
         super(props);

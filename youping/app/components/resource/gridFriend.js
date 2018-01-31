@@ -103,8 +103,8 @@ export default class ThreeColumns extends Component {
                     justifyContent: 'center', alignItems: 'center', flex: 1,
                     borderWidth: StyleSheet.hairlineWidth, borderColor: '#eee',
                 }}>
-                    <Image source={{url: data.headPortrait}}
-                           style={{width: 30, height: 30, marginHorizontal: 10, marginBottom: 10,}}/>
+                    <Image source={{uri: data.headPortrait}}
+                           style={{width: 30, height: 30, marginHorizontal: 10, marginBottom: 10}}/>
                     <Text>{data.firstName}</Text>
                 </View>
             </TouchableOpacity>
@@ -112,11 +112,10 @@ export default class ThreeColumns extends Component {
     };
 
     _onPressCell = (data) => {
-        Alert.alert('点他您想要做什么，请讲述你的想法！ -> ' + data.title)
+        Alert.alert('点他您想要做什么，请讲述你的想法！ -> ' + data.firstName)
     };
 
     componentDidMount() {
-        console.log(this.props.data)
         this.setState({
             dataSource: this.props.data
         })

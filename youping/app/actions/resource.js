@@ -33,14 +33,15 @@ export function fetchResourceList() {
 }
 
 //发布资源
-export function releaseResource(data, productName, description, productPrice, quantityTotal) {
-    console.log(data, productName, description, productPrice, quantityTotal);
+export function releaseResource(data, productName, description, productPrice, quantityTotal,productFeatures) {
+    console.log(data, productName, description, productPrice, quantityTotal,productFeatures);
     return (dispatch) => {
         dispatch({type: TYPES.RELEASE_RESOURCE_DOING});
         DeviceStorage.get('tarjeta').then((tags) => {
             DeviceStorage.get('productCategoryId').then((CategoryId)=> {
                 let url = ServiceURl.personManager + 'releaseResource?tarjeta=' + tags + '&productName=' + productName +
-                    '&description=' + description + '&productCategoryId=' + CategoryId + '&quantityTotal=' + quantityTotal + '&productPrice=' + productPrice;
+                    '&description=' + description + '&productCategoryId=' + CategoryId + '&quantityTotal=' + quantityTotal + '&productPrice=' + productPrice+
+                    '&productFeatures='+JSON.stringify(productFeatures);
                 Request.uploadImage(url, data, function (response) {
                     console.log('发布资源' + JSON.stringify(response));
                     const {code:code}=response;
@@ -132,6 +133,19 @@ export function queryCustSalesReport(productId) {
                 placingCustList: placingCustList,
                 partnerList: partnerList
             });
+        }, function (err) {
+            console.log(JSON.stringify(err))
+        })
+    };
+}
+
+//查询资源特征信息
+export function queryProductFeatures(productId) {
+    return (dispatch) => {
+        let url = ServiceURl.personManager + 'queryProductFeatures';
+        let data = '&productId=' + productId;
+        Request.postRequest(url, data, function (response) {
+            console.log('查询资源特征信息' + JSON.stringify(response));
         }, function (err) {
             console.log(JSON.stringify(err))
         })
