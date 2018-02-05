@@ -41,7 +41,7 @@ class headerTab extends React.Component {
                         return (
                             <TouchableOpacity key={item.id} onPress={()=>this._changeTab(item.id)}>
                                 <Text
-                                    style={[styles.text, {color: this.state.onSelect === item.id ? '#A52A2A': '#8B7D7B'}]}>{item.text}</Text>
+                                    style={[styles.text, {color: this.state.onSelect === item.id ? '#A52A2A' : '#8B7D7B'}]}>{item.text}</Text>
                             </TouchableOpacity>
                         )
                     })
@@ -51,7 +51,6 @@ class headerTab extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props.orderState);
         this.setState({
             onSelect: this.props.orderState.orderStatus
         })

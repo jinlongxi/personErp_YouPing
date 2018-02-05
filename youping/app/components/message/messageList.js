@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import MessageItem from './messageItem';
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
-import Header from '../../components/common/headerBar';
+import Header from './messageHeader';
 import ChatWebView from '../../containers/clientContainer';
 import DeciveStorage from '../../utils/deviceStorage';
 import {
@@ -28,6 +28,7 @@ class messageList extends React.Component {
             dataSource: ds.cloneWithRows(['row 1']),
             show: false,
             empty: false,
+            selected: 1
         };
         this._renderRow = this._renderRow.bind(this)
     }
@@ -35,28 +36,44 @@ class messageList extends React.Component {
     render() {
         return (
             <View style={{flex: 1}}>
-                <Header initObj={{backName: '', barTitle: '消息列表'}}/>
-                <ScrollView>
-                    {
-                        this.state.show ? <ListView
-                            dataSource={this.state.dataSource}
-                            initialListSize={10}    //设置显示条数
-                            renderRow={this._renderRow}
-                            renderSeparator={this._renderSeparator}
-                            contentContainerStyle={styles.listStyle}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        /> : Util.loading
-                    }
-                </ScrollView>
+                <Header initObj={{
+                    backName: '',
+                    barTitleLeft: '消息列表',
+                    barTitleRight: '询价请求',
+                    selected: this.state.selected,
+                    onPress: this._switchButton.bind(this)
+                }}/>
+                {
+                    this.state.show ? <ListView
+                        dataSource={this.state.dataSource}
+                        initialListSize={10}    //设置显示条数
+                        renderRow={this._renderRow}
+                        renderSeparator={this._renderSeparator}
+                        contentContainerStyle={styles.listStyle}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                    /> : Util.loading
+                }
             </View>
         );
     }
 
+    //切换列表显示
+    _switchButton(selected) {
+        console.log(this.state.selected, selected);
+        if (selected !== this.state.selected) {
+            this.setState({
+                selected: this.state.selected === 1 ? 2 : 1
+            })
+        }
+    }
+
     //渲染
     _renderRow(resource) {
-        return !this.state.empty ?
-            <MessageItem resource={resource} onPress={this._goChatWebView.bind(this, resource)}/> : <EmptyPage/>
+        return (
+            !this.state.empty ?
+                <MessageItem resource={resource} onPress={this._goChatWebView.bind(this, resource)}/> : <EmptyPage/>
+        )
     }
 
     //渲染分割线

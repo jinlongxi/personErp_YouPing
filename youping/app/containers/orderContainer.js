@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import OrderView from '../components/order/orderView';
 import {connect} from 'react-redux';
-import {fetchOrderList, fetchLogistics, fetchPaymentReceived,fetchExpress} from '../actions/order'
+import {fetchOrderList, fetchLogistics, fetchPaymentReceived, fetchExpress} from '../actions/order'
 import {hideTabBar} from '../actions/tab'
 
 const mapStateToProps = (state) => {
@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch)=> {
             dispatch(fetchOrderList(type));
         },
         //请求订单详情
-        queryMyOrdersDetail:(orderId)=>{
+        queryMyOrdersDetail: (orderId)=> {
             dispatch(fetchOrdersDetail(orderId));
         },
         //隐藏TAB

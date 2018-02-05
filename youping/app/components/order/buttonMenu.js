@@ -164,8 +164,8 @@ class ButtonMenu extends Component {
                 component: ChatWebView,
                 params: {
                     url: url,
-                    productId:productId,
-                    payToPartyId:payToPartyId
+                    productId: productId,
+                    payToPartyId: payToPartyId
                 }
             })
         }

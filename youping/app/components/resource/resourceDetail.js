@@ -14,6 +14,7 @@ import TabBar from "react-native-underline-tabbar";
 import Grid from './gridFriend';
 import Request from '../../utils/request';
 import ServiceURl from '../../utils/service';
+import NestedListview, {NestedRow} from 'react-native-nested-listview'
 import {
     AppRegistry,
     StyleSheet,
@@ -30,6 +31,22 @@ import {
 const Page = ({label}) => (
     <Grid data={label}/>
 );
+
+const data = [
+    {
+        title: '龙熙(转发9次)',
+        items: [{
+            title: '小沈(转发7次)',
+            items: [{title: '冯总(转发2次)'}, {title: '小明(转发0次)'}, {title: '红红(转发1次)'}, {title: '啦啦(转发0次)'}]
+        }, {title: '童总(转发2次)'}]
+    },
+    {
+        title: '小董(转发6次)',
+        items: [{title: '小沈(转发3次)', items: [{title: '冯总(转发2次)'}]}, {title: '童总(转发3次)'}, {title: '啊啊(转发0次)'}]
+    },
+    {title: '峰哥(转发0次)'},
+    {title: '东东(转发3次)', items: [{title: '小沈(转发0次)', items: [{title: '冯总(转发0次)'}]}, {title: '童总(转发0次)'}]}
+];
 
 class ResourceDetail extends React.Component {
     constructor(props) {
@@ -82,6 +99,21 @@ class ResourceDetail extends React.Component {
         this.setState({
             defaultIndex: state.index
         })
+    }
+
+    //客户关系列表颜色枚举(根据颜色设置不同层级背景颜色)
+    _partnerListColor(level) {
+        switch (level) {
+            case 1: {
+                return '#BCD2EE'
+            }
+            case 2: {
+                return '#8FBC8F'
+            }
+            case 3: {
+                return '#C1CDCD'
+            }
+        }
     }
 
     render() {
@@ -166,32 +198,68 @@ class ResourceDetail extends React.Component {
                                             : null
                                     }
                                 </View>
-                                <View style={{flex: 1, height: 500}}>
-                                    <ScrollableTabView
-                                        tabBarActiveTextColor="#53ac49"
-                                        renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>
-                                        <Page tabLabel={{
-                                            label: "浏览客户",
-                                            badge: this.state.visitorList != null ? this.state.visitorList.length : 0
-                                        }}
-                                              label={this.state.visitorList}/>
-                                        <Page tabLabel={{
-                                            label: "潜在客户",
-                                            badge: this.state.placingCustList != null ? this.state.placingCustList.length : 0
-                                        }}
-                                              label={this.state.placingCustList}/>
-                                        <Page tabLabel={{
-                                            label: "转发客户",
-                                            badge: this.state.partnerList != null ? this.state.partnerList.length : 0
-                                        }}
-                                              label={this.state.partnerList}/>
-                                        <Page tabLabel={{
-                                            label: "实际客户",
-                                            badge: this.state.custList != null ? this.state.custList.length : 0
-                                        }}
-                                              label={this.state.custList}/>
-                                    </ScrollableTabView>
+                                <View style={[styles.textContainer, {paddingVertical: 0}]}>
+                                    <Text style={styles.title}>客户列表=></Text>
                                 </View>
+                                <View style={{flex: 1, margin: 10}}>
+                                    <NestedListview
+                                        data={data}
+                                        getChildrenName={(node) => 'items'}
+                                        onNodePressed={(node) => console.log('点击了：' + node.title)}
+                                        renderNode={(node, level) => (
+                                            <NestedRow
+                                                level={level}
+                                                style={{
+                                                    borderBottomWidth: StyleSheet.hairlineWidth,
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'flex-start',
+                                                    alignItems: 'center',
+                                                    backgroundColor: this._partnerListColor(level),
+                                                }}
+                                            >
+                                                <Text>{level}级 </Text>
+                                                <Image style={styles.imageContact}
+                                                       source={{uri: 'http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLbXh3vd3I57rnNWlwyhXk6TtWa7rP90lQbTP4zu4iaiboGq21996ftQLWY1zYxp1R49U5NZqnZ36Ww/132'}}/>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    flex: 1,
+                                                    paddingRight: 15
+                                                }}>
+                                                    <Text>{node.title}</Text>
+                                                    <Text>下一级客户数:{node.items != null ? node.items.length : 0}</Text>
+                                                </View>
+                                            </NestedRow>
+                                        )}
+                                    />
+                                </View>
+                                {/*<View style={{flex: 1, height: 500}}>*/}
+                                {/*<ScrollableTabView*/}
+                                {/*tabBarActiveTextColor="#53ac49"*/}
+                                {/*renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>*/}
+                                {/*<Page tabLabel={{*/}
+                                {/*label: "浏览客户",*/}
+                                {/*badge: this.state.visitorList != null ? this.state.visitorList.length : 0*/}
+                                {/*}}*/}
+                                {/*label={this.state.visitorList}/>*/}
+                                {/*<Page tabLabel={{*/}
+                                {/*label: "潜在客户",*/}
+                                {/*badge: this.state.placingCustList != null ? this.state.placingCustList.length : 0*/}
+                                {/*}}*/}
+                                {/*label={this.state.placingCustList}/>*/}
+                                {/*<Page tabLabel={{*/}
+                                {/*label: "转发客户",*/}
+                                {/*badge: this.state.partnerList != null ? this.state.partnerList.length : 0*/}
+                                {/*}}*/}
+                                {/*label={this.state.partnerList}/>*/}
+                                {/*<Page tabLabel={{*/}
+                                {/*label: "实际客户",*/}
+                                {/*badge: this.state.custList != null ? this.state.custList.length : 0*/}
+                                {/*}}*/}
+                                {/*label={this.state.custList}/>*/}
+                                {/*</ScrollableTabView>*/}
+                                {/*</View>*/}
                             </View>
                         }
                     </ScrollView>
@@ -321,6 +389,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'gray',
         margin: 10
+    },
+    imageContact: {
+        width: 30,
+        height: 30,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#bbb',
+        borderRadius: 2,
+        marginRight: 10
     },
     //按钮文本样式
     placeOrder_btn: {

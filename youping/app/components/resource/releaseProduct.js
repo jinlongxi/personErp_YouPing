@@ -4,10 +4,11 @@
 import React, {Component} from 'react';
 import Header from '../../containers/headerContainer';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
-import releaseProductImage from './releaseProductImage';
 import AddOption from './addOption';
 import ImageList from '../common/imageList';
-import ImagePickers from 'react-native-image-crop-picker';
+//import ImagePickers from 'react-native-image-crop-picker';
+import ImagePickers from 'react-native-customized-image-picker';
+import CameraRollPicker from 'react-native-camera-roll-picker';
 import {
     AppRegistry,
     StyleSheet,
@@ -77,22 +78,6 @@ class ReleaseProduct extends React.Component {
                         />
                     </View>
                     <View style={styles.productDescContainer}>
-                        <Text style={styles.productDesc_text}>描述:</Text>
-                        <AutoGrowingTextInput
-                            placeholder='输入资源品述'
-                            style={styles.productDesc_input}
-                            multiline={true}
-                            underlineColorAndroid='transparent'
-                            onChangeText={(text) => this.setState({productDesc: text})}
-                            keyboardType="default"
-                            returnKeyType="done"
-                            clearButtonMode="always"
-                            keyboardAppearance="dark"
-                            blurOnSubmit={true}
-                            keyboardShouldPersistTaps={true}
-                        />
-                    </View>
-                    <View style={styles.productDescContainer}>
                         <Text style={styles.productDesc_text}>图片(至少一张):</Text>
                         {
                             this.state.aboutImages !== null ?
@@ -112,6 +97,22 @@ class ReleaseProduct extends React.Component {
                     {
                         this.state.radioSelect ?
                             <View >
+                                <View style={styles.productDescContainer}>
+                                    <Text style={styles.productDesc_text}>描述:</Text>
+                                    <AutoGrowingTextInput
+                                        placeholder='输入资源品述'
+                                        style={styles.productDesc_input}
+                                        multiline={true}
+                                        underlineColorAndroid='transparent'
+                                        onChangeText={(text) => this.setState({productDesc: text})}
+                                        keyboardType="default"
+                                        returnKeyType="done"
+                                        clearButtonMode="always"
+                                        keyboardAppearance="dark"
+                                        blurOnSubmit={true}
+                                        keyboardShouldPersistTaps={true}
+                                    />
+                                </View>
                                 <View style={styles.productDescContainer}>
                                     <Text style={styles.productDesc_text}>价格:</Text>
                                     <AutoGrowingTextInput
@@ -243,7 +244,6 @@ class ReleaseProduct extends React.Component {
     //选择多张图片
     _selectImages() {
         ImagePickers.openPicker({
-            cropping: true,
             multiple: true,
             includeExif: true,
             maxFiles: 9,
@@ -265,7 +265,7 @@ class ReleaseProduct extends React.Component {
 
     //nextPage
     _nextPage() {
-        if (this.state.productName == null || this.state.productDesc == null) {
+        if (this.state.productName == null||this.state.aboutImages==null) {
             alert('信息不完整')
         } else {
             //发布产品
