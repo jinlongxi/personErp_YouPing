@@ -3,12 +3,11 @@
  */
 import React, {Component} from 'react';
 import ResourceItem from './resourceItem'
-import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import HeaderBar from '../common/headerBar';
-import ResourceDetail from './resourceDetail';
+import ResourceDetailContainer from '../../containers/resource/resourceDetailContainer';
 import Button from '../common/buttons';
-import releaseProduct from './releaseProduct';
+import releaseReleaseContainer from '../../containers/resource/resourceReleaseContainer';
 import {
     StyleSheet,
     Text,
@@ -27,22 +26,20 @@ class ResourceList extends React.Component {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             dataSource: ds.cloneWithRows(['row 1']),
-            show: false,
-            empty: false,
-            isRefreshing: false
         };
         this._renderRow = this._renderRow.bind(this);
         this._onRefresh = this._onRefresh.bind(this)
     }
 
     render() {
+        const {isRefreshing}=this.props.resourceListStore;
         return (
             <View style={{flex: 1}}>
                 <HeaderBar initObj={{backName: '', barTitle: '我的资源'}}/>
-                <ScrollView
+                <ListView
                     refreshControl={
                         <RefreshControl
-                            refreshing={this.state.isRefreshing}
+                            refreshing={isRefreshing}
                             onRefresh={this._onRefresh}
                             tintColor="#ff0000"
                             title="刷新中..."
@@ -51,19 +48,14 @@ class ResourceList extends React.Component {
                             progressBackgroundColor="#ffff00"
                         />
                     }
-                >
-                    {
-                        this.state.show ? <ListView
-                            dataSource={this.state.dataSource}
-                            initialListSize={10}    //设置显示条数
-                            renderRow={this._renderRow}
-                            renderSeparator={this._renderSeparator}
-                            contentContainerStyle={styles.listStyle}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        /> : Util.loading
-                    }
-                </ScrollView>
+                    dataSource={this.state.dataSource}
+                    initialListSize={10}    //设置显示条数
+                    renderRow={this._renderRow}
+                    renderSeparator={this._renderSeparator}
+                    contentContainerStyle={styles.listStyle}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                />
                 <Button.ColoredRaisedButton onPress={()=> {
                     this._releaseResource.bind(this)()
                 }}/>
@@ -73,21 +65,21 @@ class ResourceList extends React.Component {
 
     //下拉刷新
     _onRefresh() {
-        this.setState({isRefreshing: true});
-        const that = this;
+        const {resourceListActions}=this.props;
+        resourceListActions.refreshResourceList();
         setTimeout(() => {
-            that.props.getResourceList();
-        }, 1000);
+            resourceListActions.requestResourceList();
+        }, 500);
     }
 
-    //发布资源
+    //点击进入发布资源页面
     _releaseResource() {
         this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'releaseProduct',
-                component: releaseProduct,
+                name: 'releaseReleaseContainer',
+                component: releaseReleaseContainer,
                 params: {
                     releaseResource: this.props.releaseResource,
                     showTabBar: this.props.showTabBar
@@ -99,26 +91,13 @@ class ResourceList extends React.Component {
     //点击进入详情页面
     _showDetail(productId) {
         this.props.hiddenTabBar();
-        const resourceList = this.props.resourceState.resourceList;
-        const selectResource = resourceList.filter((item)=> {
-            if (item.productId === productId) {
-                return item
-            }
-        });
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'ResourceDetail',
-                component: ResourceDetail,
+                name: 'ResourceDetailContainer',
+                component: ResourceDetailContainer,
                 params: {
-                    selectResource: selectResource[0],//选中的数据
-                    weChatShare: this.props.weChatShare,//微信分享
-                    addResourceDesc: this.props.addResourceDesc,//完善资料
-                    resourceState: this.props.resourceState,
-                    spreadProduct: this.props.spreadProduct,//推广产品
-                    salesDiscontinuation: this.props.salesDiscontinuation,//下架商品
-                    queryCustSalesReport:this.props.queryCustSalesReport,//查询客户信息
-                    queryProductFeatures:this.props.queryProductFeatures//查询资源特征信息
+                    productId: productId
                 }
             })
         }
@@ -141,26 +120,26 @@ class ResourceList extends React.Component {
     }
 
     componentDidMount() {
+        const {resourceListData}=this.props.resourceListStore;
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
         });
         this.setState({
-            dataSource: ds.cloneWithRows(this.props.resourceState.resourceList),
-            show: this.props.resourceState.isLoading
+            dataSource: ds.cloneWithRows(resourceListData)
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        //设置数据源和加载状态
-        var ds = new ListView.DataSource({
-            rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-        });
-        this.setState({
-            dataSource: ds.cloneWithRows(nextProps.resourceState.resourceList),
-            show: nextProps.resourceState.isLoading
-        });
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     const {resourceListData}=nextProps.resourceListStore;
+    //     //设置数据源和加载状态
+    //     var ds = new ListView.DataSource({
+    //         rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
+    //     });
+    //     this.setState({
+    //         dataSource: ds.cloneWithRows(resourceListData)
+    //     });
+    // }
 }
 
 

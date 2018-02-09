@@ -3,23 +3,35 @@
  */
 
 /*登录模块*********************************************************/
-export const WECHAT_LOGIN_DOING = 'WECHAT_LOGIN_DOING';
-export const WECHAT_LOGIN_SUCCESS = 'WECHAT_LOGIN_SUCCESS';
-export const WECHAT_LOGIN_ERROR = 'WECHAT_LOGIN_ERROR';
-
-export const HAS_TOKEN = 'HAS_TOKEN';
-export const NO_TOKEN = 'NO_TOKEN';
-
-export const DELETE_TOKEN = 'DELETE_TOKEN';
-
+export const REQUEST_WECHAT_LOGIN = 'REQUEST_WECHAT_LOGIN';                                 //请求微信登录
+export const FETCH_WECHAT_LOGIN = 'FETCH_WECHAT_LOGIN';                                     //网络请求微信登录
+export const WECHAT_LOGIN_SUCCESS = 'WECHAT_LOGIN_SUCCESS';                                 //微信登录成功接受参数
+export const WECHAT_LOGIN_OUT = 'WECHAT_LOGIN_OUT';                                         //退出登录
 
 /*资源模块**********************************************************/
-export const FETCH_RESOURCE_LIST_DOING = 'FETCH_RESOURCE_LIST_DOING';
-export const FETCH_RESOURCE_LIST_SUCCESS = 'FETCH_RESOURCE_LIST_SUCCESS';
-export const FETCH_RESOURCE_LIST_ERROR = 'FETCH_RESOURCE_LIST_ERROR';
+export const REQUEST_RESOURCE_LIST = 'REQUEST_RESOURCE_LIST';                               //请求资源列表
+export const FETCH_RESOURCE_LIST = 'FETCH_RESOURCE_LIST';                                   //网络请求资源列表
+export const RECEIVE_RESOURCE_LIST = 'RECEIVE_RESOURCE_LIST';                               //接收资源列表数据
+export const REFRESH_RESOURCE_LIST = 'REFRESH_RESOURCE_LIST';                               //下拉刷新资源列表数据
+export const FETCH_SALES_DISCONTINUATION = 'FETCH_SALES_DISCONTINUATION';                   //下拉刷新资源列表数据
+export const FETCH_SALES_DISCONTINUATION_SUCCESS = 'FETCH_SALES_DISCONTINUATION_SUCCESS';   //下拉刷新资源列表数据
 
-export const RELEASE_RESOURCE_DOING = 'RELEASE_RESOURCE_DOING';
-export const RELEASE_RESOURCE_SUCCESS = 'RELEASE_RESOURCE_SUCCESS';
+export const REQUEST_PRODUCT_FEATURES = 'REQUEST_PRODUCT_FEATURES';                         //请求资源特征列表
+export const FETCH_PRODUCT_FEATURES = 'FETCH_PRODUCT_FEATURES';                             //网络请求资源特征列表
+export const RECEIVE_PRODUCT_FEATURES = 'RECEIVE_PRODUCT_FEATURES';                         //接收资源特征列表数据
+
+export const SET_RESOURCE_NAME = 'SET_RESOURCE_NAME';                                       //设置资源名称
+export const SET_RESOURCE_IMAGES = 'SET_RESOURCE_IMAGES';                                   //设置资源图片
+export const SET_RESOURCE_ADVANCED = 'SET_RESOURCE_ADVANCED';                               //开启高级选项
+export const SET_RESOURCE_DESCRIPTION = 'SET_RESOURCE_DESCRIPTION';                         //设置资源描述
+export const SET_RESOURCE_PRICE = 'SET_RESOURCE_PRICE';                                     //设置资源价格
+export const SET_RESOURCE_STORE_NUMBER = 'SET_RESOURCE_STORE_NUMBER';                       //设置资源库存
+export const SET_RESOURCE_FEATURES = 'SET_RESOURCE_FEATURES';                               //设置资源特征
+export const REQUEST_RESOURCE_RELEASE = 'REQUEST_RESOURCE_RELEASE';                         //请求发布资源
+export const FETCH_RESOURCE_RELEASE = 'FETCH_RESOURCE_RELEASE';                             //网络请求发布资源
+export const FETCH_RESOURCE_RELEASE_SUCCESS = 'FETCH_RESOURCE_RELEASE_SUCCESS';             //发布资源成功SHOW_FEATURES_MODEL
+export const SHOW_FEATURES_MODEL = 'SHOW_FEATURES_MODEL';                                   //显示隐藏特征模态框
+
 
 export const DELETE_RESOURCE_SUCCESS = 'DELETE_RESOURCE_SUCCESS';
 
@@ -28,8 +40,12 @@ export const ADD_RESOURCE_DESC_SUCCESS = 'ADD_RESOURCE_DESC_SUCCESS';
 export const ADD_RESOURCE_DESC_ERROR = 'ADD_RESOURCE_DESC_ERROR';
 
 export const FETCH_RESOURCE_CUSTMER_INFO = 'FETCH_RESOURCE_CUSTMER_INFO';
-
 export const FETCH_RESOURCE_FEATURE_INFO = 'FETCH_RESOURCE_FEATURE_INFO';
+
+export const REQUEST_RESOURCE_DETAIL = 'REQUEST_RESOURCE_DETAIL';                           //请求资源详情
+export const FETCH_RESOURCE_DETAIL = 'FETCH_RESOURCE_DETAIL';                               //网络请求资源详情
+export const RECEIVE_RESOURCE_DETAIL = 'RECEIVE_RESOURCE_DETAIL';                           //接受资源详情数据
+export const SHOW_SHARE_MODEL = 'SHOW_SHARE_MODEL';                                         //显示分享模态框
 
 /*订单模块**********************************************************/
 
@@ -38,34 +54,39 @@ export const FETCH_ORDER_LIST_SUCCESS = 'FETCH_ORDER_LIST_SUCCESS';
 export const FETCH_ORDER_LIST_ERROR = 'FETCH_ORDER_LIST_ERROR';
 
 export const FETCH_ORDER_DETAIL_SUCCESS = 'FETCH_ORDER_DETAIL_SUCCESS';
-
-
 /*消息模块**********************************************************/
+export const REQUEST_MESSAGE_LIST = 'REQUEST_MESSAGE_LIST';                                 //请求消息列表
+export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';                                     //发送网路请求消息列表
+export const RECEIVE_MESSAGE_LIST = 'RECEIVE_MESSAGE_LIST';                                 //接受消息列表数据
 
-export const FETCH_MESSAGE_LIST_DOING = 'FETCH_MESSAGE_LIST_DOING';
-export const FETCH_MESSAGE_LIST_SUCCESS = 'FETCH_MESSAGE_LIST_SUCCESS';
-export const FETCH_MESSAGE_LIST_ERROR = 'FETCH_MESSAGE_LIST_ERROR';
+export const SWITCH_LIST_TYPE = 'SWITCH_LIST_TYPE';                                         //切换消息列表显示类型
+export const CLEAN_MESSAGE_SESSION = 'CLEAN_MESSAGE_SESSION';                               //清除消息未读数
+export const RECEIVE_REQUEST_PRICE_LIST = 'RECEIVE_REQUEST_PRICE_LIST';                     //接受询价请求列表
 
-export const FETCH_CLIENT_LIST_SUCCESS = 'FETCH_CLIENT_LIST_SUCCESS';
+export const REQUEST_CONSUMER_INFO = 'REQUEST_CONSUMER_INFO';
+export const FETCH_CONSUMER_INFO = 'FETCH_CONSUMER_INFO';
+export const RECEIVE_CONSUMER_INFO = 'RECEIVE_CONSUMER_INFO';
+export const CLEAR_CONSUMER_INFO = 'CLEAR_CONSUMER_INFO';
 
-export const FETCH_SINGLE_MESSAGE_DOING = 'FETCH_SINGLE_MESSAGE_DOING';
-export const FETCH_SINGLE_MESSAGE_SUCCESS = 'FETCH_SINGLE_MESSAGE_SUCCESS';
-export const FETCH_SINGLE_MESSAGE_ERROR = 'FETCH_SINGLE_MESSAGE_ERROR';
-
-
+export const SET_REPLY_PRICE = 'SET_REPLY_PRICE';                                           //设置价格
+export const SET_REPLY_CONTENT = 'SET_REPLY_CONTENT';                                       //设置回复内容
+export const SET_CUSTOMER_INPUT = 'SET_CUSTOMER_INPUT';                                     //设置买家需填表单类型
+export const SET_QR_CODE = 'SET_QR_CODE';                                                   //设置收款二维码
+export const REPLY_REQUEST_PRICE = 'REPLY_REQUEST_PRICE';                                   //回复询价请求
+export const REPLY_REQUEST_PRICE_SUCCESS = 'REPLY_REQUEST_PRICE_SUCCESS';                   //回复询价成功
 /*关于模块**********************************************************/
 
-export const FETCH_ABOUTINFO_DOING = 'FETCH_ABOUTINFO_DOING';
-export const FETCH_ABOUTINFO_SUCCESS = 'FETCH_ABOUTINFO_SUCCESS';
-export const FETCH_ABOUTINFO_ERROR = 'FETCH_ABOUTINFO_ERROR';
-
-export const UPLOAD_PAYMENTMETHODS_DOING = 'UPLOAD_PAYMENTMETHODS_DOING';
-export const UPLOAD_PAYMENTMETHODS_SUCCESS = 'UPLOAD_PAYMENTMETHODS_SUCCESS';
-export const UPLOAD_PAYMENTMETHODS_ERROR = 'UPLOAD_PAYMENTMETHODS_ERROR';
+export const REQUEST_ACCOUNT_INFO = 'REQUEST_ACCOUNT_INFO';                                 //请求关于我的信息
+export const FETCH_ACCOUNT_INFO = 'FETCH_ACCOUNT_INFO';                                     //网络请求我的信息
+export const RECEIVE_ACCOUNT_INFO = 'RECEIVE_ACCOUNT_INFO';                                 //接受我的信息数据
 
 /*TAB管理模块**********************************************************/
+export const SWITCH_TAB_BAR = 'SWITCH_TAB_BAR';                                             //切换tab
+export const HIDDEN_TAB_BAR = 'HIDDEN_TAB_BAR';                                             //隐藏tab
+export const SHOW_TAB_BAR = 'SHOW_TAB_BAR';                                                 //显示tab
 
-export const HIDDEN_TAB_BAR = 'HIDDEN_TAB_BAR';
-export const SHOW_TAB_BAR = 'SHOW_TAB_BAR';
+export const REQUEST_SAVE_REGID = 'REQUEST_SAVE_REGID';                                     //请求保存registrationId
+export const FETCH_SAVE_REGID = 'FETCH_SAVE_REGID';                                         //网络请求保存registrationId
+export const SAVE_REGID_SUCCESS = 'SAVE_REGID_SUCCESS';                                     //保存registrationId成功
 
 

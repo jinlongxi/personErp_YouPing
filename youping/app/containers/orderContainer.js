@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import OrderView from '../components/order/orderView';
 import {connect} from 'react-redux';
 import {fetchOrderList, fetchLogistics, fetchPaymentReceived, fetchExpress} from '../actions/order'
-import {hideTabBar} from '../actions/tab'
+import {hideTabBar} from '../actions/tab/tabAction'
 
 const mapStateToProps = (state) => {
     return {

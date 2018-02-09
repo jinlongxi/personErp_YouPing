@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import Util from '../../utils/util';
-import PaymentMethods from './PaymentMethods';
 import {
     AppRegistry,
     StyleSheet,
@@ -16,35 +15,15 @@ import {
 } from 'react-native';
 
 class AccountList extends Component {
-    constructor(props) {
-        super(props);
-        this._paymentMethod = this._paymentMethod.bind(this);
-    }
-
-    //收款方式
-    _paymentMethod() {
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'PaymentMethods',
-                component: PaymentMethods,
-                params: {
-                    PaymentMethods: this.props.PaymentMethods,
-                    aboutState: this.props.aboutState
-                },
-            })
-        }
-    }
-
     render() {
-        const aboutState = this.props.aboutState;
+        const {loading, accountInfo}=this.props.aboutStore;
         return (
-            aboutState.isLoading ?
+            loading ? Util.loading :
                 <View style={styles.container}>
                     <ScrollView>
                         <View style={styles.accountInfo}>
                             <View style={styles.image}>
-                                <Image source={{uri: aboutState.myInfo.headPortrait}}
+                                <Image source={{uri: accountInfo.headPortrait}}
                                        style={styles.image1}
                                        accessibilityLabel="图片加载中。。。"
                                        blurRadius={1}
@@ -52,19 +31,13 @@ class AccountList extends Component {
                                 />
                             </View>
                             <View style={styles.textContainer}>
-                                <Text style={styles.text}>姓名:{aboutState.myInfo.personName}</Text>
+                                <Text style={styles.text}>姓名:{accountInfo.personName}</Text>
                             </View>
                             <View style={styles.textContainer}>
-                                <Text style={styles.text}>电话:{aboutState.myInfo.contactNumber}</Text>
+                                <Text style={styles.text}>电话:{accountInfo.contactNumber}</Text>
                             </View>
-                            {/*<TouchableOpacity style={styles.PaymentMethods} onPress={()=> {*/}
-                                {/*this._paymentMethod()*/}
-                            {/*}*/}
-                            {/*}>*/}
-                                {/*<Text style={styles.text}>收款方式</Text>*/}
-                            {/*</TouchableOpacity>*/}
                             <TouchableOpacity style={styles.loginOut} onPress={()=> {
-                                this.props.loginOut()
+                                this._loginOut()
                             }
                             }>
                                 <Text style={styles.text}>退出登录</Text>
@@ -72,8 +45,18 @@ class AccountList extends Component {
                         </View>
                     </ScrollView>
                 </View>
-                : Util.loading
         )
+    }
+
+    //退出登录
+    _loginOut() {
+        const {loginActions}=this.props;
+        loginActions.weChatLoginOut();
+    }
+
+    componentDidMount() {
+        const {aboutActions}=this.props;
+        aboutActions.requstAccountInfo()
     }
 }
 
@@ -81,7 +64,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        marginTop:20,
+        marginTop: 20,
     },
     accountInfo: {
         justifyContent: 'center',

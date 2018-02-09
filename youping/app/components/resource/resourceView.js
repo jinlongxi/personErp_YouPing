@@ -16,26 +16,25 @@ import {
 } from 'react-native';
 
 class ResourceView extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
-        const Loading = this.props.resourceState.isLoading;
+        const {loading, resourceListData}=this.props.resourceListStore;
         return (
-            Loading ? <View style={{flex: 1}}>
+            loading ? Util.loading : <View style={{flex: 1}}>
                 {
-                    this.props.resourceState.resourceList.length !== 0 ?
+                    resourceListData.length > 0 ?
                         <ResourceList {...this.props}/>
                         :
                         <EmptyView {...this.props}/>
                 }
-            </View> : Util.loading
+            </View>
         )
     }
- 
-    componentWillMount() {
-        this.props.getResourceList();
+
+    componentDidMount() {
+        const {resourceListActions}=this.props;
+        setTimeout(function () {
+            resourceListActions.requestResourceList();
+        }, 500);
     }
 }
 

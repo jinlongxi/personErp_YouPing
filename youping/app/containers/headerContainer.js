@@ -3,11 +3,11 @@
  */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchMessageList} from '../actions/message'
+import {fetchMessageList} from '../actions/message/messageAction'
 import Header from '../components/common/header';
-import {fetchResourceList} from '../actions/resource';
+import {requestResourceList} from '../actions/resource/resourceListAction';
 import {fetchOrderList} from '../actions/order';
-import {showTabBar, hideTabBar} from '../actions/tab'
+import {showTabBar, hideTabBar} from '../actions/tab/tabAction'
 const mapStateToProps = (state) => {
     return {
         messageState: state.messageStore,
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch)=> {
         },
         //查询资源列表
         getResourceList: ()=> {
-            dispatch(fetchResourceList());
+            dispatch(requestResourceList());
         },
         //查询我的订单列表
         getOrderList: ()=> {

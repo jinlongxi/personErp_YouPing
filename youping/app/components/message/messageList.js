@@ -6,8 +6,10 @@ import MessageItem from './messageItem';
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
 import Header from './messageHeader';
-import ChatWebView from '../../containers/clientContainer';
-import DeciveStorage from '../../utils/deviceStorage';
+import DeviceStorage from '../../utils/deviceStorage';
+import InquiryItem from './inquiryItem';
+import chatViewContainer from '../../containers/message/chatViewContaitner';
+import replyPriceContainer from '../../containers/message/replyPriceContainer';
 import {
     AppRegistry,
     StyleSheet,
@@ -20,31 +22,29 @@ import {
     ScrollView
 } from 'react-native';
 
-class messageList extends React.Component {
+class MessageList extends React.Component {
     constructor(props) {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows(['row 1']),
-            show: false,
-            empty: false,
-            selected: 1
+            dataSource: ds.cloneWithRows(['row1']),
         };
         this._renderRow = this._renderRow.bind(this)
     }
 
     render() {
+        const {loading, switchType}=this.props.messageStore;
         return (
             <View style={{flex: 1}}>
                 <Header initObj={{
                     backName: '',
                     barTitleLeft: '消息列表',
                     barTitleRight: '询价请求',
-                    selected: this.state.selected,
+                    switchType: switchType,
                     onPress: this._switchButton.bind(this)
                 }}/>
                 {
-                    this.state.show ? <ListView
+                    loading ? Util.loading : <ListView
                         dataSource={this.state.dataSource}
                         initialListSize={10}    //设置显示条数
                         renderRow={this._renderRow}
@@ -52,28 +52,37 @@ class messageList extends React.Component {
                         contentContainerStyle={styles.listStyle}
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
-                    /> : Util.loading
+                    />
                 }
             </View>
         );
     }
 
     //切换列表显示
-    _switchButton(selected) {
-        console.log(this.state.selected, selected);
-        if (selected !== this.state.selected) {
-            this.setState({
-                selected: this.state.selected === 1 ? 2 : 1
-            })
+    _switchButton(isSwitch) {
+        const {switchType}=this.props.messageStore;
+        if (isSwitch !== switchType) {
+            const {messageActions} = this.props;
+            messageActions.switchListType();
         }
     }
 
-    //渲染
+    //渲染行
     _renderRow(resource) {
-        return (
-            !this.state.empty ?
-                <MessageItem resource={resource} onPress={this._goChatWebView.bind(this, resource)}/> : <EmptyPage/>
-        )
+        const {messageList, switchType, requestsPriceList}=this.props.messageStore;
+        if (switchType) {
+            return (
+                messageList.length > 0 ?
+                    <MessageItem resource={resource} onPress={this._goChatWebView.bind(this, resource)}/> : <EmptyPage/>
+            )
+        } else {
+            return (
+                requestsPriceList.length > 0 ?
+                    <InquiryItem resource={resource} onPress={this._goReplyPriceView.bind(this, resource)}/> :
+                    <EmptyPage/>
+            )
+        }
+
     }
 
     //渲染分割线
@@ -86,10 +95,8 @@ class messageList extends React.Component {
 
     //点击进入聊天webView
     _goChatWebView(resource) {
-        console.log(resource);
-        this.props.cleanSessionMessage(resource.realToId);
         this.props.hiddenTabBar();
-        DeciveStorage.get('partyId').then((partyId)=> {
+        DeviceStorage.get('partyId').then((partyId)=> {
             const username = partyId;
             const password = partyId + '111';
             const payToPartyId = resource.user.realPartyId;
@@ -98,27 +105,60 @@ class messageList extends React.Component {
             const {navigator} = this.props;
             if (navigator) {
                 navigator.push({
-                    name: 'ChatWebView',
-                    component: ChatWebView,
+                    name: 'chatViewContainer',
+                    component: chatViewContainer,
                     params: {
                         url: url,
                         productId: productId,
-                        payToPartyId: payToPartyId
+                        payToPartyId: payToPartyId,
+                        realToId: resource.realToId
                     }
                 })
             }
         });
     }
 
-    componentDidMount() {
+    //点击进入回复询价页面
+    _goReplyPriceView(resource) {
+        this.props.hiddenTabBar();
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'replyPriceContainer',
+                component: replyPriceContainer,
+                params: {
+                    resource: resource,
+                }
+            })
+        }
+    }
+
+    componentWillMount() {
+        const {messageActions} = this.props;
+        messageActions.requestMessageList();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {loading, messageList, switchType, requestsPriceList}=nextProps.messageStore;
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
         });
-        this.setState({
-            dataSource: ds.cloneWithRows(this.props.messageState.messageList),
-            show: this.props.messageState.isLoading
-        })
+        if (switchType) {
+            if (messageList.length > 0) {
+                this.setState({
+                    loading: loading,
+                    dataSource: ds.cloneWithRows(messageList),
+                })
+            }
+        } else {
+            if (requestsPriceList.length > 0) {
+                this.setState({
+                    loading: loading,
+                    dataSource: ds.cloneWithRows(requestsPriceList),
+                })
+            }
+        }
     }
 }
 
@@ -128,11 +168,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         marginTop: 20
     },
-    text: {
-        fontSize: 18,
-        color: '#1d1d1d',
-        textAlign: 'center'
-    },
     btn: {
         backgroundColor: 'yellow',
         marginTop: 10,
@@ -141,4 +176,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default messageList
+export default MessageList

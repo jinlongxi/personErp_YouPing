@@ -20,13 +20,6 @@ import {
 class customerWebView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            selectBtn: 1,
-            text: '',
-            resourceList: [],
-            partyRelation: '',
-            distributingLeaflets: {}
-        };
         this.swipeOutBtn = [
             {
                 text: '切换资源',
@@ -42,8 +35,8 @@ class customerWebView extends React.Component {
     }
 
     render() {
-        let resourceList = this.state.resourceList;
-        console.log(resourceList.productName)
+        const {consumerInfo} = this.props.messageStore;
+
         return (
             <View style={{backgroundColor: 'white', flex: 1}}>
                 <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message', refresh: true}}
@@ -53,9 +46,9 @@ class customerWebView extends React.Component {
                     <TouchableOpacity style={styles.item}>
                         <View style={styles.imageContainer}>
                             {
-                                resourceList.detailImageUrl != null ?
+                                consumerInfo != null ?
                                     <Image
-                                        source={{uri: resourceList.detailImageUrl + '?x-oss-process=image/resize,w_100,h_100/quality,q_50'}}
+                                        source={{uri: consumerInfo.resourceDetail.detailImageUrl + '?x-oss-process=image/resize,w_100,h_100/quality,q_50'}}
                                         style={styles.image}
                                         defaultSource={require('../../img/loading.gif')}
                                     /> : null
@@ -64,27 +57,18 @@ class customerWebView extends React.Component {
                         </View>
                         <View style={styles.contentContainer}>
                             {
-                                resourceList.productName != undefined ?
+                                consumerInfo != null && consumerInfo.resourceDetail.productName != undefined ?
                                     <View>
                                         <View style={styles.textContainer}>
                                             <Text numberOfLines={1}
-                                                  style={styles.resourceTitle}>资源名称:{resourceList.productName}</Text>
+                                                  style={styles.resourceTitle}>资源名称:{consumerInfo.resourceDetail.productName}</Text>
                                         </View>
                                         <View style={styles.textContainer}>
-                                            <Text style={{color: '#FA8072'}}>客户关系:{this.state.partyRelation}</Text>
+                                            <Text style={{color: '#FA8072'}}>客户关系:{consumerInfo.partyRelation}</Text>
                                         </View>
                                     </View>
                                     : null
                             }
-                            <View style={styles.textContainer}>
-                                {this.state.partyRelation === '潜在客户' ?
-                                    this.state.distributingLeaflets != undefined ?
-                                        <Text style={{color: '#B03060'}}
-                                              numberOfLines={1}>来自:"{this.state.distributingLeaflets}"的转发</Text>
-                                        : <Text style={{color: '#B03060'}}
-                                                numberOfLines={1}>来自:自己的分享</Text>
-                                    : null}
-                            </View>
                         </View>
                     </TouchableOpacity>
                 </Swipeout>
@@ -99,17 +83,15 @@ class customerWebView extends React.Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.props.queryConsumerInfo(this.props.payToPartyId, this.props.productId)
+            const {chatViewActions, payToPartyId, productId, realToId} = this.props;
+            chatViewActions.requestConsumerInfo(payToPartyId, productId);
+            chatViewActions.cleanSessionMessage(realToId);//清除消息角标
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-        this.setState({
-            resourceList: nextProps.messageState.clientData,
-            partyRelation: nextProps.messageState.partyRelation,
-            distributingLeaflets: nextProps.messageState.distributingLeaflets.workerName
-        })
+    componentWillUnmount() {
+        const {chatViewActions} = this.props;
+        chatViewActions.clearConsumerInfo()
     }
 }
 

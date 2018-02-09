@@ -20,14 +20,16 @@ class myResourceItem extends React.Component {
         super(props);
     }
 
-    //删除资源
+    //下架资源
     _deleteReource(productId) {
-        this.props.salesDiscontinuation(productId)
+        console.log(this.props);
+        const {resourceListActions}=this.props;
+        resourceListActions.fetchSalesDiscontinuation(productId);
+        //this.props.salesDiscontinuation(productId)
     }
 
     render() {
         var resource = this.props.resource;
-        // Buttons
         var swipeoutBtns = [
             {
                 text: '下架',

@@ -5,7 +5,7 @@
  * Created by jinlongxi on 17/9/11.
  */
 import React, {Component} from 'react';
-import ReleaseResource from './releaseProduct';
+import releaseReleaseContainer from '../../containers/resource/resourceReleaseContainer';
 import Button from '../common/buttons';
 import AutoTypingText from 'react-native-auto-typing-text';
 import {
@@ -62,8 +62,8 @@ class EmptyView extends React.Component {
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'ReleaseResource',
-                component: ReleaseResource,
+                name: 'releaseReleaseContainer',
+                component: releaseReleaseContainer,
                 params: {
                     releaseResource: this.props.releaseResource,
                     ...this.props

@@ -4,12 +4,13 @@
  * @flow
  */
 import React, {Component} from 'react';
-import LoginContainer from '../containers/loginContainer';
-import TabsContainer from '../containers/tabsContainer'
 import {connect} from 'react-redux';
 import DeviceStorage from '../utils/deviceStorage';
-import {hasToken, noToken} from '../actions/login';
+import * as loginCreators from '../actions/login/loginAction';
+import {bindActionCreators} from 'redux';
 import Util from '../utils/util';
+import LoginContainer from './login/loginContainer';
+import TabsContainer from './tabs/tabsContainer'
 import {
     Platform,
     StyleSheet,
@@ -17,59 +18,44 @@ import {
     View
 } from 'react-native';
 
-class App extends React.Component {
+class AppContainer extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isLoggedIn: false,
-            hasToken: false
-        }
     }
 
     render() {
+        const {isLoggedIn, booting}=this.props.loginStore;
         return (
-            this.state.hasToken ? this.state.isLoggedIn ? <TabsContainer/> : <LoginContainer/> : Util.bootUp
+            booting ? Util.bootUp : isLoggedIn ? <TabsContainer/> : <LoginContainer/>
         )
     }
 
-    componentWillMount() {
-        this.props.judgeToken();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const that = this;
-        setTimeout(function () {
-            that.setState({
-                isLoggedIn: nextProps.loginState.isLoggedIn,
-                hasToken: nextProps.loginState.hasToken
-            })
-        }, 1000)
+    componentDidMount() {
+        const {loginActions}=this.props;
+        DeviceStorage.get('tarjeta').then((tarjeta) => {
+            setTimeout(function () {
+                if (tarjeta) {
+                    loginActions.weChatLoginSuccess(tarjeta);
+                } else {
+                    loginActions.weChatLoginOut();
+                }
+            }, 1500)
+        });
     }
 }
 
 const mapStateToProps = (state) => {
+    const {loginStore} =state;
     return {
-        loginState: state.loginStore
+        loginStore
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
+    const loginActions = bindActionCreators(loginCreators, dispatch);
     return {
-        //判断是否存在TOKEN
-        judgeToken: ()=> {
-            DeviceStorage.get('tarjeta').then((tags) => {
-                if (tags) {
-                    setTimeout(function () {
-                        dispatch(hasToken(tags))
-                    }, 1000);
-                } else {
-                    setTimeout(function () {
-                        dispatch(noToken())
-                    }, 1000);
-                }
-            });
-        }
+        loginActions
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

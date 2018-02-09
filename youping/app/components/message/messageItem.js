@@ -20,47 +20,35 @@ class messageItem extends React.Component {
     }
 
     render() {
-        let resource = this.props.resource;
-        let workerList = '';
-        resource.distributingLeafletsList.map((item)=> {
-            workerList += item.workerName + ',';
-        });
-
-        let text;
-        if (resource.text.search("https://") !== -1 || resource.text.search("<button") !== -1) {
-            text = '图片消息'
-        } else if (resource.text.search("latitude") !== -1) {
-            text = '位置消息'
-        } else {
-            text = resource.text
-        }
+        const {resource} = this.props;
         return (
-            <TouchableOpacity style={styles.item} {...this.props} >
-
-                <View style={styles.imageContainer}>
-                    {
-                        resource.user != null ?
-                            <BadgeView
-                                title={resource.user.name}
-                                padding={8}
-                                badgeStyle={{flex: 1}}
-                                badgeText={resource.badge}
-                                renderImage={()=><Image style={styles.image} source={{uri: resource.user.avatar}}/>}
-                            />
-                            : null
-                    }
-                </View>
-                <View style={styles.contentContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={[styles.text,{color:'blue'}]}
-                              numberOfLines={1}>{resource.user.name}</Text>
-                        <Text style={styles.text}
-                              numberOfLines={1}>{text}</Text>
-                        <Text style={styles.date}
-                              numberOfLines={1}>{resource.createdAt}</Text>
+            resource.user != null ?
+                <TouchableOpacity style={styles.item} {...this.props} >
+                    <View style={styles.imageContainer}>
+                        <BadgeView
+                            title={resource.user.name}
+                            padding={8}
+                            badgeStyle={{flex: 1}}
+                            badgeText={resource.badge}
+                            renderImage={()=><Image style={styles.image} source={{uri: resource.user.avatar}}/>}
+                        />
                     </View>
-                </View>
-            </TouchableOpacity>
+
+
+                    <View style={styles.contentContainer}>
+                        <View style={styles.textContainer}>
+
+                            <Text style={[styles.text, {color: 'blue'}]}
+                                  numberOfLines={1}>{resource.user.name}</Text>
+                            <Text style={styles.text}
+                                  numberOfLines={1}>{resource.text}</Text>
+                            <Text style={styles.date}
+                                  numberOfLines={1}>{resource.createdAt}</Text>
+                        </View>
+                    </View>
+
+                </TouchableOpacity>
+                : null
         )
     }
 }

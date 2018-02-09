@@ -20,20 +20,9 @@ class messageView extends React.Component {
     }
 
     render() {
-        const Loading = this.props.messageState.isLoading;
         return (
-            Loading ?
-                this.props.messageState.messageList.length > 0 ?
-                    <MessageList {...this.props}/> :
-                    <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
-                        <Text style={{textAlign: 'center'}}>客户还在路上。。。</Text>
-                    </View>
-                : Util.loading
+            <MessageList {...this.props}/>
         )
-    }
-
-    componentWillMount() {
-        this.props.getMessageList();
     }
 }
 

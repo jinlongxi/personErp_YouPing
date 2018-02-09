@@ -5,16 +5,17 @@ import React, {Component} from 'react';
 import Header from '../../containers/headerContainer';
 import Util from '../../utils/util';
 import ImageList from '../common/imageList';
-import DeciveStorage from '../../utils/deviceStorage';
+import DeviceStorage from '../../utils/deviceStorage';
 import Modal from 'react-native-modal';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
-import Banner from 'react-native-banner';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import TabBar from "react-native-underline-tabbar";
 import Grid from './gridFriend';
 import Request from '../../utils/request';
 import ServiceURl from '../../utils/service';
-import NestedListview, {NestedRow} from 'react-native-nested-listview'
+import NestedListview, {NestedRow} from 'react-native-nested-listview';
+import * as WeChat from 'react-native-wechat';
+import ServiceURL from '../../utils/service';
 import {
     AppRegistry,
     StyleSheet,
@@ -28,10 +29,12 @@ import {
     InteractionManager
 } from 'react-native';
 
+//客户分类展示
 const Page = ({label}) => (
     <Grid data={label}/>
 );
 
+//客户关系假数据
 const data = [
     {
         title: '龙熙(转发9次)',
@@ -51,55 +54,109 @@ const data = [
 class ResourceDetail extends React.Component {
     constructor(props) {
         super(props);
-        this._weChatShare = this._weChatShare.bind(this);
         this.state = {
-            isModalVisible: false,
             shareInfo: null,
-            clickTitle: 'You can try clicking beauty',
             defaultIndex: 1,
-            custList: null,
             visitorList: null,
             placingCustList: null,
             partnerList: null,
             productFeaturesList: null
         };
-        this._toggleModal = this._toggleModal.bind(this);
-        this.iosMarginTop = Platform.OS == 'ios' ? {marginTop: 10, flex: 1} : {width: '100%'};
-        this.banners = null
+        this._resourceShare = this._resourceShare.bind(this);
+        this._showWeChatShareModel = this._showWeChatShareModel.bind(this)
     }
 
-    //微信分享模态框
-    _toggleModal() {
-        this.setState({isModalVisible: !this.state.isModalVisible});
-        const that = this;
-        DeciveStorage.get('partyId').then((partyId)=> {
-            that.props.weChatShare(that.props.selectResource.productId,
-                that.props.selectResource.detailImageUrl,
-                that.props.selectResource.productName, partyId, that.state.shareInfo)
-        });
-    }
+    //产品特征信息
+    _resourceFeatures = ()=> {
+        return (
+            <View style={styles.textContainer}>
+                <Text style={styles.title}>资源特征=></Text>
+                {
+                    this.state.productFeaturesList != null ?
+                        this.state.productFeaturesList.map((item, index)=> {
+                            let optionTitle = Object.keys(item);
+                            let optionList = Object.values(item);
+                            console.log(optionTitle, optionList);
+                            return (
+                                <View key={optionTitle[0] + index} style={{
+                                    borderWidth: StyleSheet.hairlineWidth,
+                                    borderColor: '#bbb',
+                                    margin: 10,
+                                    paddingVertical: 5,
+                                    width: '100%'
+                                }}>
+                                    <Text
+                                        style={[styles.text, {color: '#EEB422'}]}>特征项:{optionTitle[0]}</Text>
+                                    <View style={{
+                                        borderColor: '#bbb',
+                                        borderRadius: 2,
+                                        padding: 5,
+                                        margin: 5,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        flexWrap: 'wrap'
+                                    }}>
+                                        {
+                                            optionList[0].map((data)=> {
+                                                return (
+                                                    <Text key={data + index + 1}
+                                                          style={{
+                                                              color: 'black',
+                                                              borderWidth: StyleSheet.hairlineWidth,
+                                                              padding: 5,
+                                                          }}>{data}</Text>
+                                                )
+                                            })
+                                        }
+                                    </View>
+                                </View>
+                            )
+                        })
+                        : null
+                }
+            </View>
+        )
+    };
 
-    //微信分享
-    _weChatShare() {
-        this.setState({
-            isModalVisible: !this.state.isModalVisible
-        });
-    }
-
-    //监听滑块点击事件
-    clickListener(index) {
-        this.setState({
-            clickTitle: this.banners[index].title ? `you click ${this.banners[index].title}` : 'this banner has no title',
-        })
-    }
-
-    //监听滑块事件
-    onMomentumScrollEnd(event, state) {
-        console.log(`--->onMomentumScrollEnd page index:${state.index}, total:${state.total}`);
-        this.setState({
-            defaultIndex: state.index
-        })
-    }
+    //客户关系列表
+    _showCustomerList = ()=> {
+        return (
+            <View style={{flex: 1, margin: 10}}>
+                <Text style={styles.title}>客户列表=></Text>
+                <NestedListview
+                    data={data}
+                    getChildrenName={(node) => 'items'}
+                    onNodePressed={(node) => console.log('点击了：' + node.title)}
+                    renderNode={(node, level) => (
+                        <NestedRow
+                            level={level}
+                            style={{
+                                borderBottomWidth: StyleSheet.hairlineWidth,
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                backgroundColor: this._partnerListColor(level),
+                            }}
+                        >
+                            <Text>{level}级 </Text>
+                            <Image style={styles.imageContact}
+                                   source={{uri: 'http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLbXh3vd3I57rnNWlwyhXk6TtWa7rP90lQbTP4zu4iaiboGq21996ftQLWY1zYxp1R49U5NZqnZ36Ww/132'}}/>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                flex: 1,
+                                paddingRight: 15
+                            }}>
+                                <Text>{node.title}</Text>
+                                <Text>下一级客户数:{node.items != null ? node.items.length : 0}</Text>
+                            </View>
+                        </NestedRow>
+                    )}
+                />
+            </View>
+        )
+    };
 
     //客户关系列表颜色枚举(根据颜色设置不同层级背景颜色)
     _partnerListColor(level) {
@@ -116,184 +173,146 @@ class ResourceDetail extends React.Component {
         }
     }
 
-    render() {
-        const resourceData = this.props.selectResource;
-        const loading = this.props.resourceState.isLoading;
+    //客户关系分类
+    _showCustomerCategory = ()=> {
         return (
-            loading ?
-                <View style={{flex: 1}}>
-                    <Header
-                        initObj={{
-                            backName: '返回',
-                            barTitle: resourceData.productName,
-                            backType: 'resource',
-                            refresh: true
-                        }}
-                        navigator={this.props.navigator}
-                    />
-                    <ScrollView>
-                        {
-                            <View style={styles.container}>
-                                <View style={this.iosMarginTop}>
-                                    <Banner
-                                        banners={this.banners}
-                                        defaultIndex={this.state.defaultIndex}
-                                        onMomentumScrollEnd={this.onMomentumScrollEnd.bind(this)}
-                                        intent={this.clickListener.bind(this)}
-                                    />
-                                </View>
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.title}>资源简介=></Text>
-                                    <Text style={styles.text}>资源编号:{resourceData.productId}</Text>
-                                    <Text style={styles.text}>价格:{resourceData.price || '未设置'}</Text>
-                                    <Text style={styles.text}>数量:{resourceData.kuCun || '未设置'}</Text>
-                                </View>
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.title}>资源描述=></Text>
-                                    <Text style={styles.text}>{resourceData.description}</Text>
-                                </View>
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.title}>资源特征=></Text>
-                                    {
-                                        this.state.productFeaturesList != null ?
-                                            this.state.productFeaturesList.map((item, index)=> {
-                                                let optionTitle = Object.keys(item);
-                                                let optionList = Object.values(item);
-                                                console.log(optionTitle, optionList);
-                                                return (
-                                                    <View key={optionTitle[0] + index} style={{
-                                                        borderWidth: StyleSheet.hairlineWidth,
-                                                        borderColor: '#bbb',
-                                                        margin: 10,
-                                                        paddingVertical: 5,
-                                                        width: '100%'
-                                                    }}>
-                                                        <Text
-                                                            style={[styles.text, {color: '#EEB422'}]}>特征项:{optionTitle[0]}</Text>
-                                                        <View style={{
-                                                            borderColor: '#bbb',
-                                                            borderRadius: 2,
-                                                            padding: 5,
-                                                            margin: 5,
-                                                            flexDirection: 'row',
-                                                            justifyContent: 'space-between',
-                                                            flexWrap: 'wrap'
-                                                        }}>
-                                                            {
-                                                                optionList[0].map((data)=> {
-                                                                    return (
-                                                                        <Text key={data + index + 1}
-                                                                              style={{
-                                                                                  color: 'black',
-                                                                                  borderWidth: StyleSheet.hairlineWidth,
-                                                                                  padding: 5,
-                                                                              }}>{data}</Text>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </View>
-                                                    </View>
-                                                )
-                                            })
-                                            : null
-                                    }
-                                </View>
-                                <View style={[styles.textContainer, {paddingVertical: 0}]}>
-                                    <Text style={styles.title}>客户列表=></Text>
-                                </View>
-                                <View style={{flex: 1, margin: 10}}>
-                                    <NestedListview
-                                        data={data}
-                                        getChildrenName={(node) => 'items'}
-                                        onNodePressed={(node) => console.log('点击了：' + node.title)}
-                                        renderNode={(node, level) => (
-                                            <NestedRow
-                                                level={level}
-                                                style={{
-                                                    borderBottomWidth: StyleSheet.hairlineWidth,
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'flex-start',
-                                                    alignItems: 'center',
-                                                    backgroundColor: this._partnerListColor(level),
-                                                }}
-                                            >
-                                                <Text>{level}级 </Text>
-                                                <Image style={styles.imageContact}
-                                                       source={{uri: 'http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLbXh3vd3I57rnNWlwyhXk6TtWa7rP90lQbTP4zu4iaiboGq21996ftQLWY1zYxp1R49U5NZqnZ36Ww/132'}}/>
-                                                <View style={{
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'space-between',
-                                                    alignItems: 'center',
-                                                    flex: 1,
-                                                    paddingRight: 15
-                                                }}>
-                                                    <Text>{node.title}</Text>
-                                                    <Text>下一级客户数:{node.items != null ? node.items.length : 0}</Text>
-                                                </View>
-                                            </NestedRow>
-                                        )}
-                                    />
-                                </View>
-                                {/*<View style={{flex: 1, height: 500}}>*/}
-                                {/*<ScrollableTabView*/}
-                                {/*tabBarActiveTextColor="#53ac49"*/}
-                                {/*renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>*/}
-                                {/*<Page tabLabel={{*/}
-                                {/*label: "浏览客户",*/}
-                                {/*badge: this.state.visitorList != null ? this.state.visitorList.length : 0*/}
-                                {/*}}*/}
-                                {/*label={this.state.visitorList}/>*/}
-                                {/*<Page tabLabel={{*/}
-                                {/*label: "潜在客户",*/}
-                                {/*badge: this.state.placingCustList != null ? this.state.placingCustList.length : 0*/}
-                                {/*}}*/}
-                                {/*label={this.state.placingCustList}/>*/}
-                                {/*<Page tabLabel={{*/}
-                                {/*label: "转发客户",*/}
-                                {/*badge: this.state.partnerList != null ? this.state.partnerList.length : 0*/}
-                                {/*}}*/}
-                                {/*label={this.state.partnerList}/>*/}
-                                {/*<Page tabLabel={{*/}
-                                {/*label: "实际客户",*/}
-                                {/*badge: this.state.custList != null ? this.state.custList.length : 0*/}
-                                {/*}}*/}
-                                {/*label={this.state.custList}/>*/}
-                                {/*</ScrollableTabView>*/}
-                                {/*</View>*/}
-                            </View>
-                        }
-                    </ScrollView>
-                    <View style={styles.footer}>
-                        <Modal style={styles.modal} isVisible={this.state.isModalVisible}>
-                            <View style={styles.modalContainer}>
-                                <View style={styles.InputView}>
-                                    <AutoGrowingTextInput
-                                        placeholder='请输入分享信息'
-                                        style={styles.modalInput}
-                                        multiline={true}
-                                        underlineColorAndroid='transparent'
-                                        onChangeText={(text) => this.setState({shareInfo: text})}
-                                        keyboardType="default"
-                                        returnKeyType="done"
-                                        clearButtonMode="always"
-                                        keyboardAppearance="dark"
-                                        blurOnSubmit={true}
-                                        keyboardShouldPersistTaps={true}
-                                    />
-                                </View>
-                                <TouchableOpacity style={styles.moving} onPress={this._toggleModal}>
-                                    <Text style={styles.footer_btn_text}>分享</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Modal>
-                        <TouchableOpacity style={styles.moving} onPress={()=> {
-                            this._weChatShare()
-                        }}>
-                            <Text style={styles.footer_btn_text}>微信分享</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> : Util.isLoading
+            <View style={{flex: 1, height: 500}}>
+                <ScrollableTabView
+                    tabBarActiveTextColor="#53ac49"
+                    renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>
+                    <Page tabLabel={{
+                        label: "浏览客户",
+                        badge: this.state.visitorList != null ? this.state.visitorList.length : 0
+                    }}
+                          label={this.state.visitorList}/>
+                    <Page tabLabel={{
+                        label: "潜在客户",
+                        badge: this.state.placingCustList != null ? this.state.placingCustList.length : 0
+                    }}
+                          label={this.state.placingCustList}/>
+                    <Page tabLabel={{
+                        label: "转发客户",
+                        badge: this.state.partnerList != null ? this.state.partnerList.length : 0
+                    }}
+                          label={this.state.partnerList}/>
+                    <Page tabLabel={{
+                        label: "实际客户",
+                        badge: this.state.custList != null ? this.state.custList.length : 0
+                    }}
+                          label={this.state.custList}/>
+                </ScrollableTabView>
+            </View>
         )
+    };
+
+    //底部
+    _renderFooter = ()=> {
+        const {showShareModel}=this.props.resourceDetailStore;
+        return (
+            <View style={styles.footer}>
+                <Modal style={styles.modal} isVisible={showShareModel}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.InputView}>
+                            <AutoGrowingTextInput
+                                placeholder='请输入分享信息'
+                                style={styles.modalInput}
+                                multiline={true}
+                                underlineColorAndroid='transparent'
+                                onChangeText={(text) => this.setState({shareInfo: text})}
+                                keyboardType="default"
+                                returnKeyType="done"
+                                clearButtonMode="always"
+                                keyboardAppearance="dark"
+                                blurOnSubmit={true}
+                                keyboardShouldPersistTaps={true}
+                            />
+                        </View>
+                        <View style={{flexDirection: 'row', flex: 1}}>
+                            <TouchableOpacity style={styles.moving} onPress={this._resourceShare}>
+                                <Text style={styles.footer_btn_text}>分享</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.moving, {backgroundColor: 'red'}]}
+                                              onPress={this._showWeChatShareModel}>
+                                <Text style={styles.footer_btn_text}>取消</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+                <TouchableOpacity style={styles.moving} onPress={()=> {
+                    this._showWeChatShareModel()
+                }}>
+                    <Text style={styles.footer_btn_text}>微信分享</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    };
+
+    render() {
+        const {resourceDetailData, loading}=this.props.resourceDetailStore;
+        return (
+            <View style={{flex: 1}}>
+                <Header initObj={{backName: '返回', barTitle: '详情', backType: 'resource', refresh: true}}
+                        navigator={this.props.navigator}/>
+
+                {
+                    loading ? Util.loading :
+                        <ScrollView>
+                            {
+                                resourceDetailData == null ? null :
+                                    <View style={styles.container}>
+                                        <ImageList data={resourceDetailData.morePicture}/>
+                                        <View style={styles.textContainer}>
+                                            <Text style={styles.title}>资源简介=></Text>
+                                            <Text style={styles.text}>资源名称:{resourceDetailData.productName}</Text>
+                                            <Text style={styles.text}>资源编号:{resourceDetailData.productId}</Text>
+                                            <Text style={styles.text}>价格:{resourceDetailData.price || '未设置'}</Text>
+                                            <Text style={styles.text}>数量:{resourceDetailData.kuCun || '未设置'}</Text>
+                                        </View>
+                                        <View style={styles.textContainer}>
+                                            <Text style={styles.title}>资源描述=></Text>
+                                            <Text style={styles.text}>{resourceDetailData.description}</Text>
+                                        </View>
+                                        {this._showCustomerList()}
+                                    </View>
+                            }
+                        </ScrollView>
+                }
+                {this._renderFooter()}
+            </View>
+        )
+    }
+
+    //微信分享资源
+    _resourceShare() {//productId, picture, productName, payToPartyId, description
+        const {productId}=this.props;
+        const {resourceDetailData}=this.props.resourceDetailStore;
+        DeviceStorage.get('partyId').then((partyId)=> {
+            WeChat.isWXAppInstalled()
+                .then((isInstalled) => {
+                    if (isInstalled) {
+                        WeChat.shareToSession({
+                            title: '分享资源:' + resourceDetailData.productName,
+                            description: '谢谢使用',
+                            thumbImage: resourceDetailData.morePicture[0].drObjectInfo,
+                            type: 'news',
+                            webpageUrl: ServiceURL.WebManager + 'myStory?productId=' + productId + '&payToPartyId=' + partyId
+                        })
+                            .catch((error) => {
+                                console.log(error.message);
+                            });
+
+                    } else {
+                        console.log('没有安装微信软件，请您安装微信之后再试');
+                    }
+                });
+        });
+    }
+
+
+    //显示微信分享模态框
+    _showWeChatShareModel() {
+        const {resourceDetailActions}=this.props;
+        resourceDetailActions.showWechatShareModle()
     }
 
     //查询客户信息列表
@@ -332,27 +351,12 @@ class ResourceDetail extends React.Component {
         })
     }
 
-    componentWillMount() {
-        const imageList = [];
-        imageList.push({
-            title: this.props.selectResource.productId,
-            image: this.props.selectResource.detailImageUrl,
-        });
-        const selectResource = this.props.selectResource.morePicture;
-        selectResource.map((item, index)=> {
-            imageList.push({
-                title: item.productId,
-                image: item.drObjectInfo,
-            });
-        });
-        this.banners = imageList;
-    }
-
     componentDidMount() {
-        this.queryCustSalesReport(this.props.selectResource.productId);
-        this.queryProductFeatures(this.props.selectResource.productId);
+        InteractionManager.runAfterInteractions(() => {
+            const {productId, resourceDetailActions}=this.props;
+            resourceDetailActions.requestResourceDetail(productId);
+        });
     }
-
 }
 
 const styles = StyleSheet.create({
