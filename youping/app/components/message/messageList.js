@@ -38,8 +38,8 @@ class MessageList extends React.Component {
             <View style={{flex: 1}}>
                 <Header initObj={{
                     backName: '',
-                    barTitleLeft: '消息列表',
-                    barTitleRight: '询价请求',
+                    barTitleLeft: '客户消息',
+                    barTitleRight: '系统通知',
                     switchType: switchType,
                     onPress: this._switchButton.bind(this)
                 }}/>
@@ -59,12 +59,10 @@ class MessageList extends React.Component {
     }
 
     //切换列表显示
-    _switchButton(isSwitch) {
-        const {switchType}=this.props.messageStore;
-        if (isSwitch !== switchType) {
-            const {messageActions} = this.props;
-            messageActions.switchListType();
-        }
+    _switchButton() {
+        const {messageActions, messageStore} = this.props;
+        messageActions.switchListType();
+        messageActions.requestMessageList(!messageStore.switchType)
     }
 
     //渲染行
@@ -133,13 +131,14 @@ class MessageList extends React.Component {
         }
     }
 
-    componentWillMount() {
-        const {messageActions} = this.props;
-        messageActions.requestMessageList();
+    componentDidMount() {
+        const {messageActions, messageStore} = this.props;
+        messageActions.requestMessageList(messageStore.switchType);
     }
 
     componentWillReceiveProps(nextProps) {
         const {loading, messageList, switchType, requestsPriceList}=nextProps.messageStore;
+
         //设置数据源和加载状态
         var ds = new ListView.DataSource({
             rowHasChanged: (oldRow, newRow)=>oldRow !== newRow

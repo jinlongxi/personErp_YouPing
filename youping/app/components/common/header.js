@@ -19,32 +19,41 @@ class Header extends Component {
         return (
             <View style={styles.header}>
                 <View style={styles.title_container}>
-                    <TouchableOpacity style={styles.left_btn} onPress={this._pop.bind(this)}>
-                        <Icon/>
-                        <Text style={styles.btn_text}>{headContent.backName}</Text>
-                    </TouchableOpacity>
+                    {
+                        this.props.initObj.backName !== '' ?
+                            <TouchableOpacity style={styles.left_btn} onPress={this._pop.bind(this)}>
+                                <Icon/>
+                                <Text style={styles.btn_text}>{headContent.backName}</Text>
+                            </TouchableOpacity> : null
+                    }
                     <Text style={styles.title} numberOfLines={1}>{headContent.barTitle}</Text>
                 </View>
             </View>
         )
     }
 
+    componentDidMount() {
+        if (this.props.initObj.backShowTab) {
+            this.props.hideTab()
+        } else {
+            this.props.showTab()
+        }
+    }
+
     _pop() {
         //刷新之前的页面
         if (this.props.initObj.backType === 'message') {
-            //this.props.getMessageList();
             this.props.navigator.popToTop();
         } else if (this.props.initObj.backType === 'resource') {
-            //this.props.getResourceList();
             this.props.navigator.pop();
         } else if (this.props.initObj.backType === 'order') {
-            //this.props.getOrderList();
             this.props.navigator.pop();
         } else {
             this.props.navigator.pop();
         }
-        //是否显示TABBAR
-        if (this.props.initObj.refresh) {
+
+        //返回显示TAB
+        if (this.props.initObj.backShowTab) {
             this.props.showTab()
         }
     }

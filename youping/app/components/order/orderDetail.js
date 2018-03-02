@@ -2,7 +2,7 @@
  * Created by jinlongxi on 17/9/15.
  */
 import React, {Component} from 'react';
-import Header from '../../containers/headerContainer';
+import Header from '../../containers/commonContainer/headerContainer';
 import ButtonMenu from './buttonMenu';
 import Util from '../../utils/util';
 import {
@@ -23,90 +23,69 @@ import {
 class orderDetail extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            orderData: null,
-            modalVisible: false,
-            orderPayStatus: this.props.selectOrder.orderPayStatus,
-            deliveryStatus: this.props.selectOrder.statusId,
-            expressInfo: null
-        };
     }
 
     render() {
-        const orderData = this.props.selectOrder;
+        const {orderDetailData, loading}=this.props.orderDetailStore;
         return (
             <View style={{flex: 1}}>
                 <Header
-                    initObj={{backName: '返回', barTitle: '订单详情', backType: 'order', refresh: true}}
+                    initObj={{backName: '返回', barTitle: '订单详情', backType: 'order', backShowTab: true}}
                     navigator={this.props.navigator}
                 />
-                <ScrollView>
-                    {
-                        orderData == null ? Util.loading :
-                            <View style={styles.container}>
-                                {
-                                    orderData.detailImageUrl != null ?
-                                        <Image
-                                            source={{uri: orderData.detailImageUrl + '?x-oss-process=image/resize,h_667'}}
-                                            style={styles.image}
-                                            accessibilityLabel="图片加载中。。。"
-                                            blurRadius={1}
-                                            defaultSource={require('../../img/loading.gif')}
-                                        />
-                                        : null
-                                }
-                                <View>
-                                    <Text style={styles.title}>订单简介=></Text>
-                                    <Text style={styles.text}>资源名称: {orderData.productName}</Text>
-                                    <Text style={styles.text}>订单编号: {orderData.orderId}</Text>
-                                    <Text style={styles.text}>客户姓名: {orderData.personInfoMap.firstName}</Text>
-                                    <Text
-                                        style={styles.text}>订单状态: {this.state.deliveryStatus} —— 支付状态:{this.state.orderPayStatus}</Text>
-                                    <Text
-                                        style={styles.text}>收货地址: {orderData.personAddressInfoMap.contactAddress}</Text>
-                                    {
-                                        this.state.expressInfo == null ? null :
+                {
+                    loading ? Util.loading :
+                        <View style={{flex: 1}}>
+                            {
+                                orderDetailData != null ?
+                                    <View style={styles.container}>
+                                        <ScrollView>
+                                            <Image
+                                                source={{uri: orderDetailData.detailImageUrl + '?x-oss-process=image/resize,h_667'}}
+                                                style={styles.image}
+                                                accessibilityLabel="图片加载中。。。"
+                                                blurRadius={1}
+                                                defaultSource={require('../../img/loading.gif')}
+                                            />
+                                            <Text style={styles.title}>订单简介=></Text>
+                                            <Text style={styles.text}>资源名称: {orderDetailData.itemDescription}</Text>
+                                            <Text style={styles.text}>订单编号: {orderDetailData.orderId}</Text>
                                             <Text
-                                                style={styles.text}>{this.state.expressInfo}</Text>
-                                    }
-                                </View>
-                            </View>
-                    }
-
-                </ScrollView>
-                <View style={styles.actionButton}>
-                    <ButtonMenu {...this.props}/>
-                </View>
-
+                                                style={styles.text}>下单时间:{`${orderDetailData.orderDate.month}月${orderDetailData.orderDate.date}日${orderDetailData.orderDate.hours}时${orderDetailData.orderDate.seconds}分`}</Text>
+                                            <Text
+                                                style={styles.text}>客户姓名: {orderDetailData.personInfoMap.firstName}</Text>
+                                            <Text style={styles.text}>订单状态: {orderDetailData.statusId}</Text>
+                                            <Text style={styles.text}>支付状态:{orderDetailData.orderPayStatus}</Text>
+                                            <Text
+                                                style={styles.text}>收货地址: {orderDetailData.personAddressInfoMap.address}</Text>
+                                            {/*{*/}
+                                            {/*this.state.expressInfo == null ? null :*/}
+                                            {/*<Text*/}
+                                            {/*style={styles.text}>{this.state.expressInfo}</Text>*/}
+                                            {/*}*/}
+                                        </ScrollView>
+                                        <View style={styles.actionButton}>
+                                            <ButtonMenu {...this.props}/>
+                                        </View>
+                                    </View>
+                                    : null
+                            }
+                        </View>
+                }
             </View>
         )
     }
 
-    componentDidMount() {
-        //注意addListener的key和emit的key保持一致
-        this.collectionListener = DeviceEventEmitter.addListener('collection', (orderPayStatus) => {
-            this.setState({
-                orderPayStatus: orderPayStatus,
-            })
-        });
-        this.deliveryListener = DeviceEventEmitter.addListener('delivery', (deliveryStatus) => {
-            this.setState({
-                deliveryStatus: deliveryStatus,
-            })
-        });
-        this.expressInfoListener = DeviceEventEmitter.addListener('expressInfo', (expressInfo) => {
-            console.log(expressInfo);
-            this.setState({
-                expressInfo: expressInfo,
-            })
+    componentWillMount() {
+        InteractionManager.runAfterInteractions(() => {
+            const {orderDetailActions, orderId} =this.props;
+            orderDetailActions.requestOrderDetail(orderId)
         });
     }
 
     componentWillUnmount() {
-        //此生命周期内，去掉监听
-        this.collectionListener && this.collectionListener.remove();
-        this.deliveryListener && this.deliveryListener.remove();
-        this.expressInfoListener && this.expressInfoListener.remove();
+        const {orderDetailActions}=this.props;
+        orderDetailActions.clearOrderDetail()
     }
 }
 

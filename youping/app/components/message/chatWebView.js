@@ -2,7 +2,7 @@
  * Created by jinlongxi on 17/8/22.
  */
 import React, {Component} from 'react';
-import Header from '../../containers/headerContainer';
+import Header from '../../containers/commonContainer/headerContainer';
 import Util from '../../utils/util';
 import Swipeout from 'react-native-swipeout';
 import {
@@ -39,7 +39,7 @@ class customerWebView extends React.Component {
 
         return (
             <View style={{backgroundColor: 'white', flex: 1}}>
-                <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message', refresh: true}}
+                <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message', backShowTab: true}}
                         navigator={this.props.navigator}
                 />
                 <Swipeout right={this.swipeOutBtn} autoClose={true} style={{backgroundColor: 'white'}}>

@@ -108,6 +108,7 @@ android {
                 APP_CHANNEL : "developer-default"        //应用渠道号
         ]
     }
+   //配置签名KEYSTORE
    signingConfigs {
            release {
                storeFile file(MYAPP_RELEASE_STORE_FILE)
@@ -147,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-customized-image-picker')
     //compile project(':react-native-wechat')
     compile project(':react-native-maps')
     compile project(':react-native-image-picker')
@@ -160,7 +162,7 @@ dependencies {
     //调用相册依赖
     compile project(':react-native-device-info')
     //设备信息依赖
-    compile project(':react-native-image-crop-picker')
+    //compile project(':react-native-image-crop-picker')
     compile project(':RCTWeChat')
     //微信依赖
     compile project(':jpush-react-native')

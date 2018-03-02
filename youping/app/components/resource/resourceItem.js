@@ -22,10 +22,8 @@ class myResourceItem extends React.Component {
 
     //下架资源
     _deleteReource(productId) {
-        console.log(this.props);
         const {resourceListActions}=this.props;
         resourceListActions.fetchSalesDiscontinuation(productId);
-        //this.props.salesDiscontinuation(productId)
     }
 
     render() {

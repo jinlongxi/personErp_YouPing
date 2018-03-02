@@ -32,29 +32,26 @@ export const FETCH_RESOURCE_RELEASE = 'FETCH_RESOURCE_RELEASE';                 
 export const FETCH_RESOURCE_RELEASE_SUCCESS = 'FETCH_RESOURCE_RELEASE_SUCCESS';             //发布资源成功SHOW_FEATURES_MODEL
 export const SHOW_FEATURES_MODEL = 'SHOW_FEATURES_MODEL';                                   //显示隐藏特征模态框
 
-
-export const DELETE_RESOURCE_SUCCESS = 'DELETE_RESOURCE_SUCCESS';
-
-export const ADD_RESOURCE_DESC_DOING = 'ADD_RESOURCE_DESC_DOING';
-export const ADD_RESOURCE_DESC_SUCCESS = 'ADD_RESOURCE_DESC_SUCCESS';
-export const ADD_RESOURCE_DESC_ERROR = 'ADD_RESOURCE_DESC_ERROR';
-
-export const FETCH_RESOURCE_CUSTMER_INFO = 'FETCH_RESOURCE_CUSTMER_INFO';
-export const FETCH_RESOURCE_FEATURE_INFO = 'FETCH_RESOURCE_FEATURE_INFO';
-
 export const REQUEST_RESOURCE_DETAIL = 'REQUEST_RESOURCE_DETAIL';                           //请求资源详情
 export const FETCH_RESOURCE_DETAIL = 'FETCH_RESOURCE_DETAIL';                               //网络请求资源详情
 export const RECEIVE_RESOURCE_DETAIL = 'RECEIVE_RESOURCE_DETAIL';                           //接受资源详情数据
+export const CLEAR_RECEIVE_RESOURCE_DETAIL = 'CLEAR_RECEIVE_RESOURCE_DETAIL';               //清除资源详情数据
 export const SHOW_SHARE_MODEL = 'SHOW_SHARE_MODEL';                                         //显示分享模态框
+export const SET_WECHAT_SHARE_TEXT = 'SET_WECHAT_SHARE_TEXT';                               //设置微信分享文本
 
 /*订单模块**********************************************************/
 
-export const FETCH_ORDER_LIST_DOING = 'FETCH_ORDER_LIST_DOING';
-export const FETCH_ORDER_LIST_SUCCESS = 'FETCH_ORDER_LIST_SUCCESS';
-export const FETCH_ORDER_LIST_ERROR = 'FETCH_ORDER_LIST_ERROR';
+export const REQUEST_ORDER_LIST = 'REQUEST_ORDER_LIST';                                     //请求订单列表
+export const FETCH_ORDER_LIST = 'FETCH_ORDER_LIST';                                         //网络请求订单列表
+export const RECEIVE_ORDER_LIST = 'RECEIVE_ORDER_LIST';                                     //接受订单列表数据
 
-export const FETCH_ORDER_DETAIL_SUCCESS = 'FETCH_ORDER_DETAIL_SUCCESS';
+export const REQUEST_ORDER_DETAIL = 'REQUEST_ORDER_DETAIL';                                 //请求订单详情数据
+export const FETCH_ORDER_DETAIL = 'FETCH_ORDER_DETAIL';                                     //网络请求订单详情数据
+export const RECEIVE_ORDER_DETAIL = 'RECEIVE_ORDER_DETAIL';                                 //接收订单详情数据
+export const CLEAR_ORDER_DETAIL = 'CLEAR_ORDER_DETAIL';                                     //清除订单详情数据
+
 /*消息模块**********************************************************/
+
 export const REQUEST_MESSAGE_LIST = 'REQUEST_MESSAGE_LIST';                                 //请求消息列表
 export const FETCH_MESSAGE_LIST = 'FETCH_MESSAGE_LIST';                                     //发送网路请求消息列表
 export const RECEIVE_MESSAGE_LIST = 'RECEIVE_MESSAGE_LIST';                                 //接受消息列表数据
@@ -74,6 +71,7 @@ export const SET_CUSTOMER_INPUT = 'SET_CUSTOMER_INPUT';                         
 export const SET_QR_CODE = 'SET_QR_CODE';                                                   //设置收款二维码
 export const REPLY_REQUEST_PRICE = 'REPLY_REQUEST_PRICE';                                   //回复询价请求
 export const REPLY_REQUEST_PRICE_SUCCESS = 'REPLY_REQUEST_PRICE_SUCCESS';                   //回复询价成功
+
 /*关于模块**********************************************************/
 
 export const REQUEST_ACCOUNT_INFO = 'REQUEST_ACCOUNT_INFO';                                 //请求关于我的信息
@@ -81,6 +79,7 @@ export const FETCH_ACCOUNT_INFO = 'FETCH_ACCOUNT_INFO';                         
 export const RECEIVE_ACCOUNT_INFO = 'RECEIVE_ACCOUNT_INFO';                                 //接受我的信息数据
 
 /*TAB管理模块**********************************************************/
+
 export const SWITCH_TAB_BAR = 'SWITCH_TAB_BAR';                                             //切换tab
 export const HIDDEN_TAB_BAR = 'HIDDEN_TAB_BAR';                                             //隐藏tab
 export const SHOW_TAB_BAR = 'SHOW_TAB_BAR';                                                 //显示tab

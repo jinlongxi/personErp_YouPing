@@ -58,16 +58,11 @@ class EmptyView extends React.Component {
 
     //发布资源
     _releaseResource() {
-        this.props.hiddenTabBar();
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
                 name: 'releaseReleaseContainer',
                 component: releaseReleaseContainer,
-                params: {
-                    releaseResource: this.props.releaseResource,
-                    ...this.props
-                },
             })
         }
     }

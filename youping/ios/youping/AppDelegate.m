@@ -34,8 +34,8 @@ JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
   NSURL *jsCodeLocation;
   
   //  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-   //jsCodeLocation = [NSURL URLWithString:@"http://10.226.18.155:8081/index.ios.bundle?platform=ios&dev=true"];
-  jsCodeLocation = [[NSBundle mainBundle]URLForResource:@"main" withExtension:@"jsbundle"];
+   jsCodeLocation = [NSURL URLWithString:@"http://10.226.16.184:8081/index.ios.bundle?platform=ios&dev=true"];
+  //jsCodeLocation = [[NSBundle mainBundle]URLForResource:@"main" withExtension:@"jsbundle"];
   
   
   //start

@@ -1,14 +1,11 @@
 import {AlertIOS} from 'react-native';
 import * as TYPES from '../../constants/ActionTypes';
-import Request from '../../utils/request';
-import ServiceURl from '../../utils/service';
-import DeviceStorage from '../../utils/deviceStorage';
 
 //请求消息列表
-export function requestMessageList() {
-    console.log('发送请求');
+export function requestMessageList(requestType) {
     return {
-        type: TYPES.REQUEST_MESSAGE_LIST
+        type: TYPES.REQUEST_MESSAGE_LIST,
+        requestType
     };
 }
 
@@ -19,7 +16,7 @@ export function fetchMessageList() {
     };
 }
 
-//接受消息列表
+//接收消息列表
 export function receiveMessageList(messageList) {
     return {
         type: TYPES.RECEIVE_MESSAGE_LIST,
@@ -27,7 +24,7 @@ export function receiveMessageList(messageList) {
     };
 }
 
-//接受询价请求列表
+//接收询价请求列表
 export function receivePartyRequestsList(requestsPriceList) {
     return {
         type: TYPES.RECEIVE_REQUEST_PRICE_LIST,
@@ -41,7 +38,6 @@ export function switchListType() {
         type: TYPES.SWITCH_LIST_TYPE,
     };
 }
-
 
 
 // //获取客户信息

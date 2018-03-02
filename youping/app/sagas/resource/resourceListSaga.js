@@ -5,14 +5,17 @@ import {put, take, call, fork} from 'redux-saga/effects';
 import * as types from '../../constants/ActionTypes';
 import {request} from '../../utils/RequestUtil';
 import DeviceStorage from '../../utils/deviceStorage';
+import ToastUtil from '../../utils/ToastUtil';
+
 import {
     fetchResourceList,
     receiveResourceList,
-    fetchSalesDiscontinuationSuccess
+    fetchSalesDiscontinuationSuccess,
+    requestResourceList
 } from '../../actions/resource/resourceListAction';
 import ServiceURl from '../../utils/service';
 
-function* requestResourceList() {
+function* RequestResourceList() {
     try {
         yield put(fetchResourceList());
         const url = ServiceURl.personManager + 'queryMyResource';
@@ -21,6 +24,7 @@ function* requestResourceList() {
         if (code === '200') yield put(receiveResourceList(myResourceList));
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 
@@ -28,7 +32,7 @@ function* requestResourceList() {
 export function* watchRequestResourceList() {
     while (true) {
         yield take(types.REQUEST_RESOURCE_LIST);
-        yield fork(requestResourceList);
+        yield fork(RequestResourceList);
     }
 }
 
@@ -36,9 +40,12 @@ function* requestSalesDiscontinuation(productId) {
     try {
         const url = ServiceURl.personManager + 'salesDiscontinuation?productId=' + productId;
         const {code} = yield call(request, url, 'post');
-        if (code === '200') yield put(fetchSalesDiscontinuationSuccess(productId));
+        if (code === '200') {
+            yield put(requestResourceList());
+        }
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

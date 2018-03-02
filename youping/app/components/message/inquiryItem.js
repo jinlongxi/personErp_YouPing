@@ -20,7 +20,6 @@ class messageItem extends React.Component {
     }
 
     render() {
-        const {custInfo, productName}=this.props.resource;
         return (
             custInfo != null ?
                 <TouchableOpacity style={styles.item} {...this.props} >

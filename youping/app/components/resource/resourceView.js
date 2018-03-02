@@ -19,22 +19,17 @@ class ResourceView extends React.Component {
     render() {
         const {loading, resourceListData}=this.props.resourceListStore;
         return (
-            loading ? Util.loading : <View style={{flex: 1}}>
-                {
-                    resourceListData.length > 0 ?
-                        <ResourceList {...this.props}/>
-                        :
-                        <EmptyView {...this.props}/>
-                }
-            </View>
+            loading ? Util.loading :
+                resourceListData.length > 0 ?
+                    <ResourceList {...this.props}/>
+                    :
+                    <EmptyView {...this.props}/>
         )
     }
 
-    componentDidMount() {
+    componentWillMount() {
         const {resourceListActions}=this.props;
-        setTimeout(function () {
-            resourceListActions.requestResourceList();
-        }, 500);
+        resourceListActions.requestResourceList();
     }
 }
 

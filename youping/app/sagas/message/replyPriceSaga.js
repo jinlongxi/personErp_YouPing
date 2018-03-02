@@ -3,6 +3,7 @@
  */
 import {put, take, call, fork} from 'redux-saga/effects';
 import * as types from '../../constants/ActionTypes';
+import ToastUtil from '../../utils/ToastUtil';
 import {request, upLoadImage} from '../../utils/RequestUtil';
 import {replyRequestPriceSuccess} from '../../actions/message/replyPriceAction';
 import ServiceURl from '../../utils/service';
@@ -16,6 +17,7 @@ function* requestReplyPrice(productId, replyPrice, replyContent, typeArray, qrCo
         //yield put(replyRequestPriceSuccess());
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

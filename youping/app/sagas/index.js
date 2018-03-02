@@ -7,7 +7,9 @@ import {watchRequestLogin} from './login/loginSaga';
 import {watchRequestAccountInfo} from './about/aboutSaga';
 import {watchRequestSaveRegistrationId} from './tabs/tabSaga';
 import {watchRequestResourceList, watchRequestSalesDiscontinuation} from './resource/resourceListSaga';
-import {watchRequestProductFeatures, watchRequestResourceRelease} from './resource/resourceReleaseSaga';
+import {watchRequestResourceRelease} from './resource/resourceReleaseSaga';
+import {watchRequestOrderList} from './order/orderListSaga';
+import {watchRequestOrderDetail} from './order/orderDetailSaga';
 export default function* rootSaga() {
     yield [
         fork(watchRequestMessageList),
@@ -20,7 +22,8 @@ export default function* rootSaga() {
         fork(watchRequestSaveRegistrationId),
         fork(watchRequestResourceList),
         fork(watchRequestSalesDiscontinuation),
-        fork(watchRequestProductFeatures),
-        fork(watchRequestResourceRelease)
+        fork(watchRequestResourceRelease),
+        fork(watchRequestOrderList),
+        fork(watchRequestOrderDetail)
     ];
 }

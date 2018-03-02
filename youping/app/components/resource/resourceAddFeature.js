@@ -6,7 +6,7 @@
  */
 import React, {Component} from 'react';
 import Modal from 'react-native-modal';
-import SelectInput from 'react-native-select-input-ios';
+//import SelectInput from 'react-native-select-input-ios';
 import Request from '../../utils/request';
 import ServiceURl from '../../utils/service';
 import {

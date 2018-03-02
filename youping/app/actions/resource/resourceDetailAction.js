@@ -26,10 +26,25 @@ export function receiveResourceDetail(resourceDetailData) {
     };
 }
 
+//清除资源详情数据
+export function clearResourceDetail() {
+    return {
+        type: TYPES.CLEAR_RECEIVE_RESOURCE_DETAIL,
+    }
+}
+
 //点击微信分享  显示微信分享模态框
 export function showWechatShareModle() {
     return {
         type: TYPES.SHOW_SHARE_MODEL,
+    };
+}
+
+//设置分享文本内容
+export function setWechatShareText(shareText) {
+    return {
+        type: TYPES.SET_WECHAT_SHARE_TEXT,
+        shareText
     };
 }
 

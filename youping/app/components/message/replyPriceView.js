@@ -2,7 +2,7 @@
  * Created by jinlongxi on 18/2/7.
  */
 import React, {Component} from 'react';
-import Header from '../../containers/headerContainer';
+import Header from '../../containers/commonContainer/headerContainer';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 import SwitchButtons from '../common/switchButtons';
 import UploadImage from '../common/uploadImage';

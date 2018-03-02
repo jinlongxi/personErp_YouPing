@@ -7,6 +7,7 @@ import {request} from '../../utils/RequestUtil';
 import {fetchWeChatLogin, weChatLoginSuccess, weChatLoginOut} from '../../actions/login/loginAction';
 import ServiceURl from '../../utils/service';
 import DeviceStorage from '../../utils/deviceStorage';
+import ToastUtil from '../../utils/ToastUtil';
 
 function* requestLogin(code) {
     try {
@@ -20,6 +21,7 @@ function* requestLogin(code) {
         }
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

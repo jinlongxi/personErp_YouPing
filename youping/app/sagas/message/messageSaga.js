@@ -4,6 +4,7 @@
 import {put, take, call, fork} from 'redux-saga/effects';
 import * as types from '../../constants/ActionTypes';
 import {request} from '../../utils/RequestUtil';
+import ToastUtil from '../../utils/ToastUtil';
 import {
     requestMessageList,
     fetchMessageList,
@@ -19,10 +20,12 @@ function* requestMessageTypeList() {
         const messageList = yield call(request, url, 'post');
         yield put(receiveMessageList(messageList.messages));
     } catch (error) {
-        yield put(receiveMessageList([]));
+        //yield put(receiveMessageList([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 
+//请求
 function* requestPartyRequestsList() {
     try {
         const url = ServiceURl.personManager + 'queryPartyRequests';
@@ -30,19 +33,24 @@ function* requestPartyRequestsList() {
         yield put(receivePartyRequestsList(requestList));
     } catch (error) {
         //yield put(receiveMessageList([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 
 //监听消息列表请求
 export function* watchRequestMessageList() {
     while (true) {
-        yield take(types.REQUEST_MESSAGE_LIST);
-        yield fork(requestMessageTypeList);
-        yield take(types.SWITCH_LIST_TYPE);
-        yield fork(requestPartyRequestsList);
+        const {requestType} = yield take(types.REQUEST_MESSAGE_LIST);
+        console.log(requestType);
+        if (requestType) {
+            yield fork(requestMessageTypeList);
+        } else {
+            yield fork(requestPartyRequestsList);
+        }
     }
 }
 
+//清除消息
 function* cleanMessageSession(partyIdTo) {
     try {
         const url = ServiceURl.platformManager + 'cleanSessionMessage?partyIdTo=' + partyIdTo;
@@ -50,6 +58,7 @@ function* cleanMessageSession(partyIdTo) {
         if (code === '200') yield put(requestMessageList());//重新请求消息列表
     } catch (error) {
         //yield put(receiveMessageList([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

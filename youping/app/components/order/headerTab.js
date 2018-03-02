@@ -30,7 +30,8 @@ class headerTab extends React.Component {
         this.setState({
             onSelect: id
         });
-        this.props.getOrderList(id)
+        const {orderListActions}=this.props;
+        orderListActions.requestOrderList(id);
     }
 
     render() {
@@ -50,9 +51,10 @@ class headerTab extends React.Component {
         )
     }
 
-    componentDidMount() {
+    componentWillReceiveProps(nextProps) {
+        const {orderStatus}=nextProps.orderListStore;
         this.setState({
-            onSelect: this.props.orderState.orderStatus
+            onSelect: orderStatus
         })
     }
 }

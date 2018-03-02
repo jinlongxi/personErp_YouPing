@@ -3,21 +3,21 @@
  */
 import * as TYPES from '../../constants/ActionTypes';
 
-//请求资源列表
+//请求特征列表
 export function requestProductFeatures() {
     return {
         type: TYPES.REQUEST_PRODUCT_FEATURES,
     };
 }
 
-//发起网络请求资源列表
+//发起网络请求特征列表
 export function fetchProductFeatures() {
     return {
         type: TYPES.FETCH_PRODUCT_FEATURES,
     };
 }
 
-//接受资源列表数据
+//接受特征列表数据
 export function receiveProductFeatures(featuresListData) {
     return {
         type: TYPES.RECEIVE_PRODUCT_FEATURES,

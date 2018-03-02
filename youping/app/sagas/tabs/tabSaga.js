@@ -7,6 +7,7 @@ import {request} from '../../utils/RequestUtil';
 import {saveRegistrationId} from '../../actions/tab/tabAction';
 import DeviceInfo from 'react-native-device-info';
 import ServiceURl from '../../utils/service';
+import ToastUtil from '../../utils/ToastUtil';
 
 function* requestSaveRegistrationId(registrationId) {
     try {
@@ -16,6 +17,7 @@ function* requestSaveRegistrationId(registrationId) {
         yield put(saveRegistrationId(registrationId));
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

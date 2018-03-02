@@ -25,22 +25,20 @@ class Login extends Component {
         const {loading}=this.props.loginStore;
         return (
             loading ? Util.loading :
-                <ParallaxView
-                    backgroundSource={require('../../img/login/jianjie.jpg')}
-                    windowHeight={300}
-                    scrollableViewStyle={{backgroundColor: 'white'}}
-                >
-                    <View style={styles.container}>
-                        <TouchableOpacity style={styles.btnWeChat} onPress={()=> {
-                            this._weChatLogin()
-                        }}>
-                            <Image
-                                source={require('../../img/login/wechat.jpg')}
-                                style={styles.icon}/>
-                            <Text style={styles.btn}>微信登录</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ParallaxView>
+                <View style={styles.container}>
+                    <ParallaxView
+                        backgroundSource={require('../../img/login/jianjie.jpg')}
+                    >
+                    </ParallaxView>
+                    <TouchableOpacity style={styles.btnWeChat} onPress={()=> {
+                        this._weChatLogin()
+                    }}>
+                        <Image
+                            source={require('../../img/login/wechat.jpg')}
+                            style={styles.icon}/>
+                        <Text style={styles.btn}>微信登录</Text>
+                    </TouchableOpacity>
+                </View>
         )
     }
 
@@ -51,6 +49,7 @@ class Login extends Component {
                 let scope = 'snsapi_userinfo';
                 let state = 'wechat_sdk_demo';
                 WeChat.sendAuthRequest(scope, state).then(responseCode => {
+                    console.log(responseCode);
                     const {code:code} =responseCode;
                     const {loginActions}=this.props;
                     loginActions.requstWeChatLogin(code);
@@ -70,36 +69,20 @@ class Login extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
+        borderWidth: 1
     },
     btnWeChat: {
-        marginTop: 200,
-        width: 100,
-        height: 44,
-        marginLeft: 5,
         borderRadius: 4,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 3
-    },
-    btnTel: {
-        marginTop: 200,
-        width: 100,
-        height: 44,
-        marginLeft: 5,
-        marginRight: 5,
-        borderRadius: 4,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+        marginRight: 3,
+        height: 200
     },
     btn: {
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',
-        lineHeight: 44
     },
     icon: {
         height: 30,

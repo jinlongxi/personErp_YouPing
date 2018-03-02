@@ -9,9 +9,9 @@ const initialState = {
     resourceName: null,
     resourceImages: [],
     resourceAdvancedOptions: false,
-    resourceDescription: null,
-    resourcePrice: null,
-    resourceStoreNumber: null,
+    resourceDescription: undefined,
+    resourcePrice: undefined,
+    resourceStoreNumber: undefined,
     resourceFeatures: [],
     showFeaturesModel: false
 };
@@ -80,7 +80,8 @@ export default function resourceRelease(state = initialState, action) {
         case TYPES.FETCH_RESOURCE_RELEASE_SUCCESS:
             return {
                 ...state,
-                loading: false
+                loading: false,
+                status: 'success'
             };
         default:
             return state;

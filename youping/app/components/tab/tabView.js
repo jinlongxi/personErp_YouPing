@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import TabNavigator from 'react-native-tab-navigator';
 import ResourceList from './../../containers/resource/resourceListContainer';
-import Order from './../../containers/orderContainer';
+import Order from './../../containers/order/orderListContainer';
 import Message from './../../containers/message/messageContainer';
 import About from './../../containers/about/aboutContainer';
 import Navigation from '../../utils/navigation';
@@ -139,7 +139,8 @@ class TabView extends Component {
                 if (map.content === "loginNotification") {
                     this._loginOut()
                 } else if (map.content === "message") {
-                    this._updateMessageList();
+                    const {messageActions}=this.props;
+                    messageActions.requestMessageList();
                 } else if (map.content === "order") {
                     this._updateOrderList()
                 }

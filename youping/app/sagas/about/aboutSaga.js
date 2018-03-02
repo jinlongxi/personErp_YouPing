@@ -6,6 +6,7 @@ import * as types from '../../constants/ActionTypes';
 import {request} from '../../utils/RequestUtil';
 import {fetchAccountInfo, receiveAccountInfo} from '../../actions/about/aboutAction';
 import ServiceURl from '../../utils/service';
+import ToastUtil from '../../utils/ToastUtil';
 
 function* requestAccountInfo() {
     try {
@@ -17,6 +18,7 @@ function* requestAccountInfo() {
         }
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

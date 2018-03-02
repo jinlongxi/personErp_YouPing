@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import * as tabCreators from '../../actions/tab/tabAction';
 import * as loginCreators from '../../actions/login/loginAction';
 import * as messageCreators from '../../actions/message/messageAction';
-import * as orderCreators from '../../actions/order';
+import * as orderCreators from '../../actions/order/orderListAction';
 import TabView from '../../components/tab/tabView';
 import {
     AppRegistry,

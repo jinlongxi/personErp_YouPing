@@ -5,8 +5,8 @@ import React, {Component} from 'react';
 import OrderItem from './orderItem';
 import Util from '../../utils/util';
 import EmptyPage from '../common/emptyPage';
-import HeaderBar from '../common/headerBar';
-import orderDetail from './orderDetail';
+import Header from '../../containers/commonContainer/headerContainer';
+import orderDetailContainer from '../../containers/order/orderDetailContainer';
 import HeaderTab from './headerTab';
 import {
     AppRegistry,
@@ -23,57 +23,45 @@ import {
 class orderList extends React.Component {
     constructor(props) {
         super(props);
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows(['row 1']),
-            show: false,
-            empty: false
+            dataSource: ds.cloneWithRows([]),
         };
         this._renderRow = this._renderRow.bind(this)
     }
 
     render() {
+        const {loading}=this.props.orderListStore;
         return (
-            <View style={{flex: 1}}>
-                <HeaderBar initObj={{backName: '', barTitle: '我的订单'}}/>
+            <View style={styles.container}>
+                <Header initObj={{backName: '', barTitle: '订单列表'}}/>
                 <HeaderTab {...this.props}/>
-                <ScrollView>
-                    {
-                        this.state.show ? this.props.orderState.orderList.length > 0 ? <ListView
-                            dataSource={this.state.dataSource}
-                            initialListSize={10}    //设置显示条数
-                            renderRow={this._renderRow}
-                            renderSeparator={this._renderSeparator}
-                            contentContainerStyle={styles.listStyle}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                        /> : <View
-                            style={{flex: 1, justifyContent: 'center', alignContent: 'center', marginTop: 100}}><Text
-                            style={{textAlign: 'center'}}>没有相关数据。。。</Text></View>
-                            : Util.loading
-                    }
-                </ScrollView>
+                {
+                    loading ? Util.loading : this._renderList()
+                }
             </View>
         );
     }
 
-    //点击进入订单详情页面
-    _showDetail(order) {
-        this.props.hiddenTabBar();
-        const {navigator} = this.props;
-        if (navigator) {
-            navigator.push({
-                name: 'orderDetail',
-                component: orderDetail,
-                params: {
-                    selectOrder: order,
-                    ...this.props
-                }
-            })
-        }
+    //渲染列表
+    _renderList() {
+        const {orderListData}=this.props.orderListStore;
+        return (
+            orderListData.length > 1 ? <ListView
+                dataSource={this.state.dataSource}
+                initialListSize={10}    //设置显示条数
+                renderRow={this._renderRow}
+                renderSeparator={this._renderSeparator}
+                contentContainerStyle={styles.listStyle}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+            /> : <View
+                style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}><Text
+                style={{textAlign: 'center'}}>没有相关数据。。。</Text></View>
+        )
     }
 
-    //渲染
+    //渲染行
     _renderRow(resource) {
         return !this.state.empty ?
             <OrderItem resource={resource} onPress={()=> {
@@ -89,26 +77,31 @@ class orderList extends React.Component {
         return <View style={style} key={sectionID + rowID}/>
     }
 
-    componentDidMount() {
-        //设置数据源和加载状态
-        var ds = new ListView.DataSource({
-            rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-        });
-        this.setState({
-            dataSource: ds.cloneWithRows(this.props.orderState.orderList),
-            show: this.props.orderState.isLoading
-        })
+    //点击进入订单详情页面
+    _showDetail(order) {
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'orderDetailContainer',
+                component: orderDetailContainer,
+                params: {
+                    orderId: order.orderId
+                }
+            })
+        }
+    }
+
+    componentWillMount() {
+        const {orderListActions}=this.props;
+        orderListActions.requestOrderList('ALL')
     }
 
     componentWillReceiveProps(nextProps) {
-        //设置数据源和加载状态
-        var ds = new ListView.DataSource({
-            rowHasChanged: (oldRow, newRow)=>oldRow !== newRow
-        });
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const {orderListData}=nextProps.orderListStore;
         this.setState({
-            dataSource: ds.cloneWithRows(nextProps.orderState.orderList),
-            show: nextProps.orderState.isLoading
-        })
+            dataSource: ds.cloneWithRows(orderListData),
+        });
     }
 }
 
@@ -116,19 +109,6 @@ class orderList extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
-        marginTop: 20
-    },
-    text: {
-        fontSize: 18,
-        color: '#1d1d1d',
-        textAlign: 'center'
-    },
-    btn: {
-        backgroundColor: 'yellow',
-        marginTop: 10,
-        padding: 10,
-        borderWidth: 1
     }
 });
 

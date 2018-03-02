@@ -6,6 +6,7 @@ import {StyleSheet, View} from 'react-native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Scanner from '../common/scanner';
+import ChatViewContainer from '../../containers/message/chatViewContaitner';
 import {
     AlertIOS,
     TextInput,
@@ -34,36 +35,27 @@ class ButtonMenu extends Component {
         return (
             <View style={{flex: 1}}>
                 <ActionButton buttonColor="rgba(231,76,60,1)" bgColor="rgba(176,176,176,0.9)" position="left">
-                    {
-                        this.props.selectOrder.orderPayStatus !== '已确定收款' ?
-                            <ActionButton.Item buttonColor='#9b59b6' title="确认收款"
-                                               onPress={() => this._paymentReceived.bind(this)()}>
-                                <Icon name="logo-usd" style={styles.actionButtonIcon}/>
-                            </ActionButton.Item>
-                            : <View></View>
-                    }
-                    {
-                        this.props.selectOrder.personAddressInfoMap.contactAddress != undefined && this.props.selectOrder.statusId !== '已发货' ?
-                            <ActionButton.Item buttonColor='#3498db' title="确认发货" onPress={() => {
-                                this._showDialog.bind(this)()
-                            }}>
-                                <Icon name="logo-foursquare" style={styles.actionButtonIcon}/>
-                            </ActionButton.Item>
-                            : <View></View>
-                    }
+                    <ActionButton.Item buttonColor='#9b59b6' title="确认收款"
+                                       onPress={() => this._paymentReceived.bind(this)()}>
+                        <Icon name="logo-usd" style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+
+                    <ActionButton.Item buttonColor='#3498db' title="确认发货" onPress={() => {
+                        this._showDialog.bind(this)()
+                    }}>
+                        <Icon name="logo-foursquare" style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
+
                     <ActionButton.Item buttonColor='#1abc9c' title="联系买家" onPress={() => {
                         this._goChatWebView.bind(this)()
                     }}>
                         <Icon name="ios-at" style={styles.actionButtonIcon}/>
                     </ActionButton.Item>
-                    {
-                        this.props.selectOrder.statusId === '已发货' ?
-                            <ActionButton.Item buttonColor='#1abc9c' title="物流信息" onPress={() => {
-                                this._expressInfo.bind(this)()
-                            }}>
-                                <Icon name="ios-car" style={styles.actionButtonIcon}/>
-                            </ActionButton.Item> : <View></View>
-                    }
+                    <ActionButton.Item buttonColor='#1abc9c' title="物流信息" onPress={() => {
+                        this._expressInfo.bind(this)()
+                    }}>
+                        <Icon name="ios-car" style={styles.actionButtonIcon}/>
+                    </ActionButton.Item>
                 </ActionButton>
             </View>
         );
@@ -80,14 +72,16 @@ class ButtonMenu extends Component {
 
     //确认已收款
     _paymentReceived() {
+        console.log(this.props);
+        const {orderDetailActions, orderId}=this.props;
         Alert.alert(
             '是否已经收到对方付款?',
             '是否确定',
             [
                 {
                     text: '确定', onPress: () => {
-                    this.props.paymentReceived(this.props.selectOrder.orderId);
-                    this._postMsgByListener('collection')
+                    orderDetailActions.fetchPaymentReceived(orderId);
+                    //this._postMsgByListener('collection')
                 }
                 },
                 {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
@@ -150,17 +144,18 @@ class ButtonMenu extends Component {
 
     //点击进入聊天webView
     _goChatWebView() {
-        console.log(this.props.selectOrder);
-        const username = this.props.selectOrder.userPartyId;
-        const password = this.props.selectOrder.userPartyId + '111';
-        const payToPartyId = this.props.selectOrder.realPartyId;
-        const productId = this.props.selectOrder.productId;
+        console.log(this.props);
+        const {orderDetailData}=this.props.orderDetailStore;
+        const username = orderDetailData.partyId;
+        const password = orderDetailData.partyId + '111';
+        const payToPartyId = orderDetailData.payToPartyId;
+        const productId = orderDetailData.productId;
         const url = "https://www.yo-pe.com/pejump/" + username + '/' + password + "/" + payToPartyId + '/' + productId + '/NA';
         const {navigator} = this.props;
         if (navigator) {
             navigator.push({
-                name: 'ChatWebView',
-                component: ChatWebView,
+                name: 'ChatViewContainer',
+                component: ChatViewContainer,
                 params: {
                     url: url,
                     productId: productId,

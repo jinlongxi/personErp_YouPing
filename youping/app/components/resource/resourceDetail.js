@@ -2,17 +2,13 @@
  * Created by jinlongxi on 17/9/15.
  */
 import React, {Component} from 'react';
-import Header from '../../containers/headerContainer';
+import Header from '../../containers/commonContainer/headerContainer';
 import Util from '../../utils/util';
 import ImageList from '../common/imageList';
 import DeviceStorage from '../../utils/deviceStorage';
 import Modal from 'react-native-modal';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
-import TabBar from "react-native-underline-tabbar";
 import Grid from './gridFriend';
-import Request from '../../utils/request';
-import ServiceURl from '../../utils/service';
 import NestedListview, {NestedRow} from 'react-native-nested-listview';
 import * as WeChat from 'react-native-wechat';
 import ServiceURL from '../../utils/service';
@@ -67,56 +63,56 @@ class ResourceDetail extends React.Component {
     }
 
     //产品特征信息
-    _resourceFeatures = ()=> {
-        return (
-            <View style={styles.textContainer}>
-                <Text style={styles.title}>资源特征=></Text>
-                {
-                    this.state.productFeaturesList != null ?
-                        this.state.productFeaturesList.map((item, index)=> {
-                            let optionTitle = Object.keys(item);
-                            let optionList = Object.values(item);
-                            console.log(optionTitle, optionList);
-                            return (
-                                <View key={optionTitle[0] + index} style={{
-                                    borderWidth: StyleSheet.hairlineWidth,
-                                    borderColor: '#bbb',
-                                    margin: 10,
-                                    paddingVertical: 5,
-                                    width: '100%'
-                                }}>
-                                    <Text
-                                        style={[styles.text, {color: '#EEB422'}]}>特征项:{optionTitle[0]}</Text>
-                                    <View style={{
-                                        borderColor: '#bbb',
-                                        borderRadius: 2,
-                                        padding: 5,
-                                        margin: 5,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        flexWrap: 'wrap'
-                                    }}>
-                                        {
-                                            optionList[0].map((data)=> {
-                                                return (
-                                                    <Text key={data + index + 1}
-                                                          style={{
-                                                              color: 'black',
-                                                              borderWidth: StyleSheet.hairlineWidth,
-                                                              padding: 5,
-                                                          }}>{data}</Text>
-                                                )
-                                            })
-                                        }
-                                    </View>
-                                </View>
-                            )
-                        })
-                        : null
-                }
-            </View>
-        )
-    };
+    // _resourceFeatures = ()=> {
+    //     return (
+    //         <View style={styles.textContainer}>
+    //             <Text style={styles.title}>资源特征=></Text>
+    //             {
+    //                 this.state.productFeaturesList != null ?
+    //                     this.state.productFeaturesList.map((item, index)=> {
+    //                         let optionTitle = Object.keys(item);
+    //                         let optionList = Object.values(item);
+    //                         console.log(optionTitle, optionList);
+    //                         return (
+    //                             <View key={optionTitle[0] + index} style={{
+    //                                 borderWidth: StyleSheet.hairlineWidth,
+    //                                 borderColor: '#bbb',
+    //                                 margin: 10,
+    //                                 paddingVertical: 5,
+    //                                 width: '100%'
+    //                             }}>
+    //                                 <Text
+    //                                     style={[styles.text, {color: '#EEB422'}]}>特征项:{optionTitle[0]}</Text>
+    //                                 <View style={{
+    //                                     borderColor: '#bbb',
+    //                                     borderRadius: 2,
+    //                                     padding: 5,
+    //                                     margin: 5,
+    //                                     flexDirection: 'row',
+    //                                     justifyContent: 'space-between',
+    //                                     flexWrap: 'wrap'
+    //                                 }}>
+    //                                     {
+    //                                         optionList[0].map((data)=> {
+    //                                             return (
+    //                                                 <Text key={data + index + 1}
+    //                                                       style={{
+    //                                                           color: 'black',
+    //                                                           borderWidth: StyleSheet.hairlineWidth,
+    //                                                           padding: 5,
+    //                                                       }}>{data}</Text>
+    //                                             )
+    //                                         })
+    //                                     }
+    //                                 </View>
+    //                             </View>
+    //                         )
+    //                     })
+    //                     : null
+    //             }
+    //         </View>
+    //     )
+    // };
 
     //客户关系列表
     _showCustomerList = ()=> {
@@ -174,36 +170,36 @@ class ResourceDetail extends React.Component {
     }
 
     //客户关系分类
-    _showCustomerCategory = ()=> {
-        return (
-            <View style={{flex: 1, height: 500}}>
-                <ScrollableTabView
-                    tabBarActiveTextColor="#53ac49"
-                    renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>
-                    <Page tabLabel={{
-                        label: "浏览客户",
-                        badge: this.state.visitorList != null ? this.state.visitorList.length : 0
-                    }}
-                          label={this.state.visitorList}/>
-                    <Page tabLabel={{
-                        label: "潜在客户",
-                        badge: this.state.placingCustList != null ? this.state.placingCustList.length : 0
-                    }}
-                          label={this.state.placingCustList}/>
-                    <Page tabLabel={{
-                        label: "转发客户",
-                        badge: this.state.partnerList != null ? this.state.partnerList.length : 0
-                    }}
-                          label={this.state.partnerList}/>
-                    <Page tabLabel={{
-                        label: "实际客户",
-                        badge: this.state.custList != null ? this.state.custList.length : 0
-                    }}
-                          label={this.state.custList}/>
-                </ScrollableTabView>
-            </View>
-        )
-    };
+    // _showCustomerCategory = ()=> {
+    //     return (
+    //         <View style={{flex: 1, height: 500}}>
+    //             <ScrollableTabView
+    //                 tabBarActiveTextColor="#53ac49"
+    //                 renderTabBar={() => <TabBar underlineColor="#53ac49"/>}>
+    //                 <Page tabLabel={{
+    //                     label: "浏览客户",
+    //                     badge: this.state.visitorList != null ? this.state.visitorList.length : 0
+    //                 }}
+    //                       label={this.state.visitorList}/>
+    //                 <Page tabLabel={{
+    //                     label: "潜在客户",
+    //                     badge: this.state.placingCustList != null ? this.state.placingCustList.length : 0
+    //                 }}
+    //                       label={this.state.placingCustList}/>
+    //                 <Page tabLabel={{
+    //                     label: "转发客户",
+    //                     badge: this.state.partnerList != null ? this.state.partnerList.length : 0
+    //                 }}
+    //                       label={this.state.partnerList}/>
+    //                 <Page tabLabel={{
+    //                     label: "实际客户",
+    //                     badge: this.state.custList != null ? this.state.custList.length : 0
+    //                 }}
+    //                       label={this.state.custList}/>
+    //             </ScrollableTabView>
+    //         </View>
+    //     )
+    // };
 
     //底部
     _renderFooter = ()=> {
@@ -218,7 +214,7 @@ class ResourceDetail extends React.Component {
                                 style={styles.modalInput}
                                 multiline={true}
                                 underlineColorAndroid='transparent'
-                                onChangeText={(text) => this.setState({shareInfo: text})}
+                                onChangeText={(text) => this._setShareText(text)}
                                 keyboardType="default"
                                 returnKeyType="done"
                                 clearButtonMode="always"
@@ -251,48 +247,54 @@ class ResourceDetail extends React.Component {
         const {resourceDetailData, loading}=this.props.resourceDetailStore;
         return (
             <View style={{flex: 1}}>
-                <Header initObj={{backName: '返回', barTitle: '详情', backType: 'resource', refresh: true}}
+                <Header initObj={{backName: '返回', barTitle: '详情', backShowTab: true}}
                         navigator={this.props.navigator}/>
-
                 {
                     loading ? Util.loading :
-                        <ScrollView>
+                        <View style={styles.container}>
                             {
                                 resourceDetailData == null ? null :
-                                    <View style={styles.container}>
+                                    <ScrollView>
                                         <ImageList data={resourceDetailData.morePicture}/>
                                         <View style={styles.textContainer}>
                                             <Text style={styles.title}>资源简介=></Text>
                                             <Text style={styles.text}>资源名称:{resourceDetailData.productName}</Text>
                                             <Text style={styles.text}>资源编号:{resourceDetailData.productId}</Text>
-                                            <Text style={styles.text}>价格:{resourceDetailData.price || '未设置'}</Text>
-                                            <Text style={styles.text}>数量:{resourceDetailData.kuCun || '未设置'}</Text>
+                                            <Text style={styles.text}>价格:{resourceDetailData.price}</Text>
+                                            <Text
+                                                style={styles.text}>库存:{resourceDetailData.quantityOnHandTotal}</Text>
                                         </View>
                                         <View style={styles.textContainer}>
                                             <Text style={styles.title}>资源描述=></Text>
                                             <Text style={styles.text}>{resourceDetailData.description}</Text>
                                         </View>
                                         {this._showCustomerList()}
-                                    </View>
+                                    </ScrollView>
                             }
-                        </ScrollView>
+                        </View>
                 }
                 {this._renderFooter()}
             </View>
         )
     }
 
+    //设置分享文本内容
+    _setShareText(shareText) {
+        const {resourceDetailActions}=this.props;
+        resourceDetailActions.setWechatShareText(shareText)
+    }
+
     //微信分享资源
     _resourceShare() {//productId, picture, productName, payToPartyId, description
         const {productId}=this.props;
-        const {resourceDetailData}=this.props.resourceDetailStore;
+        const {resourceDetailData, shareText}=this.props.resourceDetailStore;
         DeviceStorage.get('partyId').then((partyId)=> {
             WeChat.isWXAppInstalled()
                 .then((isInstalled) => {
                     if (isInstalled) {
                         WeChat.shareToSession({
                             title: '分享资源:' + resourceDetailData.productName,
-                            description: '谢谢使用',
+                            description: shareText,
                             thumbImage: resourceDetailData.morePicture[0].drObjectInfo,
                             type: 'news',
                             webpageUrl: ServiceURL.WebManager + 'myStory?productId=' + productId + '&payToPartyId=' + partyId
@@ -315,47 +317,16 @@ class ResourceDetail extends React.Component {
         resourceDetailActions.showWechatShareModle()
     }
 
-    //查询客户信息列表
-    queryCustSalesReport(productId) {
-        const that = this;
-        let url = ServiceURl.personManager + 'queryCustSalesReport';
-        let data = '&productId=' + productId;
-        Request.postRequest(url, data, function (response) {
-            console.log('查询客户关系，浏览记录详情列表' + JSON.stringify(response));
-            let {custList:custList, visitorList:visitorList, placingCustList:placingCustList, partnerList:partnerList}=response;
-            that.setState({
-                custList: custList,
-                visitorList: visitorList,
-                placingCustList: placingCustList,
-                partnerList: partnerList
-            })
-        }, function (err) {
-            console.log(JSON.stringify(err))
-        })
-    }
-
-    //查询资源特征信息
-    queryProductFeatures(productId) {
-        const that = this;
-        let url = ServiceURl.personManager + 'queryProductFeatures';
-        let data = '&productId=' + productId;
-        Request.postRequest(url, data, function (response) {
-            console.log('查询资源特征信息' + JSON.stringify(response));
-            let {productFeaturesList:productFeaturesList}=response;
-            console.log(productFeaturesList);
-            that.setState({
-                productFeaturesList: productFeaturesList
-            })
-        }, function (err) {
-            console.log(JSON.stringify(err))
-        })
-    }
-
-    componentDidMount() {
+    componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
             const {productId, resourceDetailActions}=this.props;
             resourceDetailActions.requestResourceDetail(productId);
         });
+    }
+
+    componentWillUnmount() {
+        const {resourceDetailActions}=this.props;
+        resourceDetailActions.clearResourceDetail();
     }
 }
 

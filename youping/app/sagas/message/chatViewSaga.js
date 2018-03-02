@@ -6,6 +6,7 @@ import * as types from '../../constants/ActionTypes';
 import {request} from '../../utils/RequestUtil';
 import {fetchConsumerInfo, receiveConsumerInfo} from '../../actions/message/chatViewAction';
 import ServiceURl from '../../utils/service';
+import ToastUtil from '../../utils/ToastUtil';
 
 function* requestConsumerInfo(realPartyId, productId) {
     try {
@@ -15,6 +16,7 @@ function* requestConsumerInfo(realPartyId, productId) {
         yield put(receiveConsumerInfo(consumerInfo));
     } catch (error) {
         //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
     }
 }
 

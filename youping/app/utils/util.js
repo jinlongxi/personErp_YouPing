@@ -2,7 +2,7 @@
  * Created by jinlongxi on 17/8/22.
  */
 import React, {Component} from 'react';
-import {LineDotsLoader,RotationHoleLoader,CirclesRotationScaleLoader} from 'react-native-indicator';
+import {LineDotsLoader, RotationHoleLoader, CirclesRotationScaleLoader} from 'react-native-indicator';
 import {
     AppRegistry,
     StyleSheet,
@@ -20,14 +20,6 @@ var Util = {
         height: Dimensions.get('window').height
     },
 
-    //基于fetch的get/post请求   只负责获取数据  具体处理  在回调中操作
-    getRequest: function (url, successCallback, failCallback) {
-        fetch(url)
-            .then((response)=>response.json())
-            .then((responseData)=>successCallback(responseData))
-            .catch((error)=>failCallback(error))
-    },
-
     //开机加载
     bootUp: <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <CirclesRotationScaleLoader size={50} style={{marginTop: 100}}/>
@@ -36,7 +28,8 @@ var Util = {
 
     //加载动画
     loading: <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <RotationHoleLoader size={40} style={{marginTop: 100}}/>
+        <ActivityIndicator/>
+        <Text style={{marginTop: 5,fontSize:10}}>正在加载</Text>
     </View>,
 
 };
