@@ -81,6 +81,20 @@ export function setResourceFeatures(features) {
     };
 }
 
+//设置当前页面为资源发布还是编辑
+export function setPageType() {
+    return {
+        type: TYPES.SET_PAGE_TYPE,
+    };
+}
+
+//清除数据
+export function clearResourceRelease() {
+    return {
+        type: TYPES.CLEAR_RESOURCE_RELEASE,
+    };
+}
+
 //点击弹出隐藏特征模态框
 export function showFeaturesModel(boolean) {
     return {
@@ -90,7 +104,7 @@ export function showFeaturesModel(boolean) {
 }
 
 //请求发布资源
-export function requestResourceRelease(resourceImages, resourceName, resourceDescription, resourcePrice, resourceStoreNumber, resourceFeatures) {
+export function requestResourceRelease(resourceImages, resourceName, resourceDescription, resourcePrice, resourceStoreNumber, resourceFeatures,currentType,productId) {
     return {
         type: TYPES.REQUEST_RESOURCE_RELEASE,
         resourceImages,
@@ -98,7 +112,9 @@ export function requestResourceRelease(resourceImages, resourceName, resourceDes
         resourceDescription,
         resourcePrice,
         resourceStoreNumber,
-        resourceFeatures
+        resourceFeatures,
+        currentType,
+        productId
     };
 }
 

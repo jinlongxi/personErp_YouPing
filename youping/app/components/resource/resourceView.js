@@ -27,9 +27,11 @@ class ResourceView extends React.Component {
         )
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const {resourceListActions}=this.props;
-        resourceListActions.requestResourceList();
+        setTimeout(function () {
+            resourceListActions.requestResourceList();
+        },100)
     }
 }
 

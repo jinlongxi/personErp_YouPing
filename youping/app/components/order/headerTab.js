@@ -17,10 +17,7 @@ class headerTab extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tabArray: [{id: 'ALL', text: '全部'}, {id: 'PAYMENT', text: '已收款'}, {id: 'SHIPMENT', text: '已发货'}, {
-                id: 4,
-                text: '已完成'
-            }],
+            tabArray: [{id: 'ALL', text: '待处理'}, {id: 'PAYMENT', text: '已收款'}, {id: 'SHIPMENT', text: '已发货'}, {id: 'DONE', text: '已完成'}],
             onSelect: null
         }
     }
@@ -31,7 +28,7 @@ class headerTab extends React.Component {
             onSelect: id
         });
         const {orderListActions}=this.props;
-        orderListActions.requestOrderList(id);
+        orderListActions.setOrderLiistStatus(id);
     }
 
     render() {

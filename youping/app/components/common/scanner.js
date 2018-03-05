@@ -46,16 +46,9 @@ class Scanner extends Component {
         )
     }
 
-    //向父组件传值
-    _postMsgByListener = (msg)=> {
-        if(msg==='collection'){
-            DeviceEventEmitter.emit('collection', '已确认收款');
-        }else if(msg==='delivery'){
-            DeviceEventEmitter.emit('delivery', '已发货');
-        }
-    };
-
     barcodeReceived(e) {
+        const {orderDetailActions, orderId}=this.props;
+
         if (this.state.break) {
             Alert.alert(
                 '快递单号',
@@ -64,8 +57,7 @@ class Scanner extends Component {
                     {
                         text: '确定发货', onPress: () => {
                         this.props.navigator.pop();
-                        this.props.delivery(e.data,this.props.selectOrder.orderId);
-                        this._postMsgByListener('delivery')
+                        orderDetailActions.fetchLogistics(e.data, orderId);
                     }
                     },
                     {

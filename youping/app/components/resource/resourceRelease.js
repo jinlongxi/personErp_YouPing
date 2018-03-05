@@ -9,6 +9,7 @@ import ImageList from '../common/imageList';
 import UploadImage from '../common/uploadImage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Util from '../../utils/util';
+import ResourceListContainer from '../../containers/resource/resourceListContainer';
 import {
     AppRegistry,
     StyleSheet,
@@ -41,87 +42,93 @@ class ReleaseProduct extends React.Component {
             resourceAdvancedOptions,
             resourceDescription,
             resourcePrice,
+            loading,
+            currentType,
+            status
         }=this.props.resourceReleaseStore;
         return (
             <View style={styles.container}>
                 <Header
-                    initObj={{backName: '返回', barTitle: '发布资源', backType: 'resource', backShowTab: true}}
+                    initObj={{backName: '返回', barTitle: currentType + '资源', backType: 'resource', hiddenTab: true}}
                     navigator={this.props.navigator}/>
-                <KeyboardAwareScrollView style={{padding: 10}}>
-                    <View style={styles.productDescContainer}>
-                        <Text style={styles.productDesc_text}>标题:</Text>
-                        <AutoGrowingTextInput
-                            placeholder='输入资源标题'
-                            style={styles.productName_input}
-                            onChangeText={(text) => resourceReleaseActions.setResourceName(text)}
-                            value={resourceName}
-                            multiline={true}
-                            underlineColorAndroid='transparent'
-                            keyboardType="default"
-                            returnKeyType="done"
-                            clearButtonMode="always"
-                            keyboardAppearance="dark"
-                            blurOnSubmit={true}
-                            keyboardShouldPersistTaps={true}
-                        />
-                    </View>
-                    <View style={styles.productDescContainer}>
-                        <Text style={styles.productDesc_text}>图片(至少一张):</Text>
-                        <UploadImage
-                            initObj={{
-                                number: 9,
-                                onClick: this._selectImages.bind(this)
+                {
+                    !loading ? <KeyboardAwareScrollView style={{padding: 10}}>
+                        <View style={styles.productDescContainer}>
+                            <Text style={styles.productDesc_text}>标题:</Text>
+                            <AutoGrowingTextInput
+                                placeholder='输入资源标题'
+                                style={styles.productName_input}
+                                onChangeText={(text) => resourceReleaseActions.setResourceName(text)}
+                                value={resourceName}
+                                multiline={true}
+                                underlineColorAndroid='transparent'
+                                keyboardType="default"
+                                returnKeyType="done"
+                                clearButtonMode="always"
+                                keyboardAppearance="dark"
+                                blurOnSubmit={true}
+                                keyboardShouldPersistTaps={true}
+                            />
+                        </View>
+                        <View style={styles.productDescContainer}>
+                            <Text style={styles.productDesc_text}>图片(至少一张):</Text>
+                            <UploadImage
+                                initObj={{
+                                    number: 9,
+                                    onClick: this._selectImages.bind(this),
+                                    initImage: resourceImages
+                                }}/>
+                        </View>
+                        <View style={styles.productDescContainer}>
+                            <Text style={styles.productDesc_text}>描述:</Text>
+                            <AutoGrowingTextInput
+                                placeholder='输入资源品述'
+                                style={styles.productDesc_input}
+                                multiline={true}
+                                value={resourceDescription}
+                                underlineColorAndroid='transparent'
+                                onChangeText={(text) => resourceReleaseActions.setResourceDescription(text)}
+                                keyboardType="default"
+                                returnKeyType="done"
+                                clearButtonMode="always"
+                                keyboardAppearance="dark"
+                                blurOnSubmit={true}
+                                keyboardShouldPersistTaps={true}
+                            />
+                        </View>
+                        <View style={styles.productDescContainer}>
+                            <Text style={styles.productDesc_text}>价格:</Text>
+                            <AutoGrowingTextInput
+                                placeholder='输入资源价格'
+                                style={styles.productDesc_input}
+                                multiline={true}
+                                underlineColorAndroid='transparent'
+                                value={resourcePrice}
+                                onChangeText={(text) => resourceReleaseActions.setResourcePrice(text)}
+                                keyboardType="numeric"
+                                returnKeyType="done"
+                                clearButtonMode="always"
+                                keyboardAppearance="dark"
+                                blurOnSubmit={true}
+                                keyboardShouldPersistTaps={true}
+                            />
+                        </View>
+                        <View style={styles.radio}>
+                            <Switch disabled={false} value={resourceAdvancedOptions} onValueChange={(boolean)=> {
+                                resourceReleaseActions.setResourceAdvancedOptions(boolean)
                             }}/>
-                    </View>
-                    <View style={styles.productDescContainer}>
-                        <Text style={styles.productDesc_text}>描述:</Text>
-                        <AutoGrowingTextInput
-                            placeholder='输入资源品述'
-                            style={styles.productDesc_input}
-                            multiline={true}
-                            value={resourceDescription}
-                            underlineColorAndroid='transparent'
-                            onChangeText={(text) => resourceReleaseActions.setResourceDescription(text)}
-                            keyboardType="default"
-                            returnKeyType="done"
-                            clearButtonMode="always"
-                            keyboardAppearance="dark"
-                            blurOnSubmit={true}
-                            keyboardShouldPersistTaps={true}
-                        />
-                    </View>
-                    <View style={styles.productDescContainer}>
-                        <Text style={styles.productDesc_text}>价格:</Text>
-                        <AutoGrowingTextInput
-                            placeholder='输入资源价格'
-                            style={styles.productDesc_input}
-                            multiline={true}
-                            underlineColorAndroid='transparent'
-                            value={resourcePrice}
-                            onChangeText={(text) => resourceReleaseActions.setResourcePrice(text)}
-                            keyboardType="numeric"
-                            returnKeyType="done"
-                            clearButtonMode="always"
-                            keyboardAppearance="dark"
-                            blurOnSubmit={true}
-                            keyboardShouldPersistTaps={true}
-                        />
-                    </View>
-                    <View style={styles.radio}>
-                        <Switch disabled={false} value={resourceAdvancedOptions} onValueChange={(boolean)=> {
-                            resourceReleaseActions.setResourceAdvancedOptions(boolean)
-                        }}/>
-                        <Text style={styles.radio_text}>高级选项</Text>
-                    </View>
-                    {
-                        resourceAdvancedOptions ? this._renderAdvancedOptions() : null
-                    }
-                </KeyboardAwareScrollView>
+                            <Text style={styles.radio_text}>高级选项</Text>
+                        </View>
+                        {
+                            resourceAdvancedOptions ? this._renderAdvancedOptions() : null
+                        }
+                    </KeyboardAwareScrollView> : Util.loading
+                }
                 <TouchableOpacity onPress={()=> {
                     this._resourceRelease()
                 }}
                                   style={styles.btnContainer}>
-                    <Text style={styles.next_btn}>发布</Text>
+                    <Text style={styles.next_btn}>确定{currentType}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -223,11 +230,34 @@ class ReleaseProduct extends React.Component {
             resourceDescription,
             resourcePrice,
             resourceStoreNumber,
-            resourceFeatures
+            resourceFeatures,
+            currentType
         }=this.props.resourceReleaseStore;
-        const {resourceReleaseActions}=this.props;
-        resourceReleaseActions.requestResourceRelease(resourceImages, resourceName, resourceDescription, resourcePrice, resourceStoreNumber, resourceFeatures);
+        const {resourceReleaseActions, resourceDetailData}=this.props;
+        let productId;
+        if (resourceDetailData) {
+            productId = resourceDetailData.productId
+        }
+        resourceReleaseActions.requestResourceRelease(resourceImages, resourceName, resourceDescription,
+            resourcePrice, resourceStoreNumber, resourceFeatures, currentType, productId);
+    }
 
+    componentWillMount() {
+        const {resourceDetailData, resourceReleaseActions}=this.props;
+        if (resourceDetailData) {
+            const {productName, description, morePicture, price, quantityOnHandTotal,}=resourceDetailData;
+            let images = [];
+            for (let item of morePicture) {
+                images.push({uri: item.drObjectInfo})
+            }
+            resourceReleaseActions.setResourceName(productName);
+            resourceReleaseActions.setResourceDescription(description);
+            resourceReleaseActions.setResourceImages(images);
+            resourceReleaseActions.setResourcePrice(price.toString());
+            resourceReleaseActions.setResourceStoreNumber(quantityOnHandTotal.toString());
+            resourceReleaseActions.setResourceAdvancedOptions(true);
+            resourceReleaseActions.setPageType();
+        }
     }
 
     componentDidMount() {
@@ -242,14 +272,14 @@ class ReleaseProduct extends React.Component {
     componentWillUnmount() {
         //此生命周期内，去掉监听
         this.msgListener && this.msgListener.remove();
+        const {resourceReleaseActions}=this.props;
+        resourceReleaseActions.clearResourceRelease();//清理数据
     }
 
     componentWillReceiveProps(nextProps) {
-        const {
-            status
-        }=nextProps.resourceReleaseStore;
+        const {status}=nextProps.resourceReleaseStore;
         if (status === 'success') {
-            this.props.navigator.popToTop(); //返回首页
+            nextProps.navigator.popToTop();
         }
     }
 }

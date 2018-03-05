@@ -38,6 +38,14 @@ class uploadImage extends Component {
         )
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.initObj.initImage>0){
+            this.setState({
+                imageArray: nextProps.initObj.initImage
+            })
+        }
+    }
+
     //选择手机中的图片
     _selectImages(number, onClick) {
         ImagePickers.openPicker({

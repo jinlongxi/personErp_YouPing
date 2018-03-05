@@ -35,15 +35,16 @@ class OrderItem extends React.Component {
                 </View>
                 <View style={styles.contentContainer}>
                     <View style={styles.textContainer}>
-                        <Text numberOfLines={1} style={styles.productName}>资源名称:{resource.productName}</Text>
+                        <Text numberOfLines={1}
+                              style={styles.productName}>资源名称:{resource.productName}({resource.orderId})</Text>
                     </View>
                     <View style={styles.textContainer}>
-                        <Text style={styles.publisher_author}
-                              numberOfLines={1}>订单({resource.orderId}):{resource.statusId}</Text>
-                    </View>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.publisher_author}
+                        <Text style={{color: resource.orderPayStatus.includes('未') ? '#D2691E' : '#8B8989'}}
                               numberOfLines={1}>支付状态:{resource.orderPayStatus}</Text>
+                    </View>
+                    <View style={styles.textContainer}>
+                        <Text style={{color: resource.orderShipment.includes('未') ? '#D2691E' : '#8B8989'}}
+                              numberOfLines={1}>发货状态:{resource.orderShipment}</Text>
                     </View>
                     <View style={styles.textContainer}>
                         <Text style={styles.buy}
@@ -86,17 +87,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 2
     },
-    productName:{
+    productName: {
         fontSize: 16,
         color: '#8B8989',
     },
     publisher_author: {
-        color: "#D2691E",
+        color: "#8B8989",
     },
     buy: {
-        color: "red",
+        color: "#8DB6CD",
         fontSize: 13
     },
 });
-
+//#D2691E
 export default OrderItem

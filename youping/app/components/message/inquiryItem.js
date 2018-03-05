@@ -20,28 +20,16 @@ class messageItem extends React.Component {
     }
 
     render() {
+        const {text}=this.props.resource;
         return (
-            custInfo != null ?
-                <TouchableOpacity style={styles.item} {...this.props} >
-                    <View style={styles.imageContainer}>
-                        <BadgeView
-                            title={custInfo.firstName}
-                            padding={8}
-                            badgeStyle={{flex: 1}}
-                            badgeText={0}
-                            renderImage={()=><Image style={styles.image} source={{uri: custInfo.headPortrait}}/>}
-                        />
+            <TouchableOpacity style={styles.item} {...this.props} >
+                <View style={styles.contentContainer}>
+                    <View style={styles.textContainer}>
+                        <Text style={[styles.text, {color: 'blue'}]}
+                              numberOfLines={1}>  {text}</Text>
                     </View>
-                    <View style={styles.contentContainer}>
-                        <View style={styles.textContainer}>
-                            <Text style={[styles.text, {color: 'blue'}]}
-                                  numberOfLines={1}>{custInfo.firstName}=>发起询价</Text>
-                            <Text style={styles.text}
-                                  numberOfLines={1}>产品:{productName}</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                : null
+                </View>
+            </TouchableOpacity>
         )
     }
 }

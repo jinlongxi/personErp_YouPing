@@ -33,17 +33,20 @@ class Header extends Component {
     }
 
     componentDidMount() {
-        if (this.props.initObj.backShowTab) {
-            this.props.hideTab()
+        const {hiddenTab} = this.props.initObj;
+        if (hiddenTab) {
+            this.props.hideTab();
         } else {
-            this.props.showTab()
+            this.props.showTab();
         }
     }
 
+
     _pop() {
+
         //刷新之前的页面
         if (this.props.initObj.backType === 'message') {
-            this.props.navigator.popToTop();
+            this.props.navigator.pop();
         } else if (this.props.initObj.backType === 'resource') {
             this.props.navigator.pop();
         } else if (this.props.initObj.backType === 'order') {
@@ -53,8 +56,10 @@ class Header extends Component {
         }
 
         //返回显示TAB
-        if (this.props.initObj.backShowTab) {
-            this.props.showTab()
+        const {navigator} = this.props;
+        const routers = navigator.getCurrentRoutes();
+        if (routers.length === 2) {
+            this.props.showTab();
         }
     }
 }

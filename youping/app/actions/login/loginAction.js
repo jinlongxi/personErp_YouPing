@@ -1,5 +1,6 @@
 'use strict';
 import * as TYPES from '../../constants/ActionTypes';
+import DeviceStorage from '../../utils/deviceStorage';
 
 //微信登录
 export function requstWeChatLogin(code) {
@@ -25,6 +26,7 @@ export function weChatLoginSuccess(token) {
 
 //退出登录
 export function weChatLoginOut() {
+    DeviceStorage.delete('tarjeta');
     return {
         type: TYPES.WECHAT_LOGIN_OUT
     };

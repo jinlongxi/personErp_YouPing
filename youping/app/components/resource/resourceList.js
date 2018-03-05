@@ -35,7 +35,7 @@ class ResourceList extends React.Component {
         const {isRefreshing}=this.props.resourceListStore;
         return (
             <View style={{flex: 1}}>
-                <Header initObj={{backName: '', barTitle: '我的资源'}}/>
+                <Header initObj={{backName: '', barTitle: '我的资源',hiddenTab:false}} {...this.props}/>
                 <ListView
                     refreshControl={
                         <RefreshControl

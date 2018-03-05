@@ -13,7 +13,8 @@ const initialState = {
     resourcePrice: undefined,
     resourceStoreNumber: undefined,
     resourceFeatures: [],
-    showFeaturesModel: false
+    showFeaturesModel: false,
+    currentType: '发布'
 };
 
 export default function resourceRelease(state = initialState, action) {
@@ -82,6 +83,28 @@ export default function resourceRelease(state = initialState, action) {
                 ...state,
                 loading: false,
                 status: 'success'
+            };
+        //设置当前页面是发布还是编辑
+        case TYPES.SET_PAGE_TYPE:
+            return {
+                ...state,
+                currentType: '编辑'
+            };
+        //清理数据
+        case TYPES.CLEAR_RESOURCE_RELEASE:
+            return {
+                loading: false,
+                featuresListData: [],
+                status: null,
+                resourceName: null,
+                resourceImages: [],
+                resourceAdvancedOptions: false,
+                resourceDescription: undefined,
+                resourcePrice: undefined,
+                resourceStoreNumber: undefined,
+                resourceFeatures: [],
+                showFeaturesModel: false,
+                currentType: '发布'
             };
         default:
             return state;

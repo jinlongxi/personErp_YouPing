@@ -12,6 +12,7 @@ import Grid from './gridFriend';
 import NestedListview, {NestedRow} from 'react-native-nested-listview';
 import * as WeChat from 'react-native-wechat';
 import ServiceURL from '../../utils/service';
+import ResourceRelease from '../../containers/resource/resourceReleaseContainer';
 import {
     AppRegistry,
     StyleSheet,
@@ -239,6 +240,11 @@ class ResourceDetail extends React.Component {
                 }}>
                     <Text style={styles.footer_btn_text}>微信分享</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={[styles.moving, {backgroundColor: 'blue'}]} onPress={()=> {
+                    this._editResource()
+                }}>
+                    <Text style={styles.footer_btn_text}>资源编辑</Text>
+                </TouchableOpacity>
             </View>
         )
     };
@@ -247,7 +253,7 @@ class ResourceDetail extends React.Component {
         const {resourceDetailData, loading}=this.props.resourceDetailStore;
         return (
             <View style={{flex: 1}}>
-                <Header initObj={{backName: '返回', barTitle: '详情', backShowTab: true}}
+                <Header initObj={{backName: '返回', barTitle: '详情', hiddenTab: true}}
                         navigator={this.props.navigator}/>
                 {
                     loading ? Util.loading :
@@ -259,7 +265,6 @@ class ResourceDetail extends React.Component {
                                         <View style={styles.textContainer}>
                                             <Text style={styles.title}>资源简介=></Text>
                                             <Text style={styles.text}>资源名称:{resourceDetailData.productName}</Text>
-                                            <Text style={styles.text}>资源编号:{resourceDetailData.productId}</Text>
                                             <Text style={styles.text}>价格:{resourceDetailData.price}</Text>
                                             <Text
                                                 style={styles.text}>库存:{resourceDetailData.quantityOnHandTotal}</Text>
@@ -308,6 +313,21 @@ class ResourceDetail extends React.Component {
                     }
                 });
         });
+    }
+
+    //编辑资源
+    _editResource() {
+        const {resourceDetailData}=this.props.resourceDetailStore;
+        const {navigator} = this.props;
+        if (navigator) {
+            navigator.push({
+                name: 'ResourceRelease',
+                component: ResourceRelease,
+                params: {
+                    resourceDetailData: resourceDetailData
+                }
+            })
+        }
     }
 
 

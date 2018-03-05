@@ -30,7 +30,7 @@ class orderDetail extends React.Component {
         return (
             <View style={{flex: 1}}>
                 <Header
-                    initObj={{backName: '返回', barTitle: '订单详情', backType: 'order', backShowTab: true}}
+                    initObj={{backName: '返回', barTitle: '订单详情', backType: 'order', hiddenTab: true}}
                     navigator={this.props.navigator}
                 />
                 {
@@ -49,15 +49,14 @@ class orderDetail extends React.Component {
                                             />
                                             <Text style={styles.title}>订单简介=></Text>
                                             <Text style={styles.text}>资源名称: {orderDetailData.itemDescription}</Text>
-                                            <Text style={styles.text}>订单编号: {orderDetailData.orderId}</Text>
-                                            <Text
-                                                style={styles.text}>下单时间:{`${orderDetailData.orderDate.month}月${orderDetailData.orderDate.date}日${orderDetailData.orderDate.hours}时${orderDetailData.orderDate.seconds}分`}</Text>
                                             <Text
                                                 style={styles.text}>客户姓名: {orderDetailData.personInfoMap.firstName}</Text>
-                                            <Text style={styles.text}>订单状态: {orderDetailData.statusId}</Text>
-                                            <Text style={styles.text}>支付状态:{orderDetailData.orderPayStatus}</Text>
                                             <Text
-                                                style={styles.text}>收货地址: {orderDetailData.personAddressInfoMap.address}</Text>
+                                                style={styles.text}>下单时间: {`${orderDetailData.orderDate.month}月${orderDetailData.orderDate.date}日${orderDetailData.orderDate.hours}时${orderDetailData.orderDate.seconds}分`}</Text>
+                                            <Text style={styles.text}>订单编号: {orderDetailData.orderId}</Text>
+                                            <Text style={styles.text}>支付状态: {orderDetailData.orderPayStatus}</Text>
+                                            <Text style={styles.text}>发货状态: {orderDetailData.orderShipment}</Text>
+                                            <Text style={styles.text}>收货地址: {orderDetailData.personAddressInfoMap.address}</Text>
                                             {/*{*/}
                                             {/*this.state.expressInfo == null ? null :*/}
                                             {/*<Text*/}
@@ -107,11 +106,12 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        marginLeft: 10,
-        marginRight: 10,
         color: '#000D22',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginHorizontal: 10,
+        marginVertical: 5,
+        fontSize: 14
     },
     image: {
         width: 300,

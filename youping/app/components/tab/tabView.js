@@ -135,25 +135,25 @@ class TabView extends Component {
             //接受通知
             JPushModule.addReceiveCustomMsgListener((map) => {
                 console.log('接受到的推送内容:' + JSON.stringify(map));
-                //挤掉当前用户
                 if (map.content === "loginNotification") {
                     this._loginOut()
                 } else if (map.content === "message") {
                     const {messageActions}=this.props;
-                    messageActions.requestMessageList();
+                    messageActions.requestMessageList(true);
                 } else if (map.content === "order") {
-                    this._updateOrderList()
+                    const {orderActions}=this.props;
+                    orderActions.requestOrderList('ALL');
                 }
             });
         }
     }
 
     componentDidMount() {
-        // const that = this;
-        // setTimeout(function () {
-        //     //监听推送消息
-        //     that._watchJPush()
-        // }, 5000)
+        const that = this;
+        setTimeout(function () {
+            //监听推送消息
+            that._watchJPush()
+        }, 5000)
     }
 }
 

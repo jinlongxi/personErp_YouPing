@@ -34,7 +34,7 @@ class orderList extends React.Component {
         const {loading}=this.props.orderListStore;
         return (
             <View style={styles.container}>
-                <Header initObj={{backName: '', barTitle: '订单列表'}}/>
+                <Header initObj={{backName: '', barTitle: '订单列表'}} {...this.props}/>
                 <HeaderTab {...this.props}/>
                 {
                     loading ? Util.loading : this._renderList()
@@ -47,7 +47,7 @@ class orderList extends React.Component {
     _renderList() {
         const {orderListData}=this.props.orderListStore;
         return (
-            orderListData.length > 1 ? <ListView
+            orderListData.length > 0 ? <ListView
                 dataSource={this.state.dataSource}
                 initialListSize={10}    //设置显示条数
                 renderRow={this._renderRow}
@@ -98,13 +98,38 @@ class orderList extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        const {orderListData}=nextProps.orderListStore;
-        this.setState({
-            dataSource: ds.cloneWithRows(orderListData),
-        });
+        const {orderListData, orderStatus}=nextProps.orderListStore;
+        let orderList = [];
+        if (orderListData.length > 0) {
+            if (orderStatus === 'ALL') {
+                orderList = orderListData.filter((item)=> {
+                    return item.orderPayStatus === '未收款' || item.orderShipment === '未发货'
+                });
+            } else if (orderStatus === 'PAYMENT') {
+                orderList = orderListData.filter((item)=> {
+                    return item.orderPayStatus === '已收款'
+                });
+            } else if (orderStatus === 'SHIPMENT') {
+                orderList = orderListData.filter((item)=> {
+                    return item.orderShipment === '已发货'
+                });
+            } else if (orderStatus === 'DONE') {
+                orderList = orderListData.filter((item)=> {
+                    return item.orderPayStatus === '已收款' && item.orderShipment === '已发货'
+                });
+            }
+            if (orderList.length > 0) {
+                this.setState({
+                    dataSource: ds.cloneWithRows(orderList),
+                });
+            } else if (orderList.length === 0) {
+                alert('没有相关数据');
+                const {orderListActions}=nextProps;
+                orderListActions.setOrderLiistStatus('ALL')
+            }
+        }
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

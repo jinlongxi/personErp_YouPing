@@ -26,3 +26,11 @@ export function receiveOrderList(orderListData) {
         orderListData
     };
 }
+
+//设置订单列表类型
+export function setOrderLiistStatus(orderStatus) {
+    return {
+        type: TYPES.SET_ORDER_STATUS,
+        orderStatus
+    };
+}

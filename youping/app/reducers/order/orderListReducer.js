@@ -25,6 +25,12 @@ export default function order(state = initialState, action) {
                 orderListData: action.orderListData,
                 status: 'done',
             };
+        //设置订单列表显示类型
+        case TYPES.SET_ORDER_STATUS:
+            return {
+                ...state,
+                orderStatus: action.orderStatus,
+            };
         default:
             return state;
     }

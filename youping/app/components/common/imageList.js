@@ -21,6 +21,7 @@ const hMargin = 20;
 class ImageList extends Component {
     render() {
         const data = this.props.data;
+        console.log(data);
         return (
             <View style={styles.container}>
                 {this.renderAllBadge(data)}

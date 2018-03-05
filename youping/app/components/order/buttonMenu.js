@@ -72,7 +72,6 @@ class ButtonMenu extends Component {
 
     //确认已收款
     _paymentReceived() {
-        console.log(this.props);
         const {orderDetailActions, orderId}=this.props;
         Alert.alert(
             '是否已经收到对方付款?',
@@ -91,35 +90,35 @@ class ButtonMenu extends Component {
     }
 
     //查询物流详细信息
-    _expressInfo() {
-        const code = this.props.selectOrder.internalCode;
-        const ApiCode = '8141fb4bfc2f44b1b21e7397de8c22ff';
-        const url = 'http://jisukdcx.market.alicloudapi.com/express/query?number=' + code + '&type=' + 'auto';
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                "Authorization": "APPCODE " + ApiCode
-            },
-            body: '',
-        }).then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        }).then((json) => {
-            console.log(JSON.stringify(json));
-            DeviceEventEmitter.emit('expressInfo', JSON.stringify(json.result.list));
-        }).catch((error) => {
-            console.log(JSON.stringify(error));
-        });
-    }
+    // _expressInfo() {
+    //     const code = this.props.selectOrder.internalCode;
+    //     const ApiCode = '8141fb4bfc2f44b1b21e7397de8c22ff';
+    //     const url = 'http://jisukdcx.market.alicloudapi.com/express/query?number=' + code + '&type=' + 'auto';
+    //     fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             "Authorization": "APPCODE " + ApiCode
+    //         },
+    //         body: '',
+    //     }).then((response) => {
+    //         if (response.ok) {
+    //             return response.json();
+    //         }
+    //     }).then((json) => {
+    //         console.log(JSON.stringify(json));
+    //         DeviceEventEmitter.emit('expressInfo', JSON.stringify(json.result.list));
+    //     }).catch((error) => {
+    //         console.log(JSON.stringify(error));
+    //     });
+    // }
 
     //确认发货
     _delivery(promptValue) {
-        this.props.delivery(promptValue, this.props.selectOrder.orderId);
-        this._postMsgByListener('delivery')
+        const {orderDetailActions, orderId}=this.props;
+        orderDetailActions.fetchLogistics(promptValue, orderId);
     }
 
-    //对话框
+    //确定发货对话框
     _showDialog(orderId) {
         if (Platform.OS === 'android') {
             this._openScanner()
@@ -144,7 +143,6 @@ class ButtonMenu extends Component {
 
     //点击进入聊天webView
     _goChatWebView() {
-        console.log(this.props);
         const {orderDetailData}=this.props.orderDetailStore;
         const username = orderDetailData.partyId;
         const password = orderDetailData.partyId + '111';

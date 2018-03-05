@@ -36,42 +36,41 @@ class customerWebView extends React.Component {
 
     render() {
         const {consumerInfo} = this.props.messageStore;
-
+        console.log(consumerInfo);
         return (
             <View style={{backgroundColor: 'white', flex: 1}}>
-                <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message', backShowTab: true}}
+                <Header initObj={{backName: '返回', barTitle: '单聊页面', backType: 'message',hiddenTab:true}}
                         navigator={this.props.navigator}
                 />
-                <Swipeout right={this.swipeOutBtn} autoClose={true} style={{backgroundColor: 'white'}}>
-                    <TouchableOpacity style={styles.item}>
-                        <View style={styles.imageContainer}>
-                            {
-                                consumerInfo != null ?
-                                    <Image
-                                        source={{uri: consumerInfo.resourceDetail.detailImageUrl + '?x-oss-process=image/resize,w_100,h_100/quality,q_50'}}
-                                        style={styles.image}
-                                        defaultSource={require('../../img/loading.gif')}
-                                    /> : null
-                            }
-
-                        </View>
-                        <View style={styles.contentContainer}>
-                            {
-                                consumerInfo != null && consumerInfo.resourceDetail.productName != undefined ?
-                                    <View>
-                                        <View style={styles.textContainer}>
-                                            <Text numberOfLines={1}
-                                                  style={styles.resourceTitle}>资源名称:{consumerInfo.resourceDetail.productName}</Text>
-                                        </View>
-                                        <View style={styles.textContainer}>
-                                            <Text style={{color: '#FA8072'}}>客户关系:{consumerInfo.partyRelation}</Text>
-                                        </View>
-                                    </View>
-                                    : null
-                            }
-                        </View>
-                    </TouchableOpacity>
-                </Swipeout>
+                {/*<Swipeout right={this.swipeOutBtn} autoClose={true} style={{backgroundColor: 'white'}}>*/}
+                {/*<TouchableOpacity style={styles.item}>*/}
+                {/*<View style={styles.imageContainer}>*/}
+                {/*{*/}
+                {/*consumerInfo != null ?*/}
+                {/*<Image*/}
+                {/*source={{uri: consumerInfo.resourceDetail.detailImageUrl + '?x-oss-process=image/resize,w_100,h_100/quality,q_50'}}*/}
+                {/*style={styles.image}*/}
+                {/*defaultSource={require('../../img/loading.gif')}*/}
+                {/*/> : null*/}
+                {/*}*/}
+                {/*</View>*/}
+                {/*<View style={styles.contentContainer}>*/}
+                {/*{*/}
+                {/*consumerInfo != null && consumerInfo.resourceDetail.productName != undefined ?*/}
+                {/*<View>*/}
+                {/*<View style={styles.textContainer}>*/}
+                {/*<Text numberOfLines={1}*/}
+                {/*style={styles.resourceTitle}>资源名称:{consumerInfo.resourceDetail.productName}</Text>*/}
+                {/*</View>*/}
+                {/*<View style={styles.textContainer}>*/}
+                {/*<Text style={{color: '#FA8072'}}>客户关系:{consumerInfo.partyRelation}</Text>*/}
+                {/*</View>*/}
+                {/*</View>*/}
+                {/*: null*/}
+                {/*}*/}
+                {/*</View>*/}
+                {/*</TouchableOpacity>*/}
+                {/*</Swipeout>*/}
                 <WebView
                     startInLoadingState={true}
                     source={{uri: this.props.url}}

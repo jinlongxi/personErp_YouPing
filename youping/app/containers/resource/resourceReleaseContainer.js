@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as resourceReleaseCreators from '../../actions/resource/resourceReleaseAction';
 import ResourceRelease from '../../components/resource/resourceRelease';
-import {hideTabBar} from '../../actions/tab/tabAction';
+import * as tabCreators from '../../actions/tab/tabAction';
 
 const mapStateToProps = (state) => {
     const {resourceReleaseStore} = state;
@@ -17,12 +17,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch)=> {
     const resourceReleaseActions = bindActionCreators(resourceReleaseCreators, dispatch);
+    const tabActions = bindActionCreators(tabCreators, dispatch);
     return {
         resourceReleaseActions,
-        //隐藏TAB
-        hiddenTabBar: ()=> {
-            dispatch(hideTabBar())
-        },
+        tabActions
     };
 };
 

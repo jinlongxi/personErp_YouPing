@@ -41,11 +41,10 @@ function* requestPartyRequestsList() {
 export function* watchRequestMessageList() {
     while (true) {
         const {requestType} = yield take(types.REQUEST_MESSAGE_LIST);
-        console.log(requestType);
         if (requestType) {
             yield fork(requestMessageTypeList);
         } else {
-            yield fork(requestPartyRequestsList);
+            //yield fork(requestPartyRequestsList);
         }
     }
 }

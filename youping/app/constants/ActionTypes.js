@@ -31,6 +31,8 @@ export const REQUEST_RESOURCE_RELEASE = 'REQUEST_RESOURCE_RELEASE';             
 export const FETCH_RESOURCE_RELEASE = 'FETCH_RESOURCE_RELEASE';                             //网络请求发布资源
 export const FETCH_RESOURCE_RELEASE_SUCCESS = 'FETCH_RESOURCE_RELEASE_SUCCESS';             //发布资源成功SHOW_FEATURES_MODEL
 export const SHOW_FEATURES_MODEL = 'SHOW_FEATURES_MODEL';                                   //显示隐藏特征模态框
+export const SET_PAGE_TYPE='SET_PAGE_TYPE';                                                 //设置当前页面是发布还是编辑
+export const CLEAR_RESOURCE_RELEASE='CLEAR_RESOURCE_RELEASE';                               //清理数据
 
 export const REQUEST_RESOURCE_DETAIL = 'REQUEST_RESOURCE_DETAIL';                           //请求资源详情
 export const FETCH_RESOURCE_DETAIL = 'FETCH_RESOURCE_DETAIL';                               //网络请求资源详情
@@ -43,7 +45,8 @@ export const SET_WECHAT_SHARE_TEXT = 'SET_WECHAT_SHARE_TEXT';                   
 
 export const REQUEST_ORDER_LIST = 'REQUEST_ORDER_LIST';                                     //请求订单列表
 export const FETCH_ORDER_LIST = 'FETCH_ORDER_LIST';                                         //网络请求订单列表
-export const RECEIVE_ORDER_LIST = 'RECEIVE_ORDER_LIST';                                     //接受订单列表数据
+export const RECEIVE_ORDER_LIST = 'RECEIVE_ORDER_LIST';                                     //接手订单列表数据
+export const SET_ORDER_STATUS='SET_ORDER_STATUS';                                           //设置订单列表显示类型
 
 export const REQUEST_ORDER_DETAIL = 'REQUEST_ORDER_DETAIL';                                 //请求订单详情数据
 export const FETCH_ORDER_DETAIL = 'FETCH_ORDER_DETAIL';                                     //网络请求订单详情数据

@@ -38,8 +38,8 @@ import DeviceStorage from '../../utils/deviceStorage';
 //     }
 // }
 
-function* requestResourceRelease(resourceImages, resourceName, resourceDescription='没有描述', resourcePrice = 0, resourceStoreNumber = 9999, resourceFeatures) {
-    console.log(resourceImages, resourceName, resourceDescription, resourcePrice, resourceStoreNumber);
+//发布资源
+function* requestResourceRelease(resourceImages, resourceName, resourceDescription = '没有描述', resourcePrice = 0, resourceStoreNumber = 9999, resourceFeatures) {
     try {
         yield put(fetchResourceRelease());
         const tarjeta = yield DeviceStorage.get('tarjeta');
@@ -48,6 +48,32 @@ function* requestResourceRelease(resourceImages, resourceName, resourceDescripti
             '&description=' + resourceDescription + '&productCategoryId=' + productCategoryId + '&quantityTotal=' + resourceStoreNumber +
             '&productPrice=' + resourcePrice;//+'&productFeatures=' + JSON.stringify(resourceFeatures)
         const {code} = yield call(upLoadImage, url, 'post', resourceImages);
+        if (code === '200') {
+            yield put(fetchResourceReleaseSuccess());
+            //成功刷新资源列表
+            yield put(requestResourceList());
+        }
+    } catch (error) {
+        //yield put(receiveConsumerInfo([]));
+        ToastUtil.showShort('加载错误，请重新加载')
+    }
+}
+
+//编辑资源
+function* requestResourceUpdate(resourceName,
+                                resourceDescription,
+                                resourcePrice,
+                                resourceStoreNumber,
+                                productId) {
+    try {
+        yield put(fetchResourceRelease());
+        const tarjeta = yield DeviceStorage.get('tarjeta');
+        const productCategoryId = yield DeviceStorage.get('productCategoryId');
+        const url = ServiceURl.personManager + 'updateResourceInfo?tarjeta=' + tarjeta + '&productName=' + resourceName +
+            '&description=' + resourceDescription + '&productId=' + productId + '&quantityTotal=' + resourceStoreNumber +
+            '&productPrice=' + resourcePrice;
+        console.log(url);
+        const {code} = yield call(request, url, 'post');
         if (code === '200') {
             yield put(fetchResourceReleaseSuccess());
             //成功刷新资源列表
@@ -68,17 +94,31 @@ export function* watchRequestResourceRelease() {
             resourceDescription,
             resourcePrice,
             resourceStoreNumber,
-            resourceFeatures
+            resourceFeatures,
+            currentType,
+            productId
         }=yield take(types.REQUEST_RESOURCE_RELEASE);
-        yield fork(
-            requestResourceRelease,
-            resourceImages,
-            resourceName,
-            resourceDescription,
-            resourcePrice,
-            resourceStoreNumber,
-            resourceFeatures
-        );
+
+        if (currentType === '发布') {
+            yield fork(
+                requestResourceRelease,
+                resourceImages,
+                resourceName,
+                resourceDescription,
+                resourcePrice,
+                resourceStoreNumber,
+                resourceFeatures,
+            );
+        } else {
+            yield fork(
+                requestResourceUpdate,
+                resourceName,
+                resourceDescription,
+                resourcePrice,
+                resourceStoreNumber,
+                productId
+            );
+        }
     }
 }
 
